@@ -5,6 +5,7 @@ struct MainView: View {
     @EnvironmentObject private var model: AppModel
     @State private var delayedUntil: Date?
     @State private var newGroup: LimitGroup?
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     private var pendingIcon: some View {
         Image(systemName: "clock")
@@ -37,19 +38,22 @@ struct MainView: View {
             List {
                 if let date = model.state.pendingEffective, model.state.pending != nil {
                     Section {
-                        ViewThatFits(in: .horizontal) {
-                            HStack(spacing: 12) {
-                                pendingIcon
-                                pendingText(date)
-                                Spacer(minLength: 8)
-                                cancelPendingButton
-                            }
-                            VStack(alignment: .leading, spacing: 4) {
-                                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                        Group {
+                            if typeSize.isAccessibilitySize {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack(alignment: .firstTextBaseline, spacing: 12) {
+                                        pendingIcon
+                                        pendingText(date)
+                                    }
+                                    cancelPendingButton
+                                }
+                            } else {
+                                HStack(spacing: 12) {
                                     pendingIcon
                                     pendingText(date)
+                                    Spacer(minLength: 8)
+                                    cancelPendingButton
                                 }
-                                cancelPendingButton
                             }
                         }
                         .padding(.vertical, 6)
