@@ -23,7 +23,7 @@ Tout est dans `ios/TimeKeeper/Theme.swift`. Une couleur porte un sens, jamais un
 |---|---|---|---|
 | fond | fond système | fond système | l'écran, sans carte |
 | encre | `label` | `label` | le texte |
-| `Theme.accent` | `#1F3A8A` | `#9DB7FF` | l'action, l'icône, le cadran (l'acier bleui des aiguilles) |
+| `Theme.accent` | `#1F3A8A` | `#9DB7FF` | l'action, le cadran (l'acier bleui des aiguilles), le plumage du hibou de l'icône |
 | `Theme.onAccent` | `#FFFFFF` | `#0B1530` | le texte posé sur l'accent |
 | `Theme.blocked` | `#B3261E` | `#FF8A80` | seulement « Bloqué » |
 | `Theme.pending` | `#8A5300` | `#FFB84D` | seulement un assouplissement en attente |
@@ -53,7 +53,7 @@ Aucune ombre, aucune bordure. Une seule surface teintée : la bannière « Assou
 Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran est un anneau avec un tiers rempli.
 
 ## Components
-- `Dial` (`Theme.swift`) : la marque. La même forme sert à l'icône, à l'accueil et à l'écran de blocage.
+- `Dial` (`Theme.swift`) : la marque dans l'app. La même forme sert à l'accueil et à l'écran de blocage. L'icône la reprend sur la montre du hibou.
 - `PrimaryButtonStyle` (`Theme.swift`) : le bouton plein.
 - `SectionTitle` (`Theme.swift`) : le titre de section en serif, à la place de l'étiquette grise en capitales.
 - `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
@@ -69,7 +69,16 @@ Animations système uniquement.
 - La confirmation de suppression s'ouvre : `.warning`.
 
 ## Illustrations
-Aucune. L'icône est le cadran blanc sur fond `#1F3A8A`, sans dégradé, en PNG 1024 opaque.
+Aucune dans l'app. La seule illustration est l'icône.
+
+### L'icône
+- Le sujet : un petit hibou rond, le gardien du temps, qui serre une montre à gousset contre lui. Un seul personnage, centré, sur un fond crème uni (`#F7EBDB`).
+- Les couleurs : le plumage en `#1F3A8A`, le visage et le ventre crème, la montre et les pattes ocre, les joues roses.
+- Le trait : dessin fait main, contour brun épais et un peu irrégulier, aplats au crayon de couleur avec le grain du papier. Pas de pictogramme plat, pas de dégradé, pas de texte, pas de chiffres sur le cadran.
+- Le fichier : `ios/TimeKeeper/Assets.xcassets/AppIcon.appiconset/icon-1024.png`, PNG 1024, RGB opaque, sans coins arrondis.
+- Pourquoi un personnage : le cadran blanc sur fond bleu se lisait comme un pictogramme froid, et l'app dit non sans jamais punir. Le hibou veille et garde le temps, il ne gronde pas. Il apporte la chaleur que l'interface, sobre, n'a pas.
+- Pourquoi le hibou plutôt qu'un réveil ou un téléphone endormi : à 60 px il garde une silhouette nette en deux couleurs (un rond bleu, un cadran doré), le réveil perd son visage et le téléphone endormi devient une tache ocre qui évoque une app de sommeil.
+- Vérifier : réduire l'icône à 60 px sur fond clair et sur fond sombre. On doit encore voir les yeux et le cadran.
 
 ## Do's and Don'ts
 - Ne jamais proposer de débloquer, rallonger ou ignorer.
