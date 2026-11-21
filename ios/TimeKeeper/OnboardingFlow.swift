@@ -401,7 +401,6 @@ struct OnboardingFlow: View {
                 case .notify: "Me prévenir"
         case .site: "Bloquer ce site"
         case .lock: "Verrouiller"
-        case .ready: goal == .site ? "Voir mon site bloqué" : "Voir ma limite"
         default: "Continuer"
         }
     }
