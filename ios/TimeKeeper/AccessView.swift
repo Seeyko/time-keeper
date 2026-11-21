@@ -1,7 +1,7 @@
 import SwiftUI
 import FamilyControls
 
-struct OnboardingView: View {
+struct AccessView: View {
     @State private var error: String?
     @State private var taps = 0
 

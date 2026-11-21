@@ -11,7 +11,7 @@ struct DomainsView: View {
     var body: some View {
         List {
             Section {
-                Text("Dans tous les navigateurs. L'app se met dans une limite.")
+                Text("Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .listRowSeparator(.hidden)
@@ -24,13 +24,13 @@ struct DomainsView: View {
                         .padding(.horizontal, 14)
                         .frame(minHeight: 50)
                         .background(Theme.field, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    Button("Ajouter", action: add)
+                    Button("Bloquer", action: add)
                         .buttonStyle(PrimaryButtonStyle())
                         .disabled(input.isEmpty)
                 }
                 .listRowSeparator(.hidden)
                 if invalid {
-                    Text("Ce n'est pas un site.")
+                    Text("Écris-le comme ça : youtube.com")
                         .font(.footnote)
                         .foregroundStyle(Theme.blocked)
                         .listRowSeparator(.hidden)
@@ -38,9 +38,6 @@ struct DomainsView: View {
             }
 
             Section {
-                if model.draft.blockedDomains.isEmpty {
-                    Text("Aucun site").foregroundStyle(.secondary)
-                }
                 ForEach(model.draft.blockedDomains, id: \.self) { domain in
                     Text(domain)
                 }
@@ -52,13 +49,11 @@ struct DomainsView: View {
                     HStack {
                         Text(domain).strikethrough().foregroundStyle(.secondary)
                         Spacer()
-                        Text("débloqué dans 24 h")
+                        Text("débloqué le \(model.state.pendingEffective?.formatted(date: .abbreviated, time: .shortened) ?? "")")
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(Theme.pending)
                     }
                 }
-            } header: {
-                SectionTitle("Bloqués")
             }
 
             let missing = suggestions.filter { !model.draft.blockedDomains.contains($0) }

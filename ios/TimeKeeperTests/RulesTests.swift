@@ -153,4 +153,13 @@ final class RulesTests: XCTestCase {
         XCTAssertEqual(DayStart().dayKey(for: twoAM, calendar: calendar), "2026-11-22")
         XCTAssertEqual(DayStart(hour: 4, minute: 0).dayKey(for: twoAM, calendar: calendar), "2026-11-21")
     }
+
+    func testFirstSetupAppliesAtOnce() {
+        var draft = Rules()
+        draft.groups = [LimitGroup(name: "Réseaux sociaux", minutes: 30)]
+        draft.dayStart = DayStart(hour: 4, minute: 0)
+        let out = Engine.plan(TimeKeeperState(), draft: draft, now: now)
+        XCTAssertNil(out.pending)
+        XCTAssertEqual(out.active.dayStart, DayStart(hour: 4, minute: 0))
+    }
 }

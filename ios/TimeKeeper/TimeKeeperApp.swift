@@ -3,7 +3,10 @@ import FamilyControls
 
 @main
 struct TimeKeeperApp: App {
-    @StateObject private var model = AppModel(demo: ProcessInfo.processInfo.arguments.contains("-demo"))
+    @StateObject private var model = AppModel(
+        demo: ProcessInfo.processInfo.arguments.contains("-demo"),
+        demoOnboarding: ProcessInfo.processInfo.arguments.contains("-onboarding")
+    )
 
     init() {
         Theme.applyNavigationTitle()
@@ -24,12 +27,15 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            if model.demo || auth.authorizationStatus == .approved {
+            if !model.hasOnboarded {
+                OnboardingFlow()
+            } else if model.demo || auth.authorizationStatus == .approved {
                 MainView()
             } else {
-                OnboardingView()
+                AccessView()
             }
         }
+        .animation(.smooth, value: model.hasOnboarded)
         .tint(Theme.accent)
         .onAppear { model.refresh() }
         .onChange(of: scenePhase) { _, phase in
@@ -42,10 +48,24 @@ struct RootView: View {
 final class AppModel: ObservableObject {
     let demo: Bool
     @Published private(set) var state: TimeKeeperState
+    @Published private(set) var hasOnboarded: Bool
 
-    init(demo: Bool) {
-        self.demo = demo
-        state = demo ? AppModel.demoState : SharedStorage.load()
+    private static let onboardedKey = "onboarded.v1"
+
+    init(demo: Bool, demoOnboarding: Bool = false) {
+        self.demo = demo || demoOnboarding
+        let loaded = demoOnboarding ? TimeKeeperState() : demo ? AppModel.demoState : SharedStorage.load()
+        state = loaded
+        hasOnboarded = demoOnboarding ? false : demo || UserDefaults.standard.bool(forKey: AppModel.onboardedKey) || !loaded.active.isUnrestricted
+    }
+
+    func applyOnboarding(_ rules: Rules) {
+        save(rules)
+    }
+
+    func finishOnboarding() {
+        if !demo { UserDefaults.standard.set(true, forKey: AppModel.onboardedKey) }
+        hasOnboarded = true
     }
 
     var draft: Rules { state.draft }

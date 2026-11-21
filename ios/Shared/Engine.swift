@@ -36,7 +36,7 @@ enum Engine {
 
     static func plan(_ current: TimeKeeperState, draft: Rules, now: Date) -> TimeKeeperState {
         var state = current
-        state.active = Rules.strictest(state.active, draft)
+        state.active = state.active.isUnrestricted && state.pending == nil ? draft : Rules.strictest(state.active, draft)
         if draft == state.active {
             state.pending = nil
             state.pendingEffective = nil

@@ -25,7 +25,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 - **Une PR par étape**, merge quand la CI est verte. Le code d'un build envoyé au store est sur `main`.
 - **Présente chaque travail fini** pour un non-technique : un titre humain, une description courte, des captures, puis le lien (skill `present-work` de tom-playbook).
 - **Pas de commentaire dans le code, pas de code mort.**
-- **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir).
+- **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir). `-onboarding` rejoue l'onboarding avec les mêmes données fictives.
 - **Outils** : le CLI `asc` pour App Store Connect.
 
 ## Charte de design
