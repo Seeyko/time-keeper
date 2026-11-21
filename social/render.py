@@ -347,7 +347,7 @@ def rendre_slide(s, fmt, post, i):
     if genre == "liste":
         corps = []
         for it in s["liste"]:
-            corps.append(bloc_natif(it, 54, larg, variante, "natif-fin") if natif else bloc_serif(it, 70, larg - 40, interligne=1.1))
+            corps.append(bloc_natif(it, 64, larg, variante, "natif-fin") if natif else bloc_serif(it, 70, larg - 40, interligne=1.1))
     haut_txt = sum(c.height + e for c, e in elements)
     pos = reglage.get("position", "haut" if genre in ("app", "alerte", "liste", "cta") or hibou else "milieu")
     y = y0 if pos == "haut" else (y1 - haut_txt if pos == "bas" else y0 + (y1 - y0 - haut_txt) / 2)

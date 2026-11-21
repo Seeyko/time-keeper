@@ -1,0 +1,78 @@
+{
+  "slug": "01-ignorer-la-limite",
+  "format": "le-bouton-ignorer",
+  "cible": "a déjà une limite Temps d'écran et la contourne",
+  "slides": [
+    {
+      "type": "alerte",
+      "titre": "« Ignorer la limite. »\n*Tous les soirs.*",
+      "alerte": {
+        "message": "Tu as atteint ta limite pour TikTok.",
+        "boutons": [
+          "OK",
+          "Ignorer la limite"
+        ],
+        "entoure": "Ignorer la limite"
+      }
+    },
+    {
+      "type": "alerte",
+      "titre": "Puis *« Ignorer pour aujourd'hui »*.",
+      "alerte": {
+        "titre": "Ignorer la limite",
+        "message": "Choisis combien de temps encore.",
+        "boutons": [
+          "Encore une minute",
+          "Me le rappeler dans 15 minutes",
+          "Ignorer pour aujourd'hui"
+        ],
+        "entoure": "Ignorer pour aujourd'hui"
+      }
+    },
+    {
+      "titre": "Ta limite tient *4 secondes*.",
+      "ligne": "Le temps de trouver le bouton.",
+      "hibou": {
+        "pose": "patient",
+        "x": 0.5,
+        "y": 0.86,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "app",
+      "titre": "Ici, il reste *un seul bouton*.",
+      "capture": "brut:shield.png",
+      "rogne": [
+        0.27,
+        0.93
+      ]
+    },
+    {
+      "titre": "Temps écoulé :\n*fermé jusqu'à demain.*",
+      "ligne": "Pas de code. Pas de « encore 15 min ».",
+      "hibou": {
+        "pose": "garde",
+        "x": 0.5,
+        "y": 0.86,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "cta",
+      "titre": "Ta limite va enfin *tenir*."
+    }
+  ],
+  "legende": {
+    "tiktok": "Tu tapes « Ignorer la limite » sans même lire. Time Keeper n'a pas ce bouton : limite atteinte, l'app reste fermée jusqu'à demain. Lien en bio. Envoie ça à celui qui tape « Ignorer » tous les soirs.",
+    "insta": "Tu tapes « Ignorer la limite » sans même lire. Puis « Ignorer pour aujourd'hui ».\n\nTime Keeper n'a pas ce bouton. Limite atteinte : l'app reste fermée jusqu'à demain. Assouplir une règle prend 24 h, pour que la toi de 23 h ne décide pas à ta place.\n\nEnvoie ça à celui qui tape « Ignorer » tous les soirs.\n\nTime Keeper, sur iPhone. 7 jours offerts, puis 19,99 € par an ou 39,99 € à vie. Lien en bio."
+  },
+  "hashtags": [
+    "tempsdecran",
+    "screentime",
+    "doomscrolling",
+    "iphone"
+  ],
+  "son": "Un son tendance calme et un peu ironique (lo-fi ou piano), volume bas. Pas de voix.",
+  "style": "natif:bandeau"
+}

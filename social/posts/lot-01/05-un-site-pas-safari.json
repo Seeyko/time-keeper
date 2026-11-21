@@ -1,0 +1,50 @@
+{
+  "slug": "05-un-site-pas-safari",
+  "format": "fonction",
+  "style": "natif:bandeau",
+  "hashtags": [
+    "tempsdecran",
+    "screentime",
+    "doomscrolling",
+    "iphone"
+  ],
+  "son": "Un son tendance calme (lo-fi ou piano), volume bas. Pas de voix.",
+  "slides": [
+    {
+      "titre": "Bloquer YouTube.\n*Pas tout Safari.*",
+      "hibou": {
+        "pose": "cadenas",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "app",
+      "titre": "Un site bloqué *dans tous les navigateurs*.",
+      "capture": "ecran:3-sites-bloques.png",
+      "rogne": [
+        0,
+        0.6
+      ]
+    },
+    {
+      "titre": "Le reste du web *reste ouvert*."
+    },
+    {
+      "titre": "Le débloquer ?\n*Dans 24 h.*",
+      "hibou": {
+        "pose": "garde",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "cta",
+      "titre": "Bloque *le site*, garde le web."
+    }
+  ],
+  "legende": {
+    "tiktok": "Tu veux couper un site, pas tout ton navigateur. Time Keeper bloque le site dans Safari, Chrome et les autres, et le reste du web reste ouvert. Lien en bio. Envoie-le à celui qui finit toujours sur YouTube.",
+    "insta": "Tu veux couper un site, pas tout ton navigateur.\n\nTime Keeper bloque le site dans tous les navigateurs. Le reste du web reste ouvert. Le débloquer prend 24 h.\n\nEnvoie-le à celui qui finit toujours sur YouTube.\n\nTime Keeper, sur iPhone. 7 jours offerts, puis 19,99 € par an ou 39,99 € à vie. Lien en bio."
+  }
+}

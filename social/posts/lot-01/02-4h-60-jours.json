@@ -1,0 +1,63 @@
+{
+  "slug": "02-4h-60-jours",
+  "format": "le-chiffre",
+  "style": "natif:bandeau",
+  "hashtags": [
+    "tempsdecran",
+    "screentime",
+    "doomscrolling",
+    "iphone"
+  ],
+  "son": "Un son tendance calme (lo-fi ou piano), volume bas. Pas de voix.",
+  "slides": [
+    {
+      "titre": "4 h par jour.\n*60 jours par an.*",
+      "hibou": {
+        "pose": "patient",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "titre": "Deux mois entiers *à scroller*.",
+      "ligne": "Chaque année."
+    },
+    {
+      "type": "alerte",
+      "titre": "Ta limite ? *Ignorée à 23 h.*",
+      "alerte": {
+        "message": "Tu as atteint ta limite pour Instagram.",
+        "boutons": [
+          "OK",
+          "Ignorer la limite"
+        ],
+        "entoure": "Ignorer la limite"
+      }
+    },
+    {
+      "type": "app",
+      "titre": "Une limite qui *tient vraiment*.",
+      "capture": "ecran:1-accueil.png",
+      "rogne": [
+        0,
+        0.5
+      ]
+    },
+    {
+      "titre": "Temps écoulé :\n*fermé jusqu'à demain.*",
+      "hibou": {
+        "pose": "garde",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "cta",
+      "titre": "Récupère *tes soirées*."
+    }
+  ],
+  "legende": {
+    "tiktok": "4 h par jour, c'est 60 jours par an. Time Keeper ferme l'app quand ta limite est atteinte, jusqu'à demain, sans bouton pour ignorer. Lien en bio. Ton temps d'écran d'hier, en commentaire.",
+    "insta": "4 h par jour, c'est 60 jours par an.\n\nTime Keeper ferme l'app quand ta limite est atteinte, jusqu'à demain. Pas de bouton « Ignorer », pas de code.\n\nTon temps d'écran d'hier, en commentaire.\n\nTime Keeper, sur iPhone. 7 jours offerts, puis 19,99 € par an ou 39,99 € à vie. Lien en bio."
+  }
+}

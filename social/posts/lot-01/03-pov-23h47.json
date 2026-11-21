@@ -1,0 +1,62 @@
+{
+  "slug": "03-pov-23h47",
+  "format": "pov",
+  "style": "natif:bandeau",
+  "hashtags": [
+    "tempsdecran",
+    "screentime",
+    "doomscrolling",
+    "iphone"
+  ],
+  "son": "Un son tendance calme (lo-fi ou piano), volume bas. Pas de voix.",
+  "slides": [
+    {
+      "titre": "POV : 23 h 47.\n*« Dernière vidéo. »*",
+      "hibou": {
+        "pose": "lit",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "titre": "0 h 32.\n*« Vraiment la dernière. »*"
+    },
+    {
+      "type": "alerte",
+      "titre": "1 h 15. Ta limite ?\n*Ignorée 3 fois.*",
+      "alerte": {
+        "message": "Tu as atteint ta limite pour TikTok.",
+        "boutons": [
+          "OK",
+          "Ignorer la limite"
+        ],
+        "entoure": "Ignorer la limite"
+      }
+    },
+    {
+      "type": "app",
+      "titre": "Avec Time Keeper, *à 23 h* :",
+      "capture": "brut:shield.png",
+      "rogne": [
+        0.27,
+        0.93
+      ]
+    },
+    {
+      "titre": "Pas de « encore 15 min ».\n*Juste « Fermer ».*",
+      "hibou": {
+        "pose": "garde",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "cta",
+      "titre": "Ce soir, *tu poses ton tel*."
+    }
+  ],
+  "legende": {
+    "tiktok": "« Dernière vidéo » à 23 h 47, et il est 1 h 15. Avec Time Keeper, la limite tombe et il ne reste que « Fermer ». Lien en bio. Envoie-le à ton pote qui dit « je vais dormir ».",
+    "insta": "« Dernière vidéo » à 23 h 47. Il est 1 h 15.\n\nAvec Time Keeper, la limite tombe et il ne reste qu'un bouton : Fermer. Ça rouvre demain, pas avant.\n\nEnvoie-le à ton pote qui dit « je vais dormir ».\n\nTime Keeper, sur iPhone. 7 jours offerts, puis 19,99 € par an ou 39,99 € à vie. Lien en bio."
+  }
+}
