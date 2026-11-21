@@ -41,7 +41,7 @@
           230
         ],
         "zoom": 1.4,
-        "dy": -520
+        "dy": -460
       },
       "thought": "« J'appuie sur Ignorer sans même réfléchir. »",
       "answer": "Ici, il n'y a qu'un bouton : Fermer.",
@@ -117,19 +117,26 @@
       }
     },
     {
-      "file": "06-sans-abonnement",
-      "screen": "../../screenshots/4-bienvenue.png",
+      "file": "06-nouvelle-journee",
+      "screen": "../../screenshots/1-accueil.png",
       "loupe": {
         "crop": [
           603,
-          1560,
-          820,
-          80
+          2148,
+          1120,
+          140
         ],
-        "zoom": 1.6
+        "zoom": 1.3,
+        "dy": -480
       },
-      "thought": "« Encore un abonnement pour arrêter de scroller&#8239;? »",
-      "answer": "Gratuit, sans compte. Rien ne quitte ton iPhone."
+      "thought": "« Je me couche à 1 h, mon compteur repart à minuit. »",
+      "answer": "Ta journée commence à l'heure que tu choisis.",
+      "owl": {
+        "src": "owl/garde.png",
+        "x": 860,
+        "y": 2260,
+        "h": 600
+      }
     },
     {
       "file": "07-ton-temps-te-revient",
