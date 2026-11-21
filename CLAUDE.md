@@ -1,6 +1,6 @@
 # Time Keeper
 
-App iOS perso qui bloque des apps après un temps d'écran quotidien et des sites dans tous les navigateurs, sans aucun moyen de débloquer sur le moment. Gratuite, sans compte, sans serveur. FR. Bundle `com.seeyko.timekeeper`. Dépôt privé `Seeyko/time-keeper`.
+App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien et des sites dans tous les navigateurs, sans aucun moyen de débloquer sur le moment. Gratuite, sans compte, sans serveur. FR. Bundle `com.seeyko.timekeeper`. Dépôt `Seeyko/time-keeper`, destiné à être public.
 
 ## Le dépôt
 
@@ -19,7 +19,8 @@ App iOS perso qui bloque des apps après un temps d'écran quotidien et des site
 
 ## Les règles
 - **Mac de build partagé** : on code à l'aveugle. Un seul build et un seul simulateur à la fois, à la fin, avec `nice`.
-- **Aucun secret dans le dépôt.** `SECRETS.md` dit où vit chaque clé.
+- **Aucun secret dans le dépôt, il est public.** `SECRETS.md` dit où vit chaque clé. Jamais de runner auto-hébergé : une PR d'un fork pourrait exécuter du code sur la machine.
+- **Déploiement** : chaque fusion sur `main` envoie un build sur TestFlight (`.github/workflows/ios.yml`, environnement `testflight`, actif quand la variable `TESTFLIGHT_ENABLED` vaut `true`).
 - **Confidentialité** : aucune donnée ne quitte l'iPhone. Pas d'analytique.
 - **Une PR par étape**, merge quand la CI est verte. Le code d'un build envoyé au store est sur `main`.
 - **Présente chaque travail fini** pour un non-technique : un titre humain, une description courte, des captures, puis le lien (skill `present-work` de tom-playbook).
