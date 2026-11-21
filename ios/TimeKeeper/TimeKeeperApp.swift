@@ -1,5 +1,6 @@
 import SwiftUI
 import FamilyControls
+import UserNotifications
 
 @main
 struct TimeKeeperApp: App {
@@ -49,6 +50,8 @@ final class AppModel: ObservableObject {
     let demo: Bool
     @Published private(set) var state: TimeKeeperState
     @Published private(set) var hasOnboarded: Bool
+    @Published private(set) var reminders: ReminderSettings
+    @Published private(set) var notificationsDenied = false
 
     private static let onboardedKey = "onboarded.v1"
 
@@ -56,6 +59,7 @@ final class AppModel: ObservableObject {
         self.demo = demo || demoOnboarding
         let loaded = demoOnboarding ? TimeKeeperState() : demo ? AppModel.demoState : SharedStorage.load()
         state = loaded
+        reminders = demo || demoOnboarding ? ReminderSettings() : SharedStorage.reminderSettings
         hasOnboarded = demoOnboarding ? false : demo || UserDefaults.standard.bool(forKey: AppModel.onboardedKey) || !loaded.active.isUnrestricted
     }
 
@@ -66,7 +70,6 @@ final class AppModel: ObservableObject {
     func finishOnboarding() {
         if !demo {
             UserDefaults.standard.set(true, forKey: AppModel.onboardedKey)
-            Reminder.requestPermission()
         }
         hasOnboarded = true
     }
@@ -80,6 +83,21 @@ final class AppModel: ObservableObject {
         Engine.applyPendingIfDue()
         state = SharedStorage.load()
         if !state.active.groups.isEmpty { Reminder.requestPermission() }
+        refreshNotificationStatus()
+    }
+
+    private func refreshNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            let denied = settings.authorizationStatus == .denied
+            Task { @MainActor in self.notificationsDenied = denied }
+        }
+    }
+
+    func setReminders(_ settings: ReminderSettings) {
+        reminders = settings
+        if demo { return }
+        SharedStorage.reminderSettings = settings
+        Engine.sync(state.active)
     }
 
     @discardableResult

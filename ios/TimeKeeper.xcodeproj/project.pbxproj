@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D2A7C3E14B5F6A7B8C9D0E12 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */; };
-		D2A7C3E14B5F6A7B8C9D0E13 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */; };
-		D2A7C3E14B5F6A7B8C9D0E15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2A7C3E14B5F6A7B8C9D0E14 /* Assets.xcassets */; };
 		005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */; };
 		0BFB7D827850435BBC31C563 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828BBDD4382219E02C5ED2D9 /* MainView.swift */; };
 		0CAD474273E5D10355283C2C /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
 		16E0802369EB9A210ADC5B69 /* TimeKeeperShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2BF2E8D51A9548D65E08CB8C /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A808CABF3CDF7C98CB4380C /* Reminder.swift */; };
+		2F619EFE7AAD17248EA71147 /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56366CD559483D922C273E8 /* AccessView.swift */; };
 		33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD3B46068D60F11BD6E072 /* Engine.swift */; };
 		3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798B9B60F4D7071DC2C9DD83 /* Theme.swift */; };
 		56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
 		7ADC1EFBA63776BC0C6DD6FB /* ShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */; };
+		887EA25C5B8747907A4EBF22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7545C5C79393B0D39779E49 /* Assets.xcassets */; };
 		8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */; };
 		906AF459DA95A99D966F0442 /* RulesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BFE1784245BBF04E121E29 /* RulesTests.swift */; };
 		942F8EE0A565EF68B9CF77D7 /* TimeKeeperShieldConfig.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -27,8 +27,8 @@
 		A2A73F50C9B55901AC577E24 /* TimeKeeperMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A5CCB346E488A5C40B75 /* DeviceActivityMonitorExtension.swift */; };
 		C6C174523400F45178F14F37 /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
-		EA3780306B56BF401111E31D /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A382015E0376534C022DA77A /* AccessView.swift */; };
-		B7C4A1E20F3D5A6B7C8D9E01 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C4A1E20F3D5A6B7C8D9E02 /* OnboardingFlow.swift */; };
+		C9264B7E8C30BEAD850AE050 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A808CABF3CDF7C98CB4380C /* Reminder.swift */; };
+		D3FB132E0A0155BDC9D34A10 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E775367B0D27121A835BF8 /* OnboardingFlow.swift */; };
 		F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
 		FC16AFF14C2097AE7D51E238 /* DomainsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */; };
 /* End PBXBuildFile section */
@@ -81,8 +81,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
-		D2A7C3E14B5F6A7B8C9D0E14 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A07F3A03A6D1905CFB37DAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainsView.swift; sourceTree = "<group>"; };
 		1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldActionExtension.swift; sourceTree = "<group>"; };
@@ -90,6 +88,8 @@
 		2189A5CCB346E488A5C40B75 /* DeviceActivityMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityMonitorExtension.swift; sourceTree = "<group>"; };
 		24BFE1784245BBF04E121E29 /* RulesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesTests.swift; sourceTree = "<group>"; };
 		28591F6C7DA3705210D3D114 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2A808CABF3CDF7C98CB4380C /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		46E775367B0D27121A835BF8 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		54DFC4114B884004CC41B5D2 /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 		61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCBEEC30CF8F24FCDB5D40E /* TimeKeeperTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TimeKeeperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,14 +98,14 @@
 		828BBDD4382219E02C5ED2D9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorView.swift; sourceTree = "<group>"; };
 		9492ABC70DD6CED6696BF726 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		A382015E0376534C022DA77A /* AccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessView.swift; sourceTree = "<group>"; };
-		B7C4A1E20F3D5A6B7C8D9E02 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStorage.swift; sourceTree = "<group>"; };
 		AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeKeeperApp.swift; sourceTree = "<group>"; };
 		B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B50E142C4310B9631FB1E67A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B56366CD559483D922C273E8 /* AccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessView.swift; sourceTree = "<group>"; };
 		BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeper.entitlements; sourceTree = "<group>"; };
 		C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldConfigurationExtension.swift; sourceTree = "<group>"; };
+		C7545C5C79393B0D39779E49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1AD3B46068D60F11BD6E072 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		EE278922667D82B311597FFF /* TimeKeeperShieldConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeperShieldConfig.entitlements; sourceTree = "<group>"; };
@@ -118,8 +118,8 @@
 			isa = PBXGroup;
 			children = (
 				D1AD3B46068D60F11BD6E072 /* Engine.swift */,
+				2A808CABF3CDF7C98CB4380C /* Reminder.swift */,
 				54DFC4114B884004CC41B5D2 /* Rules.swift */,
-				D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */,
 				A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */,
 			);
 			path = Shared;
@@ -160,13 +160,13 @@
 		9B9EC749B959727BB393A6D3 /* TimeKeeper */ = {
 			isa = PBXGroup;
 			children = (
+				B56366CD559483D922C273E8 /* AccessView.swift */,
 				B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */,
 				0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */,
 				9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */,
 				B50E142C4310B9631FB1E67A /* Info.plist */,
 				828BBDD4382219E02C5ED2D9 /* MainView.swift */,
-				A382015E0376534C022DA77A /* AccessView.swift */,
-				B7C4A1E20F3D5A6B7C8D9E02 /* OnboardingFlow.swift */,
+				46E775367B0D27121A835BF8 /* OnboardingFlow.swift */,
 				798B9B60F4D7071DC2C9DD83 /* Theme.swift */,
 				BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */,
 				AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */,
@@ -198,7 +198,7 @@
 		FDB54EF842862EFDE8CD6A0D /* TimeKeeperShieldConfig */ = {
 			isa = PBXGroup;
 			children = (
-				D2A7C3E14B5F6A7B8C9D0E14 /* Assets.xcassets */,
+				C7545C5C79393B0D39779E49 /* Assets.xcassets */,
 				28591F6C7DA3705210D3D114 /* Info.plist */,
 				C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */,
 				EE278922667D82B311597FFF /* TimeKeeperShieldConfig.entitlements */,
@@ -231,7 +231,7 @@
 			buildConfigurationList = 2DBD63DDFB0735C83518BB4A /* Build configuration list for PBXNativeTarget "TimeKeeperShieldConfig" */;
 			buildPhases = (
 				0FE298E95CDD2B5360273458 /* Sources */,
-				D2A7C3E14B5F6A7B8C9D0E16 /* Resources */,
+				15E753D0A7E248710E11FD70 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -356,11 +356,11 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D2A7C3E14B5F6A7B8C9D0E16 /* Resources */ = {
+		15E753D0A7E248710E11FD70 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2A7C3E14B5F6A7B8C9D0E15 /* Assets.xcassets in Resources */,
+				887EA25C5B8747907A4EBF22 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,8 +405,8 @@
 			files = (
 				AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */,
 				9BD95244BE7FC5EB199BE65C /* Engine.swift in Sources */,
+				2BF2E8D51A9548D65E08CB8C /* Reminder.swift in Sources */,
 				0CAD474273E5D10355283C2C /* Rules.swift in Sources */,
-				D2A7C3E14B5F6A7B8C9D0E13 /* Reminder.swift in Sources */,
 				56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -415,13 +415,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F619EFE7AAD17248EA71147 /* AccessView.swift in Sources */,
 				FC16AFF14C2097AE7D51E238 /* DomainsView.swift in Sources */,
 				33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */,
 				005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */,
 				0BFB7D827850435BBC31C563 /* MainView.swift in Sources */,
-				EA3780306B56BF401111E31D /* AccessView.swift in Sources */,
-				B7C4A1E20F3D5A6B7C8D9E01 /* OnboardingFlow.swift in Sources */,
-				D2A7C3E14B5F6A7B8C9D0E12 /* Reminder.swift in Sources */,
+				D3FB132E0A0155BDC9D34A10 /* OnboardingFlow.swift in Sources */,
+				C9264B7E8C30BEAD850AE050 /* Reminder.swift in Sources */,
 				C6C174523400F45178F14F37 /* Rules.swift in Sources */,
 				F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */,
 				3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */,

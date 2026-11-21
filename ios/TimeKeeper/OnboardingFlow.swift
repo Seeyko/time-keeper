@@ -2,7 +2,7 @@ import SwiftUI
 import FamilyControls
 
 enum OnboardingStep: Int, CaseIterable {
-    case welcome, aha, goals, access, apps, minutes, site, lock, ready
+    case welcome, aha, goals, access, apps, minutes, notify, site, lock, ready
 }
 
 enum OnboardingGoal: String, CaseIterable, Identifiable {
@@ -42,7 +42,7 @@ struct OnboardingFlow: View {
     private var flow: [OnboardingStep] {
         OnboardingStep.allCases.filter { step in
             switch step {
-            case .apps, .minutes: goal != .site
+            case .apps, .minutes, .notify: goal != .site
             case .site: goal == .site
             default: true
             }
@@ -109,6 +109,7 @@ struct OnboardingFlow: View {
         case .apps: apps
         case .minutes: minutesStep
         case .site: siteStep
+        case .notify: notifyStep
         case .lock: lockStep
         case .ready: ready
         }
@@ -117,7 +118,7 @@ struct OnboardingFlow: View {
     private var welcome: some View {
         VStack(spacing: 20) {
             Spacer()
-            Owl(name: "owl-montre", label: "Le hibou de Time Keeper serre sa montre", height: 190)
+            Owl(name: "owl-garde", label: "Le hibou de Time Keeper croise les ailes", height: 190)
             Text("Ta limite va enfin tenir.")
                 .font(Theme.title)
                 .multilineTextAlignment(.center)
@@ -262,6 +263,20 @@ struct OnboardingFlow: View {
         }
     }
 
+    private var notifyStep: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            Owl(name: "owl-patient", label: "Le hibou attend, assis sur sa montre", height: 190)
+            Text("Je te préviens avant la fin.")
+                .font(Theme.heading)
+                .multilineTextAlignment(.center)
+            Text("À la moitié de ton temps, puis 5 min avant. Même en mode Concentration.")
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            Spacer()
+        }
+    }
+
     private var lockStep: some View {
         VStack(spacing: 16) {
             Spacer()
@@ -320,7 +335,11 @@ struct OnboardingFlow: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(ctaDisabled)
             .sensoryFeedback(.selection, trigger: step)
-            if step == .lock {
+            if step == .notify {
+                Button("Plus tard") { go(1) }
+                    .font(.body.weight(.medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            } else if step == .lock {
                 Button("Plus tard") { advance(lock: false) }
                     .font(.body.weight(.medium))
                     .frame(maxWidth: .infinity, minHeight: 44)
@@ -341,6 +360,7 @@ struct OnboardingFlow: View {
         case .aha: "Poser ma limite"
         case .access: "Autoriser"
         case .apps: appsChosen ? "Continuer" : "Choisir les apps"
+        case .notify: "Me prévenir"
         case .site: "Bloquer ce site"
         case .lock: "Verrouiller"
         case .ready: goal == .site ? "Voir mon site bloqué" : "Voir ma limite"
@@ -363,6 +383,8 @@ struct OnboardingFlow: View {
             if model.demo { demoPicked = true } else { showPicker = true }
         case .site:
             if Rules.normalizeDomain(site) == nil { siteInvalid = true } else { siteInvalid = false; go(1) }
+        case .notify:
+            if model.demo { go(1) } else { Reminder.requestPermission { go(1) } }
         case .lock:
             advance(lock: true)
         case .ready:

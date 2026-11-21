@@ -36,6 +36,11 @@ enum SharedStorage {
         defaults.string(forKey: "shieldDay." + id.uuidString) == todayKey()
     }
 
+    static var reminderSettings: ReminderSettings {
+        get { defaults.data(forKey: "reminders.v1").flatMap { try? JSONDecoder().decode(ReminderSettings.self, from: $0) } ?? ReminderSettings() }
+        set { defaults.set(try? JSONEncoder().encode(newValue), forKey: "reminders.v1") }
+    }
+
     static func claimReminderToday(_ name: String, for id: UUID) -> Bool {
         let key = "reminder.\(name).\(id.uuidString)"
         let today = todayKey()

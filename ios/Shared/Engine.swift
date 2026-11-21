@@ -82,6 +82,7 @@ enum Engine {
         }
         SharedStorage.knownGroupIDs = currentIDs
 
+        let reminders = SharedStorage.reminderSettings
         let schedule = DeviceActivitySchedule(
             intervalStart: rules.dayStart.intervalStart,
             intervalEnd: rules.dayStart.intervalEnd,
@@ -94,11 +95,11 @@ enum Engine {
                 SharedStorage.setFingerprint(nil, for: group.id)
                 continue
             }
-            let fp = fingerprint(group, dayStart: rules.dayStart)
+            let fp = fingerprint(group, dayStart: rules.dayStart, reminders: reminders)
             if center.activities.contains(group.activityName), SharedStorage.fingerprint(group.id) == fp {
                 continue
             }
-            var events = Reminder.events(for: group)
+            var events = Reminder.events(for: group, settings: reminders)
             events[LimitGroup.eventName] = group.event(after: group.minutes)
             center.stopMonitoring([group.activityName])
             do {
@@ -128,8 +129,8 @@ enum Engine {
         Set(filteredDomainNames(base).map { WebDomain(domain: $0) })
     }
 
-    private static func fingerprint(_ group: LimitGroup, dayStart: DayStart) -> String {
+    private static func fingerprint(_ group: LimitGroup, dayStart: DayStart, reminders: ReminderSettings) -> String {
         let data = (try? JSONEncoder().encode(group.selection)) ?? Data()
-        return "reminders|\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
+        return "\(reminders.fingerprint)|\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
     }
 }
