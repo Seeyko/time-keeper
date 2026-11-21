@@ -2,6 +2,30 @@ import Foundation
 import DeviceActivity
 import UserNotifications
 
+enum ReminderPlan: String, CaseIterable, Identifiable {
+    case halfAndLastFive
+    case lastFive
+    case off
+
+    var id: String { rawValue }
+
+    var reminders: [Reminder] {
+        switch self {
+        case .halfAndLastFive: [.half, .lastFive]
+        case .lastFive: [.lastFive]
+        case .off: []
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .halfAndLastFive: "À la moitié et 5 min avant"
+        case .lastFive: "5 min avant"
+        case .off: "Jamais"
+        }
+    }
+}
+
 enum Reminder: String, CaseIterable {
     case half
     case lastFive
@@ -22,17 +46,19 @@ enum Reminder: String, CaseIterable {
         }
     }
 
-    static func events(for group: LimitGroup) -> [DeviceActivityEvent.Name: DeviceActivityEvent] {
+    static func events(for group: LimitGroup, plan: ReminderPlan) -> [DeviceActivityEvent.Name: DeviceActivityEvent] {
         var events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [:]
-        for reminder in allCases {
+        for reminder in plan.reminders {
             guard let minutes = reminder.minutesUsed(of: group.minutes) else { continue }
             events[reminder.eventName] = group.event(after: minutes)
         }
         return events
     }
 
-    static func requestPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
+    static func requestPermission(then done: @escaping @MainActor @Sendable () -> Void = {}) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in
+            Task { @MainActor in done() }
+        }
     }
 
     func post(for group: LimitGroup) {
@@ -40,7 +66,8 @@ enum Reminder: String, CaseIterable {
         content.title = group.name
         content.body = body(limit: group.minutes)
         content.sound = .default
-        content.interruptionLevel = .active
+        content.threadIdentifier = group.id.uuidString
+        content.interruptionLevel = .timeSensitive
         let id = "\(rawValue).\(group.id.uuidString)"
         UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: id, content: content, trigger: nil))
     }

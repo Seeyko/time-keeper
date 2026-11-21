@@ -17,7 +17,7 @@ final class DeviceActivityMonitorExtension: DeviceActivityMonitor {
         guard let id = LimitGroup.id(from: activity),
               let group = SharedStorage.load().active.groups.first(where: { $0.id == id }) else { return }
         if let reminder = Reminder(rawValue: event.rawValue) {
-            if !SharedStorage.isShieldedToday(id) && SharedStorage.claimReminderToday(reminder.rawValue, for: id) {
+            if SharedStorage.reminderPlan.reminders.contains(reminder) && !SharedStorage.isShieldedToday(id) && SharedStorage.claimReminderToday(reminder.rawValue, for: id) {
                 reminder.post(for: group)
             }
             return

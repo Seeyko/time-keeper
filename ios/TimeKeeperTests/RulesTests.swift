@@ -169,6 +169,9 @@ final class RulesTests: XCTestCase {
         XCTAssertNil(Reminder.half.minutesUsed(of: 15))
         XCTAssertEqual(Reminder.lastFive.minutesUsed(of: 15), 10)
         XCTAssertNil(Reminder.lastFive.minutesUsed(of: 5))
-        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 5)).count, 0)
+        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 5), plan: .halfAndLastFive).count, 0)
+        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .halfAndLastFive).count, 2)
+        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .lastFive).keys.map(\.rawValue), ["lastFive"])
+        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .off).count, 0)
     }
 }

@@ -40,6 +40,7 @@ targets:
       path: TimeKeeper/TimeKeeper.entitlements
       properties:
         com.apple.developer.family-controls: true
+        com.apple.developer.usernotifications.time-sensitive: true
         com.apple.security.application-groups: [$(APP_GROUP_ID)]
     settings:
       base:
@@ -68,6 +69,7 @@ targets:
       path: TimeKeeperMonitor/TimeKeeperMonitor.entitlements
       properties:
         com.apple.developer.family-controls: true
+        com.apple.developer.usernotifications.time-sensitive: true
         com.apple.security.application-groups: [$(APP_GROUP_ID)]
     settings:
       base:

@@ -6,6 +6,7 @@ struct MainView: View {
     @State private var delayedUntil: Date?
     @State private var newGroup: LimitGroup?
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.openURL) private var openURL
 
     private var pendingIcon: some View {
         Image(systemName: "clock")
@@ -100,6 +101,22 @@ struct MainView: View {
                         set: { on in handle(model.setDenyAppRemoval(on)) }
                     ))
                     .tint(Theme.toggle)
+                    Picker("Me prévenir", selection: Binding(
+                        get: { model.reminderPlan },
+                        set: { model.setReminderPlan($0) }
+                    )) {
+                        ForEach(ReminderPlan.allCases) { plan in
+                            Text(plan.label).tag(plan)
+                        }
+                    }
+                    .sensoryFeedback(.selection, trigger: model.reminderPlan)
+                    if model.notificationsDenied && model.reminderPlan != .off {
+                        Button("Autoriser les notifications") {
+                            if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                        }
+                        .foregroundStyle(Theme.accent)
+                        .frame(minHeight: 44)
+                    }
                 } header: {
                     SectionTitle("Réglages")
                 }
