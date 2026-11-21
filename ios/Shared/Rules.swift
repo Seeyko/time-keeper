@@ -41,7 +41,7 @@ struct LimitGroup: Codable, Identifiable {
     var selection = FamilyActivitySelection()
     var minutes: Int = 30
 
-    static let eventName = DeviceActivityEvent.Name(rawValue: "threshold")
+    static var eventName: DeviceActivityEvent.Name { DeviceActivityEvent.Name(rawValue: "threshold") }
     static let prefix = "limit."
 
     var key: String { LimitGroup.prefix + id.uuidString }

@@ -1,5 +1,12 @@
 # Time Keeper
 
+<p>
+<img src="screenshots/1-accueil.png" width="200" alt="Les limites du jour">
+<img src="screenshots/2-limite.png" width="200" alt="Une limite ouverte">
+<img src="screenshots/3-sites-bloques.png" width="200" alt="Les sites bloqués">
+<img src="screenshots/4-bienvenue.png" width="200" alt="Le premier lancement">
+</p>
+
 App iOS perso (Swift / SwiftUI) pour :
 
 1. **Limiter des apps par temps d'écran quotidien.** Exemple : Instagram + TikTok, 30 min par jour au total. Une fois le temps écoulé, elles sont bloquées jusqu'au début de la journée suivante. L'heure de début de journée se règle (minuit, 4 h, 6 h…).

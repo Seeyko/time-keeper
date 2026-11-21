@@ -1,0 +1,789 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */; };
+		0BFB7D827850435BBC31C563 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828BBDD4382219E02C5ED2D9 /* MainView.swift */; };
+		0CAD474273E5D10355283C2C /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
+		16E0802369EB9A210ADC5B69 /* TimeKeeperShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD3B46068D60F11BD6E072 /* Engine.swift */; };
+		56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
+		7ADC1EFBA63776BC0C6DD6FB /* ShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */; };
+		8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */; };
+		906AF459DA95A99D966F0442 /* RulesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BFE1784245BBF04E121E29 /* RulesTests.swift */; };
+		942F8EE0A565EF68B9CF77D7 /* TimeKeeperShieldConfig.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		975526108C5E25AF7FE2A3E5 /* ShieldConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */; };
+		983F8A0FC39093ABC3464EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */; };
+		9BD95244BE7FC5EB199BE65C /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD3B46068D60F11BD6E072 /* Engine.swift */; };
+		A2A73F50C9B55901AC577E24 /* TimeKeeperMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A5CCB346E488A5C40B75 /* DeviceActivityMonitorExtension.swift */; };
+		C6C174523400F45178F14F37 /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
+		EA3780306B56BF401111E31D /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A382015E0376534C022DA77A /* OnboardingView.swift */; };
+		F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
+		FC16AFF14C2097AE7D51E238 /* DomainsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		080BDC393B14531D2855A3E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B27710043117EDC34437D683 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A37F61EA33B7807704A7ABC2;
+			remoteInfo = TimeKeeperShieldConfig;
+		};
+		6F1258972746A593852F837D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B27710043117EDC34437D683 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DCF58C62E29FF3FC8D69EA40;
+			remoteInfo = TimeKeeper;
+		};
+		7DF60FD4EAD57C8F6BF80287 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B27710043117EDC34437D683 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A1353134019A1648C35E4CC;
+			remoteInfo = TimeKeeperShieldAction;
+		};
+		9A9505D085026E7ABE57765C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B27710043117EDC34437D683 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F87925519FAA613D15E8FDE0;
+			remoteInfo = TimeKeeperMonitor;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7AA1B21B7EF35CD0FE8E206B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A2A73F50C9B55901AC577E24 /* TimeKeeperMonitor.appex in Embed Foundation Extensions */,
+				942F8EE0A565EF68B9CF77D7 /* TimeKeeperShieldConfig.appex in Embed Foundation Extensions */,
+				16E0802369EB9A210ADC5B69 /* TimeKeeperShieldAction.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0A07F3A03A6D1905CFB37DAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainsView.swift; sourceTree = "<group>"; };
+		1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldActionExtension.swift; sourceTree = "<group>"; };
+		11F6A353DE3B37F3AC7473FF /* TimeKeeperMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeperMonitor.entitlements; sourceTree = "<group>"; };
+		2189A5CCB346E488A5C40B75 /* DeviceActivityMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceActivityMonitorExtension.swift; sourceTree = "<group>"; };
+		24BFE1784245BBF04E121E29 /* RulesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesTests.swift; sourceTree = "<group>"; };
+		28591F6C7DA3705210D3D114 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		54DFC4114B884004CC41B5D2 /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
+		61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CCBEEC30CF8F24FCDB5D40E /* TimeKeeperTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TimeKeeperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		828BBDD4382219E02C5ED2D9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorView.swift; sourceTree = "<group>"; };
+		9492ABC70DD6CED6696BF726 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A382015E0376534C022DA77A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStorage.swift; sourceTree = "<group>"; };
+		AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeKeeperApp.swift; sourceTree = "<group>"; };
+		B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B50E142C4310B9631FB1E67A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeper.entitlements; sourceTree = "<group>"; };
+		C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldConfigurationExtension.swift; sourceTree = "<group>"; };
+		CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1AD3B46068D60F11BD6E072 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
+		EE278922667D82B311597FFF /* TimeKeeperShieldConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeperShieldConfig.entitlements; sourceTree = "<group>"; };
+		F766C10929FB6044FDF77FC9 /* TimeKeeper.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TimeKeeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA1A5FF1CFDBD62BBCA1A18C /* TimeKeeperShieldAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeperShieldAction.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0FBCFF643A7F53ED97C4B5D9 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				D1AD3B46068D60F11BD6E072 /* Engine.swift */,
+				54DFC4114B884004CC41B5D2 /* Rules.swift */,
+				A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		6E5CD939387DCCE6D1AFD8FC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F766C10929FB6044FDF77FC9 /* TimeKeeper.app */,
+				CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */,
+				816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */,
+				61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */,
+				6CCBEEC30CF8F24FCDB5D40E /* TimeKeeperTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72647AB52B30F4B0F88CB065 /* TimeKeeperShieldAction */ = {
+			isa = PBXGroup;
+			children = (
+				0A07F3A03A6D1905CFB37DAD /* Info.plist */,
+				1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */,
+				FA1A5FF1CFDBD62BBCA1A18C /* TimeKeeperShieldAction.entitlements */,
+			);
+			path = TimeKeeperShieldAction;
+			sourceTree = "<group>";
+		};
+		7C11674D687D83718EEB96F0 /* TimeKeeperMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				2189A5CCB346E488A5C40B75 /* DeviceActivityMonitorExtension.swift */,
+				9492ABC70DD6CED6696BF726 /* Info.plist */,
+				11F6A353DE3B37F3AC7473FF /* TimeKeeperMonitor.entitlements */,
+			);
+			path = TimeKeeperMonitor;
+			sourceTree = "<group>";
+		};
+		9B9EC749B959727BB393A6D3 /* TimeKeeper */ = {
+			isa = PBXGroup;
+			children = (
+				B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */,
+				0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */,
+				9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */,
+				B50E142C4310B9631FB1E67A /* Info.plist */,
+				828BBDD4382219E02C5ED2D9 /* MainView.swift */,
+				A382015E0376534C022DA77A /* OnboardingView.swift */,
+				BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */,
+				AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */,
+			);
+			path = TimeKeeper;
+			sourceTree = "<group>";
+		};
+		A8DE67D1213CF63F1883F7D8 = {
+			isa = PBXGroup;
+			children = (
+				0FBCFF643A7F53ED97C4B5D9 /* Shared */,
+				9B9EC749B959727BB393A6D3 /* TimeKeeper */,
+				7C11674D687D83718EEB96F0 /* TimeKeeperMonitor */,
+				72647AB52B30F4B0F88CB065 /* TimeKeeperShieldAction */,
+				FDB54EF842862EFDE8CD6A0D /* TimeKeeperShieldConfig */,
+				BEEA5A7E91F4DF728B105336 /* TimeKeeperTests */,
+				6E5CD939387DCCE6D1AFD8FC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BEEA5A7E91F4DF728B105336 /* TimeKeeperTests */ = {
+			isa = PBXGroup;
+			children = (
+				24BFE1784245BBF04E121E29 /* RulesTests.swift */,
+			);
+			path = TimeKeeperTests;
+			sourceTree = "<group>";
+		};
+		FDB54EF842862EFDE8CD6A0D /* TimeKeeperShieldConfig */ = {
+			isa = PBXGroup;
+			children = (
+				28591F6C7DA3705210D3D114 /* Info.plist */,
+				C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */,
+				EE278922667D82B311597FFF /* TimeKeeperShieldConfig.entitlements */,
+			);
+			path = TimeKeeperShieldConfig;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5A1353134019A1648C35E4CC /* TimeKeeperShieldAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BE057F4903A95470559C5768 /* Build configuration list for PBXNativeTarget "TimeKeeperShieldAction" */;
+			buildPhases = (
+				958CC453C80269844E158A3E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TimeKeeperShieldAction;
+			packageProductDependencies = (
+			);
+			productName = TimeKeeperShieldAction;
+			productReference = 816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		A37F61EA33B7807704A7ABC2 /* TimeKeeperShieldConfig */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2DBD63DDFB0735C83518BB4A /* Build configuration list for PBXNativeTarget "TimeKeeperShieldConfig" */;
+			buildPhases = (
+				0FE298E95CDD2B5360273458 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TimeKeeperShieldConfig;
+			packageProductDependencies = (
+			);
+			productName = TimeKeeperShieldConfig;
+			productReference = 61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		DCF58C62E29FF3FC8D69EA40 /* TimeKeeper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 711C9C07A8A55276ACCAEE8E /* Build configuration list for PBXNativeTarget "TimeKeeper" */;
+			buildPhases = (
+				E3E26557277AEBF3492FB186 /* Sources */,
+				93DB94511F2E9AEB602B7E99 /* Resources */,
+				7AA1B21B7EF35CD0FE8E206B /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D9DB556FB9527F980EA91786 /* PBXTargetDependency */,
+				D38802F0FADDE25A51847006 /* PBXTargetDependency */,
+				158E84602B8C17C3A7B969F4 /* PBXTargetDependency */,
+			);
+			name = TimeKeeper;
+			packageProductDependencies = (
+			);
+			productName = TimeKeeper;
+			productReference = F766C10929FB6044FDF77FC9 /* TimeKeeper.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F87925519FAA613D15E8FDE0 /* TimeKeeperMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34B4B98442EA447D44AEF752 /* Build configuration list for PBXNativeTarget "TimeKeeperMonitor" */;
+			buildPhases = (
+				D1FAE4AB43FDF4F2E5B513A6 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TimeKeeperMonitor;
+			packageProductDependencies = (
+			);
+			productName = TimeKeeperMonitor;
+			productReference = CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F9B27E4E714711E672531597 /* TimeKeeperTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ECBF8B091D96473FA4A7A4F2 /* Build configuration list for PBXNativeTarget "TimeKeeperTests" */;
+			buildPhases = (
+				113E06B1456E38B55B95B65F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C5E1C4EF0ED8CE333DAAB32B /* PBXTargetDependency */,
+			);
+			name = TimeKeeperTests;
+			packageProductDependencies = (
+			);
+			productName = TimeKeeperTests;
+			productReference = 6CCBEEC30CF8F24FCDB5D40E /* TimeKeeperTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B27710043117EDC34437D683 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					5A1353134019A1648C35E4CC = {
+						DevelopmentTeam = 8564ATFAJQ;
+						ProvisioningStyle = Automatic;
+					};
+					A37F61EA33B7807704A7ABC2 = {
+						DevelopmentTeam = 8564ATFAJQ;
+						ProvisioningStyle = Automatic;
+					};
+					DCF58C62E29FF3FC8D69EA40 = {
+						DevelopmentTeam = 8564ATFAJQ;
+						ProvisioningStyle = Automatic;
+					};
+					F87925519FAA613D15E8FDE0 = {
+						DevelopmentTeam = 8564ATFAJQ;
+						ProvisioningStyle = Automatic;
+					};
+					F9B27E4E714711E672531597 = {
+						DevelopmentTeam = 8564ATFAJQ;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A70C3804D7589B31ADD54D15 /* Build configuration list for PBXProject "TimeKeeper" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A8DE67D1213CF63F1883F7D8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6E5CD939387DCCE6D1AFD8FC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DCF58C62E29FF3FC8D69EA40 /* TimeKeeper */,
+				F87925519FAA613D15E8FDE0 /* TimeKeeperMonitor */,
+				A37F61EA33B7807704A7ABC2 /* TimeKeeperShieldConfig */,
+				5A1353134019A1648C35E4CC /* TimeKeeperShieldAction */,
+				F9B27E4E714711E672531597 /* TimeKeeperTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		93DB94511F2E9AEB602B7E99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				983F8A0FC39093ABC3464EB7 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0FE298E95CDD2B5360273458 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				975526108C5E25AF7FE2A3E5 /* ShieldConfigurationExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		113E06B1456E38B55B95B65F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				906AF459DA95A99D966F0442 /* RulesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		958CC453C80269844E158A3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7ADC1EFBA63776BC0C6DD6FB /* ShieldActionExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1FAE4AB43FDF4F2E5B513A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */,
+				9BD95244BE7FC5EB199BE65C /* Engine.swift in Sources */,
+				0CAD474273E5D10355283C2C /* Rules.swift in Sources */,
+				56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E3E26557277AEBF3492FB186 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC16AFF14C2097AE7D51E238 /* DomainsView.swift in Sources */,
+				33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */,
+				005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */,
+				0BFB7D827850435BBC31C563 /* MainView.swift in Sources */,
+				EA3780306B56BF401111E31D /* OnboardingView.swift in Sources */,
+				C6C174523400F45178F14F37 /* Rules.swift in Sources */,
+				F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */,
+				8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		158E84602B8C17C3A7B969F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5A1353134019A1648C35E4CC /* TimeKeeperShieldAction */;
+			targetProxy = 7DF60FD4EAD57C8F6BF80287 /* PBXContainerItemProxy */;
+		};
+		C5E1C4EF0ED8CE333DAAB32B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DCF58C62E29FF3FC8D69EA40 /* TimeKeeper */;
+			targetProxy = 6F1258972746A593852F837D /* PBXContainerItemProxy */;
+		};
+		D38802F0FADDE25A51847006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A37F61EA33B7807704A7ABC2 /* TimeKeeperShieldConfig */;
+			targetProxy = 080BDC393B14531D2855A3E0 /* PBXContainerItemProxy */;
+		};
+		D9DB556FB9527F980EA91786 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F87925519FAA613D15E8FDE0 /* TimeKeeperMonitor */;
+			targetProxy = 9A9505D085026E7ABE57765C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0FBB9FADD84CAA520948D8B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TimeKeeper/TimeKeeper.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = TimeKeeper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4BA34D189A8088D42F147D51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TimeKeeperShieldAction/TimeKeeperShieldAction.entitlements;
+				INFOPLIST_FILE = TimeKeeperShieldAction/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).shieldaction";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		59EB95ED5FEB5FA3C605C7F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeKeeper.app/TimeKeeper";
+			};
+			name = Release;
+		};
+		8D59C41B9CF498C41912F314 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_GROUP_ID = group.com.seeyko.timekeeper;
+				BUNDLE_ID_ROOT = com.seeyko.timekeeper;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 8564ATFAJQ;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		902D36D5485024FB54F40092 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TimeKeeperMonitor/TimeKeeperMonitor.entitlements;
+				INFOPLIST_FILE = TimeKeeperMonitor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).monitor";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AEEB959DBB4214999B60F989 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).tests";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TimeKeeper.app/TimeKeeper";
+			};
+			name = Debug;
+		};
+		B2573A8BD6865AE5CFE45AF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TimeKeeperShieldConfig/TimeKeeperShieldConfig.entitlements;
+				INFOPLIST_FILE = TimeKeeperShieldConfig/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).shieldconfig";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B62612642CB81B9364A8833A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TimeKeeper/TimeKeeper.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = TimeKeeper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT)";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CF3C7F768273933AD6979F29 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TimeKeeperMonitor/TimeKeeperMonitor.entitlements;
+				INFOPLIST_FILE = TimeKeeperMonitor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).monitor";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EAAE28CC6E02C935B4482E9C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TimeKeeperShieldAction/TimeKeeperShieldAction.entitlements;
+				INFOPLIST_FILE = TimeKeeperShieldAction/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).shieldaction";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F72914D18AE8BFC89CC81BA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TimeKeeperShieldConfig/TimeKeeperShieldConfig.entitlements;
+				INFOPLIST_FILE = TimeKeeperShieldConfig/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(BUNDLE_ID_ROOT).shieldconfig";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FFA8D482EEF5B14A05A958A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_GROUP_ID = group.com.seeyko.timekeeper;
+				BUNDLE_ID_ROOT = com.seeyko.timekeeper;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 8564ATFAJQ;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2DBD63DDFB0735C83518BB4A /* Build configuration list for PBXNativeTarget "TimeKeeperShieldConfig" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F72914D18AE8BFC89CC81BA2 /* Debug */,
+				B2573A8BD6865AE5CFE45AF0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		34B4B98442EA447D44AEF752 /* Build configuration list for PBXNativeTarget "TimeKeeperMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				902D36D5485024FB54F40092 /* Debug */,
+				CF3C7F768273933AD6979F29 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		711C9C07A8A55276ACCAEE8E /* Build configuration list for PBXNativeTarget "TimeKeeper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FBB9FADD84CAA520948D8B2 /* Debug */,
+				B62612642CB81B9364A8833A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A70C3804D7589B31ADD54D15 /* Build configuration list for PBXProject "TimeKeeper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFA8D482EEF5B14A05A958A1 /* Debug */,
+				8D59C41B9CF498C41912F314 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BE057F4903A95470559C5768 /* Build configuration list for PBXNativeTarget "TimeKeeperShieldAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4BA34D189A8088D42F147D51 /* Debug */,
+				EAAE28CC6E02C935B4482E9C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ECBF8B091D96473FA4A7A4F2 /* Build configuration list for PBXNativeTarget "TimeKeeperTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AEEB959DBB4214999B60F989 /* Debug */,
+				59EB95ED5FEB5FA3C605C7F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B27710043117EDC34437D683 /* Project object */;
+}

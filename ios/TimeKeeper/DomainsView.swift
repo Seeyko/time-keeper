@@ -24,7 +24,7 @@ struct DomainsView: View {
                     Text("Ce n'est pas un site.").font(.footnote).foregroundStyle(.red)
                 }
             } footer: {
-                Text("Bloque aussi www. et m. L'app, elle, se met dans une limite.")
+                Text(verbatim: "Bloque aussi www. et m. L'app, elle, se met dans une limite.")
             }
 
             let missing = suggestions.filter { !model.draft.blockedDomains.contains($0) }
