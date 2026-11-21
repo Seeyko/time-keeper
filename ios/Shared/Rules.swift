@@ -102,6 +102,10 @@ struct Rules: Codable, Equatable {
         return out
     }
 
+    var isUnrestricted: Bool {
+        groups.isEmpty && blockedDomains.isEmpty && !denyAppRemoval
+    }
+
     func isAtLeastAsStrict(as other: Rules) -> Bool {
         Rules.strictest(other, self) == self
     }

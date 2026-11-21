@@ -9,8 +9,13 @@ enum Theme {
     static var pending: Color { dynamic(light: 0x8A5300, dark: 0xFFB84D) }
     static var pendingGround: Color { dynamic(light: 0xFFF4DE, dark: 0x2A1F0A) }
     static var field: Color { dynamic(light: 0xF0F1F4, dark: 0x1C1D22) }
+    static var accentGround: Color { dynamic(light: 0xEEF2FC, dark: 0x172447) }
+    static var hairline: Color { dynamic(light: 0xE4E6EB, dark: 0x2C2E35) }
+    static var night: Color { dynamic(light: 0x0B1530, dark: 0x0B1530) }
+    static var nightSecondary: Color { dynamic(light: 0xC4CBDA, dark: 0xC4CBDA) }
 
     static var title: Font { .system(.largeTitle, design: .serif, weight: .semibold) }
+    static var heading: Font { .system(.title, design: .serif, weight: .semibold) }
     static var section: Font { .system(.title2, design: .serif, weight: .semibold) }
     static var value: Font { .system(.title2, design: .serif).monospacedDigit() }
 

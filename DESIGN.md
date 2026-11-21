@@ -29,6 +29,8 @@ Tout est dans `ios/TimeKeeper/Theme.swift`. Une couleur porte un sens, jamais un
 | `Theme.pending` | `#8A5300` | `#FFB84D` | seulement un assouplissement en attente |
 | `Theme.pendingGround` | `#FFF4DE` | `#2A1F0A` | le fond de la bannière en attente |
 | `Theme.field` | `#F0F1F4` | `#1C1D22` | le fond d'un champ |
+| `Theme.accentGround` | `#EEF2FC` | `#172447` | le fond d'un choix sélectionné (onboarding) |
+| `Theme.hairline` | `#E4E6EB` | `#2C2E35` | les filets et contours de choix |
 | nuit | `#0B1530` | `#0B1530` | l'écran de blocage, toujours sombre |
 
 - Pourquoi le bleu et plus l'orange : l'orange sur blanc ne passe pas le contraste (4,5:1) et se lisait comme une alerte. L'ambre reste, mais seulement pour « en attente ».
@@ -57,8 +59,9 @@ Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran 
 - `PrimaryButtonStyle` (`Theme.swift`) : le bouton plein.
 - `SectionTitle` (`Theme.swift`) : le titre de section en serif, à la place de l'étiquette grise en capitales.
 - `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
-- `delayedAlert` (`MainView.swift`) : la seule explication du délai de 24 h, montrée au moment où il s'applique.
+- `delayedAlert` (`MainView.swift`) : l'explication du délai de 24 h au moment où il s'applique. L'onboarding le dit aussi une fois, avant le choix du temps et du verrou, parce que c'est là qu'il change la décision.
 - L'écran de blocage (`ShieldConfigurationExtension.swift`) : fond nuit, cadran blanc, un bouton blanc « Fermer ».
+- L'onboarding (`OnboardingFlow.swift`) : un seul écran dont le contenu se remplace par un fondu flou, le bouton plein fixe en bas, une barre de progression fine. Le aha est au 2e écran : la vraie maquette de l'écran de blocage, où l'on cherche en vain « Ignorer ». Taper à côté ne dit rien, seule une vibration répond. Puis une question par écran : ce qui prend le plus de temps (un seul choix, une seule limite), Temps d'écran, les apps et le temps par jour, ou le site, puis le verrou. Le début de journée vaut 04:00 et se règle sur l'accueil. La première installation s'applique tout de suite (rien n'existait à assouplir).
 
 ## Motion
 Animations système uniquement.
@@ -69,7 +72,8 @@ Animations système uniquement.
 - La confirmation de suppression s'ouvre : `.warning`.
 
 ## Illustrations
-Aucune dans l'app. La seule illustration est l'icône.
+Le hibou de l'icône est la seule illustration. Dans l'app, il n'apparaît que dans l'onboarding (bienvenue, réussite du aha, verrou, fin), jamais sur les écrans de tous les jours : ils restent sobres. Les poses détourées sont dans `Assets.xcassets` (`owl-montre`, `owl-non`, `owl-cadenas`, `owl-lit`) et viennent de `store/make/owl`.
+- Pourquoi : l'onboarding doit faire sentir la valeur et donner de la chaleur, l'outil de tous les jours doit rester un cadran (Tom, 2026-11-21).
 
 ### L'icône
 - Le sujet : un petit hibou rond, le gardien du temps, qui serre une montre à gousset contre lui. Un seul personnage, centré, sur un fond crème uni (`#F7EBDB`).
@@ -85,7 +89,15 @@ Aucune dans l'app. La seule illustration est l'icône.
 - L'écran de blocage a un seul bouton : « Fermer ».
 - Montre l'état dans la ligne (« Bloqué jusqu'à 04:00 ») au lieu de l'expliquer sous la liste.
 - Pas de carte, pas de sablier, pas d'orange en couleur d'action.
-- Pas de rouge ailleurs que sur « Bloqué », une erreur de saisie et une suppression.
+- Pas de rouge ailleurs que sur « Bloqué », une erreur de saisie, une suppression et le refus de Temps d'écran dans l'onboarding (sans cet accès, rien ne bloque).
 
 ## Vérifier ce fichier
-Lancer avec `-demo`, en clair puis en sombre, regarder chaque écran en vraie taille, cacher chaque texte avec le doigt. Chercher `Color.orange`, `.red` et `hourglass` dans `ios/` : il ne doit rien rester.
+Lancer avec `-demo` (et `-onboarding` pour le parcours d'accueil), en clair puis en sombre, regarder chaque écran en vraie taille, cacher chaque texte avec le doigt. Chercher `Color.orange`, `.red` et `hourglass` dans `ios/` : il ne doit rien rester.
+
+## Les mots
+Relus par deux relecteurs Fable (copy-cutter et story-reviewer, 2026-11-21). Les mêmes mots partout :
+- « limite », jamais « règle ». « Changement prévu le … », jamais « assouplissement » ni « effectif ».
+- Une date réelle, jamais « dans 24 h » sur un état qui dure : il devient faux une heure après.
+- « Remise à zéro à » pour le début de journée. « Verrouiller la suppression d'apps » pour le verrou.
+- « 2 apps · 1 site », jamais « éléments ».
+- Une erreur dit quoi faire : « Écris-le comme ça : youtube.com ».

@@ -24,7 +24,7 @@ struct GroupEditorView: View {
                 }
                 .sensoryFeedback(.selection, trigger: group.minutes)
             } header: {
-                SectionTitle("Temps par jour")
+                SectionTitle("Temps total par jour")
             }
 
             Section {
@@ -51,10 +51,6 @@ struct GroupEditorView: View {
                 }
             } header: {
                 SectionTitle("Apps et sites")
-            } footer: {
-                Text("Un seul compteur pour tout ce qui est choisi.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
             }
 
             if !isNew {

@@ -15,13 +15,9 @@ struct MainView: View {
     }
 
     private func pendingText(_ date: Date) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Assouplissement en attente").font(.headline)
-            Text("Effectif le \(date.formatted(date: .abbreviated, time: .shortened))")
-                .font(.subheadline)
-                .foregroundStyle(Theme.pending)
-        }
-        .fixedSize(horizontal: false, vertical: true)
+        Text("Changement prévu le \(date.formatted(date: .abbreviated, time: .shortened))")
+            .font(.headline)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private var cancelPendingButton: some View {
@@ -30,7 +26,7 @@ struct MainView: View {
             .font(.callout.weight(.semibold))
             .foregroundStyle(Theme.pending)
             .frame(minHeight: 44)
-            .accessibilityLabel("Annuler l'assouplissement")
+            .accessibilityLabel("Annuler ce changement")
     }
 
     var body: some View {
@@ -98,8 +94,8 @@ struct MainView: View {
                 }
 
                 Section {
-                    DatePicker("Nouvelle journée à", selection: dayStartBinding, displayedComponents: .hourAndMinute)
-                    Toggle("Empêcher la suppression d'apps", isOn: Binding(
+                    DatePicker("Remise à zéro à", selection: dayStartBinding, displayedComponents: .hourAndMinute)
+                    Toggle("Verrouiller la suppression d'apps", isOn: Binding(
                         get: { model.draft.denyAppRemoval },
                         set: { on in handle(model.setDenyAppRemoval(on)) }
                     ))
@@ -157,11 +153,11 @@ private struct GroupRow: View {
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(Theme.blocked)
                 } else if pending {
-                    Text("Modification dans 24 h")
+                    Text("Changement en attente")
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(Theme.pending)
                 } else if !group.isEmpty {
-                    Text("\(group.itemCount) élément\(group.itemCount > 1 ? "s" : "")")
+                    Text(group.contentLabel)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -173,6 +169,21 @@ private struct GroupRow: View {
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
+    }
+}
+
+extension LimitGroup {
+    var contentLabel: String {
+        let parts = [
+            counted(selection.applicationTokens.count, "app", "apps"),
+            counted(selection.categoryTokens.count, "catégorie", "catégories"),
+            counted(selection.webDomainTokens.count, "site", "sites"),
+        ].compactMap { $0 }
+        return parts.joined(separator: " · ")
+    }
+
+    private func counted(_ count: Int, _ one: String, _ many: String) -> String? {
+        count == 0 ? nil : "\(count) \(count > 1 ? many : one)"
     }
 }
 
@@ -190,7 +201,7 @@ extension View {
         )) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("Ce qui assouplit tes règles s'appliquera le \(date.wrappedValue?.formatted(date: .abbreviated, time: .shortened) ?? "").")
+            Text("Ce changement s'applique le \(date.wrappedValue?.formatted(date: .abbreviated, time: .shortened) ?? "").")
         }
     }
 }
