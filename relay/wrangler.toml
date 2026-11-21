@@ -1,0 +1,7 @@
+name = "time-keeper-live"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+APNS_TEAM_ID = "8564ATFAJQ"
+APNS_TOPIC = "com.seeyko.timekeeper"

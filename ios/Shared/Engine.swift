@@ -100,6 +100,7 @@ enum Engine {
                 continue
             }
             var events = Reminder.events(for: group, plan: reminderPlan)
+            events.merge(LiveLimit.events(for: group)) { current, _ in current }
             events[LimitGroup.eventName] = group.event(after: group.minutes)
             center.stopMonitoring([group.activityName])
             do {
@@ -131,6 +132,6 @@ enum Engine {
 
     private static func fingerprint(_ group: LimitGroup, dayStart: DayStart, plan: ReminderPlan) -> String {
         let data = (try? JSONEncoder().encode(group.selection)) ?? Data()
-        return "\(plan.rawValue)|\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
+        return "live|\(plan.rawValue)|\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
     }
 }

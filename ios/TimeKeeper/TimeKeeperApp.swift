@@ -11,6 +11,7 @@ struct TimeKeeperApp: App {
 
     init() {
         Theme.applyNavigationTitle()
+        LiveLimit.observeTokens()
     }
 
     var body: some Scene {

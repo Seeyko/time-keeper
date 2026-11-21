@@ -41,6 +41,21 @@ enum SharedStorage {
         set { defaults.set(newValue.rawValue, forKey: "reminderPlan.v1") }
     }
 
+    static var livePushToStartToken: String? {
+        get { defaults.string(forKey: "live.startToken") }
+        set { defaults.set(newValue, forKey: "live.startToken") }
+    }
+
+    static func liveUpdateToken(for id: UUID) -> String? {
+        guard let stored = defaults.string(forKey: "live.updateToken." + id.uuidString) else { return nil }
+        let parts = stored.split(separator: "|", maxSplits: 1).map(String.init)
+        return parts.count == 2 && parts[0] == todayKey() ? parts[1] : nil
+    }
+
+    static func setLiveUpdateToken(_ token: String?, for id: String) {
+        defaults.set(token.map { todayKey() + "|" + $0 }, forKey: "live.updateToken." + id)
+    }
+
     static func claimReminderToday(_ name: String, for id: UUID) -> Bool {
         let key = "reminder.\(name).\(id.uuidString)"
         let today = todayKey()

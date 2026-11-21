@@ -174,4 +174,12 @@ final class RulesTests: XCTestCase {
         XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .lastFive).keys.map(\.rawValue), ["lastFive"])
         XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .off).count, 0)
     }
+
+    func testLiveStepsFromHalfToFiveMinutesLeft() {
+        XCTAssertEqual(LiveLimit.usedMinutes(for: 60), [30, 35, 40, 45, 50, 55])
+        XCTAssertEqual(LiveLimit.usedMinutes(for: 15), [10])
+        XCTAssertEqual(LiveLimit.usedMinutes(for: 5), [])
+        XCTAssertLessThanOrEqual(LiveLimit.usedMinutes(for: 600).count, 12)
+        XCTAssertEqual(LiveLimit.usedMinutes(for: 600).last, 595)
+    }
 }
