@@ -101,16 +101,21 @@ struct MainView: View {
                         set: { on in handle(model.setDenyAppRemoval(on)) }
                     ))
                     .tint(Theme.toggle)
-                    Picker("Me prévenir", selection: Binding(
-                        get: { model.reminderPlan },
-                        set: { model.setReminderPlan($0) }
+                    Toggle("Me prévenir à la moitié", isOn: Binding(
+                        get: { model.reminders.atHalf },
+                        set: { on in var r = model.reminders; r.atHalf = on; model.setReminders(r) }
+                    ))
+                    .tint(Theme.toggle)
+                    Picker("Me prévenir avant la fin", selection: Binding(
+                        get: { model.reminders.minutesBefore },
+                        set: { m in var r = model.reminders; r.minutesBefore = m; model.setReminders(r) }
                     )) {
-                        ForEach(ReminderPlan.allCases) { plan in
-                            Text(plan.label).tag(plan)
+                        ForEach(ReminderSettings.beforeChoices, id: \.self) { minutes in
+                            Text(minutes == 0 ? "Jamais" : "\(minutes) min avant").tag(minutes)
                         }
                     }
-                    .sensoryFeedback(.selection, trigger: model.reminderPlan)
-                    if model.notificationsDenied && model.reminderPlan != .off {
+                    .sensoryFeedback(.selection, trigger: model.reminders)
+                    if model.notificationsDenied && (model.reminders.atHalf || model.reminders.minutesBefore > 0) {
                         Button("Autoriser les notifications") {
                             if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
                         }

@@ -163,15 +163,16 @@ final class RulesTests: XCTestCase {
         XCTAssertEqual(out.active.dayStart, DayStart(hour: 4, minute: 0))
     }
 
-    func testRemindersAtHalfAndFiveMinutesLeft() {
-        XCTAssertEqual(Reminder.half.minutesUsed(of: 60), 30)
-        XCTAssertEqual(Reminder.lastFive.minutesUsed(of: 60), 55)
-        XCTAssertNil(Reminder.half.minutesUsed(of: 15))
-        XCTAssertEqual(Reminder.lastFive.minutesUsed(of: 15), 10)
-        XCTAssertNil(Reminder.lastFive.minutesUsed(of: 5))
-        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 5), plan: .halfAndLastFive).count, 0)
-        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .halfAndLastFive).count, 2)
-        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .lastFive).keys.map(\.rawValue), ["lastFive"])
-        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), plan: .off).count, 0)
+    func testRemindersFollowSettings() {
+        let standard = ReminderSettings()
+        XCTAssertEqual(Reminder.half.minutesUsed(of: 60, settings: standard), 30)
+        XCTAssertEqual(Reminder.before.minutesUsed(of: 60, settings: standard), 55)
+        XCTAssertNil(Reminder.half.minutesUsed(of: 15, settings: standard))
+        XCTAssertEqual(Reminder.before.minutesUsed(of: 15, settings: standard), 10)
+        XCTAssertNil(Reminder.before.minutesUsed(of: 5, settings: standard))
+        XCTAssertEqual(Reminder.before.minutesUsed(of: 60, settings: ReminderSettings(atHalf: false, minutesBefore: 15)), 45)
+        XCTAssertNil(Reminder.before.minutesUsed(of: 60, settings: ReminderSettings(atHalf: true, minutesBefore: 30)))
+        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), settings: standard).count, 2)
+        XCTAssertEqual(Reminder.events(for: LimitGroup(name: "Vidéo", minutes: 60), settings: ReminderSettings(atHalf: false, minutesBefore: 0)).count, 0)
     }
 }

@@ -50,7 +50,7 @@ final class AppModel: ObservableObject {
     let demo: Bool
     @Published private(set) var state: TimeKeeperState
     @Published private(set) var hasOnboarded: Bool
-    @Published private(set) var reminderPlan: ReminderPlan
+    @Published private(set) var reminders: ReminderSettings
     @Published private(set) var notificationsDenied = false
 
     private static let onboardedKey = "onboarded.v1"
@@ -59,7 +59,7 @@ final class AppModel: ObservableObject {
         self.demo = demo || demoOnboarding
         let loaded = demoOnboarding ? TimeKeeperState() : demo ? AppModel.demoState : SharedStorage.load()
         state = loaded
-        reminderPlan = demo || demoOnboarding ? .halfAndLastFive : SharedStorage.reminderPlan
+        reminders = demo || demoOnboarding ? ReminderSettings() : SharedStorage.reminderSettings
         hasOnboarded = demoOnboarding ? false : demo || UserDefaults.standard.bool(forKey: AppModel.onboardedKey) || !loaded.active.isUnrestricted
     }
 
@@ -93,10 +93,10 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func setReminderPlan(_ plan: ReminderPlan) {
-        reminderPlan = plan
+    func setReminders(_ settings: ReminderSettings) {
+        reminders = settings
         if demo { return }
-        SharedStorage.reminderPlan = plan
+        SharedStorage.reminderSettings = settings
         Engine.sync(state.active)
     }
 
