@@ -9,9 +9,8 @@
   ],
   "slides": [
     {
-      "file": "01-limite-qui-tient",
+      "file": "01-encore-5-minutes",
       "screen": "../../screenshots/1-accueil.png",
-      "title": "Une limite de temps d'écran <em>qui tient</em>",
       "loupe": {
         "crop": [
           300,
@@ -20,13 +19,20 @@
           180
         ],
         "zoom": 1.7
+      },
+      "thought": "« Encore 5 minutes… »<br>Il y a deux heures.",
+      "answer": "Une limite de temps d'écran qui tient vraiment.",
+      "owl": {
+        "src": "owl/garde.png",
+        "x": -30,
+        "y": 2150,
+        "h": 720
       }
     },
     {
       "file": "02-juste-fermer",
       "screen": "raw/shield.png",
       "dark": true,
-      "title": "Limite atteinte&#8239;?<br><em>Juste « Fermer ».</em>",
       "loupe": {
         "crop": [
           603,
@@ -34,13 +40,21 @@
           1206,
           230
         ],
-        "zoom": 1.4
+        "zoom": 1.4,
+        "dy": -520
+      },
+      "thought": "« J'appuie sur Ignorer sans même réfléchir. »",
+      "answer": "Ici, il n'y a qu'un bouton : Fermer.",
+      "owl": {
+        "src": "owl/montre.png",
+        "x": 30,
+        "y": 2420,
+        "h": 460
       }
     },
     {
       "file": "03-un-site-pas-le-navigateur",
       "screen": "../../screenshots/3-sites-bloques.png",
-      "title": "Bloque un site,<br><em>pas le navigateur</em>",
       "loupe": {
         "crop": [
           330,
@@ -49,12 +63,19 @@
           140
         ],
         "zoom": 1.7
+      },
+      "thought": "« Je veux bloquer un site, pas tout mon navigateur. »",
+      "answer": "Un site bloqué partout. Le reste du web reste ouvert.",
+      "owl": {
+        "src": "owl/cadenas.png",
+        "x": 760,
+        "y": 2200,
+        "h": 660
       }
     },
     {
       "file": "04-assouplir-24h",
       "screen": "../../screenshots/5-assouplissement.png",
-      "title": "Envie de tricher&#8239;?<br>Il faudra <em>attendre 24&nbsp;h</em>",
       "loupe": {
         "crop": [
           603,
@@ -63,12 +84,19 @@
           290
         ],
         "zoom": 1.4
+      },
+      "thought": "« Je rallonge ma limite dès que ça m'arrange. »",
+      "answer": "Assouplir une règle prend 24&nbsp;h.",
+      "owl": {
+        "src": "owl/patient.png",
+        "x": -40,
+        "y": 2160,
+        "h": 700
       }
     },
     {
       "file": "05-impossible-a-supprimer",
       "screen": "../../screenshots/1-accueil.png",
-      "title": "Même supprimer l'app<br><em>ne marche pas</em>",
       "loupe": {
         "crop": [
           603,
@@ -76,13 +104,21 @@
           1120,
           160
         ],
-        "zoom": 1.3
+        "zoom": 1.3,
+        "dy": -480
+      },
+      "thought": "« Je supprime l'app et c'est réglé. »",
+      "answer": "Pas cette fois&#8239;: la suppression est verrouillée.",
+      "owl": {
+        "src": "owl/non.png",
+        "x": 780,
+        "y": 1640,
+        "h": 600
       }
     },
     {
-      "file": "06-rien-ne-quitte-ton-iphone",
+      "file": "06-sans-abonnement",
       "screen": "../../screenshots/4-bienvenue.png",
-      "title": "<em>Rien</em> ne quitte<br>ton iPhone",
       "loupe": {
         "crop": [
           603,
@@ -91,12 +127,21 @@
           80
         ],
         "zoom": 1.6
-      }
+      },
+      "thought": "« Encore un abonnement pour arrêter de scroller&#8239;? »",
+      "answer": "Gratuit, sans compte. Rien ne quitte ton iPhone."
     },
     {
       "file": "07-ton-temps-te-revient",
       "title": "Ton temps<br><em>te revient</em>",
-      "line": "Sans compte · Sans pub · Open source"
+      "line": "Sans compte · Sans pub · Open source",
+      "thought": "« Ce soir, j'ai lu un livre. »",
+      "owl": {
+        "src": "owl/lit.png",
+        "x": 330,
+        "y": 780,
+        "h": 660
+      }
     }
   ]
 }

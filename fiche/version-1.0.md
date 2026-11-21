@@ -53,15 +53,17 @@ Time Keeper demande l'accès à Temps d'écran pour pouvoir bloquer. iOS 17.4 ou
 
 ### Légendes des captures
 
-| # | Fichier | Titre | Loupe |
-|---|---|---|---|
-| 1 | `01-limite-qui-tient` | Une limite de temps d'écran *qui tient* | « Bloqué jusqu'à 04:00 » |
-| 2 | `02-juste-fermer` | Limite atteinte ? *Juste « Fermer ».* | le bouton « Fermer » |
-| 3 | `03-un-site-pas-le-navigateur` | Bloque un site, *pas le navigateur* | un site bloqué |
-| 4 | `04-assouplir-24h` | Envie de tricher ? Il faudra *attendre 24 h* | la bannière « Assouplissement en attente » |
-| 5 | `05-impossible-a-supprimer` | Même supprimer l'app *ne marche pas* | « Empêcher la suppression d'apps » |
-| 6 | `06-rien-ne-quitte-ton-iphone` | *Rien* ne quitte ton iPhone | « Rien ne quitte ton iPhone. » |
-| 7 | `07-ton-temps-te-revient` | Ton temps *te revient* | aucune |
+Chaque capture part d'une phrase que la personne s'est déjà dite, puis montre la réponse de l'app. Le hibou change de pose à chaque fois.
+
+| # | Fichier | Ce qu'elle se dit | La réponse | Hibou |
+|---|---|---|---|---|
+| 1 | `01-encore-5-minutes` | « Encore 5 minutes… » Il y a deux heures. | Une limite de temps d'écran qui tient vraiment. | bras croisés |
+| 2 | `02-juste-fermer` | « J'appuie sur Ignorer sans même réfléchir. » | Ici, il n'y a qu'un bouton : Fermer. | montre le bouton |
+| 3 | `03-un-site-pas-le-navigateur` | « Je veux bloquer un site, pas tout mon navigateur. » | Un site bloqué partout. Le reste du web reste ouvert. | cadenas |
+| 4 | `04-assouplir-24h` | « Je rallonge ma limite dès que ça m'arrange. » | Assouplir une règle prend 24 h. | patient sur sa montre |
+| 5 | `05-impossible-a-supprimer` | « Je supprime l'app et c'est réglé. » | Pas cette fois : la suppression est verrouillée. | fait non |
+| 6 | `06-sans-abonnement` | « Encore un abonnement pour arrêter de scroller ? » | Gratuit, sans compte. Rien ne quitte ton iPhone. | aucun |
+| 7 | `07-ton-temps-te-revient` | « Ce soir, j'ai lu un livre. » | Ton temps te revient. | lit un livre |
 
 Les trois premières portent les mots cherchés : limite, temps d'écran, bloquer, site, navigateur.
 
@@ -114,3 +116,4 @@ Time Keeper asks for Screen Time access to block apps. Requires iOS 17.4 or late
 
 ## Journal
 - 2026-11-21 : première fiche complète, 7 captures sur fond cadran.
+- 2026-11-21 : légendes réécrites en phrases que la personne se dit, hibou dans six poses.

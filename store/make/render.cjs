@@ -14,7 +14,7 @@ mkdirSync(out, { recursive: true });
 
 const url = (p) => pathToFileURL(resolve(here, p)).href;
 
-const phone = { x: 160, y: 660, w: 1000 };
+const phone = { x: 160, y: 900, w: 1000 };
 const k = phone.w / RW;
 const bezel = 26;
 
@@ -85,14 +85,14 @@ function loupe(s) {
   const w = Math.min(cw * z, W - 80);
   const h = ch * z;
   const left = Math.max(40, Math.min(W - 40 - w, phone.x + cx * k - w / 2));
-  const top = phone.y + cy * k - h / 2;
+  const top = phone.y + cy * k - h / 2 + (s.loupe.dy ?? 0);
   return `<div class="loupe" style="left:${left}px;top:${top}px;width:${w}px;height:${h}px;border-radius:${Math.min(h / 2, 64)}px;
     background-image:url('${url(s.screen)}');background-size:${RW * z}px ${RH * z}px;background-position:${-(cx - cw / 2) * z + (w - cw * z) / 2}px ${-(cy - ch / 2) * z}px"></div>`;
 }
 
 function closing(s) {
-  return `<img class="mark" src="${url('../../ios/TimeKeeper/Assets.xcassets/AppIcon.appiconset/icon-1024.png')}">
-  <h1 class="end">${s.title}</h1><p class="line">${s.line}</p>`;
+  return `${s.owl ? '' : `<img class="mark" src="${url('../../ios/TimeKeeper/Assets.xcassets/AppIcon.appiconset/icon-1024.png')}">`}
+  <p class="quote">${s.thought}</p><h1 class="end">${s.title}</h1><p class="line">${s.line}</p>`;
 }
 
 function page(s, i) {
@@ -102,22 +102,27 @@ function page(s, i) {
   @font-face{font-family:IS;font-style:italic;src:url('${url('fonts/InstrumentSerif-Italic.woff2')}')}
   html,body{margin:0;width:${W}px;height:${H}px;overflow:hidden;background:#070E24}
   .bg{position:absolute;inset:0}
-  h1{position:absolute;left:90px;right:90px;top:190px;margin:0;font:400 140px/1.04 IS,serif;color:#fff;text-align:center;letter-spacing:-1px;text-wrap:balance}
-  h1 em{color:#B9CCFF}
+  .head{position:absolute;left:80px;right:80px;top:170px;text-align:center}
+  .head p{margin:0;font:400 118px/1.04 IS,serif;color:#fff;letter-spacing:-.5px;text-wrap:balance}
+  .head h1{margin:30px 0 0;font:italic 400 80px/1.08 IS,serif;color:#B9CCFF;text-wrap:balance}
+  .owl{position:absolute;filter:drop-shadow(0 30px 50px rgba(0,0,0,.45))}
   .phone{position:absolute;left:${phone.x - bezel}px;top:${phone.y - bezel}px;width:${phone.w}px;height:${ph}px;padding:${bezel}px;border-radius:${150}px;background:#0A0A0D;
     box-shadow:0 0 0 3px #2A2C33,0 60px 140px rgba(0,0,0,.55)}
   .screen{position:relative;width:${phone.w}px;height:${ph}px;border-radius:${124}px;overflow:hidden;background:url('${s.screen ? url(s.screen) : ''}') 0 0/100% 100%}
   .status{position:absolute;left:0;right:0;top:0;height:${175 * k}px;display:flex;align-items:center;justify-content:space-between;padding:${14 * k}px ${110 * k}px 0 ${150 * k}px;box-sizing:border-box;font:600 ${50 * k}px Inter,sans-serif}
   .island{position:absolute;top:${34 * k}px;left:50%;width:${370 * k}px;height:${110 * k}px;margin-left:${-185 * k}px;border-radius:${60 * k}px;background:#000}
   .mark{position:absolute;left:${W / 2 - 190}px;top:1060px;width:380px;height:380px;border-radius:86px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
-  h1.end{top:1540px;font-size:190px}
+  h1.end{position:absolute;left:0;right:0;margin:0;text-align:center;top:1540px;font:400 190px/1.02 IS,serif;color:#fff}
+  h1.end em{color:#B9CCFF}
+  .quote{position:absolute;left:0;right:0;top:330px;margin:0;text-align:center;font:400 104px/1.06 IS,serif;color:#fff}
   .line{position:absolute;left:0;right:0;top:2020px;margin:0;text-align:center;font:500 54px Inter,sans-serif;color:#B9CCFF;letter-spacing:.5px}
   .loupe{position:absolute;background-repeat:no-repeat;box-shadow:0 0 0 10px #fff,0 40px 90px rgba(3,8,30,.6),inset 0 0 0 1px rgba(0,0,0,.08)}
   </style></head><body>
   ${background(i, s)}
-  ${s.screen ? `<h1>${s.title}</h1>
+  ${s.screen ? `<div class="head"><p>${s.thought}</p><h1>${s.answer}</h1></div>
   <div class="phone"><div class="screen">${statusBar(s.dark)}<div class="island"></div></div></div>
   ${loupe(s)}` : closing(s)}
+  ${s.owl ? `<img class="owl" src="${url(s.owl.src)}" style="left:${s.owl.x}px;top:${s.owl.y}px;height:${s.owl.h}px;${s.owl.flip ? 'transform:scaleX(-1)' : ''}">` : ''}
   </body></html>`;
 }
 
