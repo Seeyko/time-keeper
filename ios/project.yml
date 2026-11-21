@@ -8,7 +8,7 @@ options:
 
 settings:
   base:
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: 8564ATFAJQ
     CODE_SIGN_STYLE: Automatic
     BUNDLE_ID_ROOT: com.seeyko.timekeeper
     APP_GROUP_ID: group.com.seeyko.timekeeper
