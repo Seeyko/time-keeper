@@ -53,6 +53,8 @@ struct GroupEditorView: View {
                 SectionTitle("Apps et sites")
             } footer: {
                 Text("Un seul compteur pour tout ce qui est choisi.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
             if !isNew {

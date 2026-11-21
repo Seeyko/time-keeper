@@ -5,36 +5,63 @@ struct MainView: View {
     @EnvironmentObject private var model: AppModel
     @State private var delayedUntil: Date?
     @State private var newGroup: LimitGroup?
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    private var pendingIcon: some View {
+        Image(systemName: "clock")
+            .font(.title3)
+            .foregroundStyle(Theme.pending)
+            .accessibilityHidden(true)
+    }
+
+    private func pendingText(_ date: Date) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Assouplissement en attente").font(.headline)
+            Text("Effectif le \(date.formatted(date: .abbreviated, time: .shortened))")
+                .font(.subheadline)
+                .foregroundStyle(Theme.pending)
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var cancelPendingButton: some View {
+        Button("Annuler") { model.cancelPending() }
+            .buttonStyle(.borderless)
+            .font(.callout.weight(.semibold))
+            .foregroundStyle(Theme.pending)
+            .frame(minHeight: 44)
+            .accessibilityLabel("Annuler l'assouplissement")
+    }
 
     var body: some View {
         NavigationStack {
             List {
                 if let date = model.state.pendingEffective, model.state.pending != nil {
                     Section {
-                        HStack(spacing: 12) {
-                            Image(systemName: "clock")
-                                .font(.title3)
-                                .foregroundStyle(Theme.pending)
-                                .accessibilityHidden(true)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Assouplissement en attente").font(.headline)
-                                Text("Effectif le \(date.formatted(date: .abbreviated, time: .shortened))")
-                                    .font(.subheadline)
-                                    .foregroundStyle(Theme.pending)
+                        Group {
+                            if typeSize.isAccessibilitySize {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    HStack(alignment: .firstTextBaseline, spacing: 12) {
+                                        pendingIcon
+                                        pendingText(date)
+                                    }
+                                    cancelPendingButton
+                                }
+                            } else {
+                                HStack(spacing: 12) {
+                                    pendingIcon
+                                    pendingText(date)
+                                    Spacer(minLength: 8)
+                                    cancelPendingButton
+                                }
                             }
-                            Spacer(minLength: 8)
-                            Button("Annuler") { model.cancelPending() }
-                                .buttonStyle(.borderless)
-                                .font(.callout.weight(.semibold))
-                                .foregroundStyle(Theme.pending)
-                                .frame(minHeight: 44)
-                                .accessibilityLabel("Annuler l'assouplissement")
                         }
                         .padding(.vertical, 6)
+                        .listRowInsets(EdgeInsets(top: 8, leading: 28, bottom: 8, trailing: 28))
                         .listRowBackground(
                             RoundedRectangle(cornerRadius: 14, style: .continuous)
                                 .fill(Theme.pendingGround)
-                                .padding(.horizontal, 8)
+                                .padding(.horizontal, 16)
                         )
                         .listRowSeparator(.hidden)
                     }
@@ -76,6 +103,7 @@ struct MainView: View {
                         get: { model.draft.denyAppRemoval },
                         set: { on in handle(model.setDenyAppRemoval(on)) }
                     ))
+                    .tint(Theme.toggle)
                 } header: {
                     SectionTitle("Réglages")
                 }
