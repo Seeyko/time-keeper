@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D2A7C3E14B5F6A7B8C9D0E12 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */; };
+		D2A7C3E14B5F6A7B8C9D0E13 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */; };
+		D2A7C3E14B5F6A7B8C9D0E15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2A7C3E14B5F6A7B8C9D0E14 /* Assets.xcassets */; };
 		005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */; };
 		0BFB7D827850435BBC31C563 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828BBDD4382219E02C5ED2D9 /* MainView.swift */; };
 		0CAD474273E5D10355283C2C /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
@@ -78,6 +81,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		D2A7C3E14B5F6A7B8C9D0E14 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0A07F3A03A6D1905CFB37DAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainsView.swift; sourceTree = "<group>"; };
 		1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldActionExtension.swift; sourceTree = "<group>"; };
@@ -114,6 +119,7 @@
 			children = (
 				D1AD3B46068D60F11BD6E072 /* Engine.swift */,
 				54DFC4114B884004CC41B5D2 /* Rules.swift */,
+				D2A7C3E14B5F6A7B8C9D0E11 /* Reminder.swift */,
 				A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */,
 			);
 			path = Shared;
@@ -192,6 +198,7 @@
 		FDB54EF842862EFDE8CD6A0D /* TimeKeeperShieldConfig */ = {
 			isa = PBXGroup;
 			children = (
+				D2A7C3E14B5F6A7B8C9D0E14 /* Assets.xcassets */,
 				28591F6C7DA3705210D3D114 /* Info.plist */,
 				C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */,
 				EE278922667D82B311597FFF /* TimeKeeperShieldConfig.entitlements */,
@@ -224,6 +231,7 @@
 			buildConfigurationList = 2DBD63DDFB0735C83518BB4A /* Build configuration list for PBXNativeTarget "TimeKeeperShieldConfig" */;
 			buildPhases = (
 				0FE298E95CDD2B5360273458 /* Sources */,
+				D2A7C3E14B5F6A7B8C9D0E16 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -348,6 +356,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D2A7C3E14B5F6A7B8C9D0E16 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2A7C3E14B5F6A7B8C9D0E15 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		93DB94511F2E9AEB602B7E99 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -390,6 +406,7 @@
 				AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */,
 				9BD95244BE7FC5EB199BE65C /* Engine.swift in Sources */,
 				0CAD474273E5D10355283C2C /* Rules.swift in Sources */,
+				D2A7C3E14B5F6A7B8C9D0E13 /* Reminder.swift in Sources */,
 				56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,6 +421,7 @@
 				0BFB7D827850435BBC31C563 /* MainView.swift in Sources */,
 				EA3780306B56BF401111E31D /* AccessView.swift in Sources */,
 				B7C4A1E20F3D5A6B7C8D9E01 /* OnboardingFlow.swift in Sources */,
+				D2A7C3E14B5F6A7B8C9D0E12 /* Reminder.swift in Sources */,
 				C6C174523400F45178F14F37 /* Rules.swift in Sources */,
 				F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */,
 				3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */,

@@ -64,7 +64,10 @@ final class AppModel: ObservableObject {
     }
 
     func finishOnboarding() {
-        if !demo { UserDefaults.standard.set(true, forKey: AppModel.onboardedKey) }
+        if !demo {
+            UserDefaults.standard.set(true, forKey: AppModel.onboardedKey)
+            Reminder.requestPermission()
+        }
         hasOnboarded = true
     }
 
@@ -76,6 +79,7 @@ final class AppModel: ObservableObject {
         guard AuthorizationCenter.shared.authorizationStatus == .approved else { return }
         Engine.applyPendingIfDue()
         state = SharedStorage.load()
+        if !state.active.groups.isEmpty { Reminder.requestPermission() }
     }
 
     @discardableResult

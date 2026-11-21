@@ -55,12 +55,13 @@ Aucune ombre, aucune bordure. Une seule surface teintée : la bannière « Assou
 Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran est un anneau avec un tiers rempli.
 
 ## Components
-- `Dial` (`Theme.swift`) : la marque dans l'app. La même forme sert à l'accueil et à l'écran de blocage. L'icône la reprend sur la montre du hibou.
+- `Dial` (`Theme.swift`) : la marque dans l'app. Elle sert à l'accueil. L'icône la reprend sur la montre du hibou.
 - `PrimaryButtonStyle` (`Theme.swift`) : le bouton plein.
 - `SectionTitle` (`Theme.swift`) : le titre de section en serif, à la place de l'étiquette grise en capitales.
 - `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
 - `delayedAlert` (`MainView.swift`) : l'explication du délai de 24 h au moment où il s'applique. L'onboarding le dit aussi une fois, avant le choix du temps et du verrou, parce que c'est là qu'il change la décision.
-- L'écran de blocage (`ShieldConfigurationExtension.swift`) : fond nuit, cadran blanc, un bouton blanc « Fermer ».
+- L'écran de blocage (`ShieldConfigurationExtension.swift`) : fond nuit, le hibou au cadenas (`owl-cadenas`, copié dans l'extension), un bouton blanc « Fermer ». Ses coins sont dessinés par iOS : on ne les règle pas.
+- Le rappel avant la fin : une notification à la moitié du temps (limite de 20 min et plus) et quand il reste 5 min (10 min et plus), une fois par jour chacune. Titre : le nom de la limite. Elle porte l'icône du hibou. Pas de Live Activity : iOS ne la démarre que depuis l'app ouverte ou un serveur.
 - L'onboarding (`OnboardingFlow.swift`) : un seul écran dont le contenu se remplace par un fondu flou, le bouton plein fixe en bas, une barre de progression fine. Le aha est au 2e écran : la vraie maquette de l'écran de blocage, où l'on cherche en vain « Ignorer ». Taper à côté ne dit rien, seule une vibration répond. Puis une question par écran : ce qui prend le plus de temps (un seul choix, une seule limite), Temps d'écran, les apps et le temps par jour, ou le site, puis le verrou. Le début de journée vaut 04:00 et se règle sur l'accueil. La première installation s'applique tout de suite (rien n'existait à assouplir).
 
 ## Motion
@@ -72,7 +73,7 @@ Animations système uniquement.
 - La confirmation de suppression s'ouvre : `.warning`.
 
 ## Illustrations
-Le hibou de l'icône est la seule illustration. Dans l'app, il n'apparaît que dans l'onboarding (bienvenue, réussite du aha, verrou, fin), jamais sur les écrans de tous les jours : ils restent sobres. Les poses détourées sont dans `Assets.xcassets` (`owl-montre`, `owl-non`, `owl-cadenas`, `owl-lit`) et viennent de `store/make/owl`.
+Le hibou de l'icône est la seule illustration. Dans l'app, il apparaît dans l'onboarding (bienvenue, réussite du aha, verrou, fin) et sur l'écran de blocage, jamais sur les écrans de tous les jours : ils restent sobres. Les poses détourées sont dans `Assets.xcassets` (`owl-montre`, `owl-non`, `owl-cadenas`, `owl-lit`) et viennent de `store/make/owl`.
 - Pourquoi : l'onboarding doit faire sentir la valeur et donner de la chaleur, l'outil de tous les jours doit rester un cadran (Tom, 2026-11-21).
 
 ### L'icône

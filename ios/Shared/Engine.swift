@@ -98,16 +98,11 @@ enum Engine {
             if center.activities.contains(group.activityName), SharedStorage.fingerprint(group.id) == fp {
                 continue
             }
-            let event = DeviceActivityEvent(
-                applications: group.selection.applicationTokens,
-                categories: group.selection.categoryTokens,
-                webDomains: group.selection.webDomainTokens,
-                threshold: DateComponents(minute: group.minutes),
-                includesPastActivity: true
-            )
+            var events = Reminder.events(for: group)
+            events[LimitGroup.eventName] = group.event(after: group.minutes)
             center.stopMonitoring([group.activityName])
             do {
-                try center.startMonitoring(group.activityName, during: schedule, events: [LimitGroup.eventName: event])
+                try center.startMonitoring(group.activityName, during: schedule, events: events)
                 SharedStorage.setFingerprint(fp, for: group.id)
             } catch {
                 NSLog("TimeKeeper startMonitoring \(group.name): \(error)")
@@ -135,6 +130,6 @@ enum Engine {
 
     private static func fingerprint(_ group: LimitGroup, dayStart: DayStart) -> String {
         let data = (try? JSONEncoder().encode(group.selection)) ?? Data()
-        return "\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
+        return "reminders|\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
     }
 }

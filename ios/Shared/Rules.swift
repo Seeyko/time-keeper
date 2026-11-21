@@ -53,6 +53,16 @@ struct LimitGroup: Codable, Identifiable {
     }
     var isEmpty: Bool { itemCount == 0 }
 
+    func event(after minutes: Int) -> DeviceActivityEvent {
+        DeviceActivityEvent(
+            applications: selection.applicationTokens,
+            categories: selection.categoryTokens,
+            webDomains: selection.webDomainTokens,
+            threshold: DateComponents(minute: minutes),
+            includesPastActivity: true
+        )
+    }
+
     static func id(from activity: DeviceActivityName) -> UUID? {
         let raw = activity.rawValue
         guard raw.hasPrefix(prefix) else { return nil }

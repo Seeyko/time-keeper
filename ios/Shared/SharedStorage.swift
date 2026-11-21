@@ -36,6 +36,14 @@ enum SharedStorage {
         defaults.string(forKey: "shieldDay." + id.uuidString) == todayKey()
     }
 
+    static func claimReminderToday(_ name: String, for id: UUID) -> Bool {
+        let key = "reminder.\(name).\(id.uuidString)"
+        let today = todayKey()
+        guard defaults.string(forKey: key) != today else { return false }
+        defaults.set(today, forKey: key)
+        return true
+    }
+
     static func fingerprint(_ id: UUID) -> String? {
         defaults.string(forKey: "fingerprint." + id.uuidString)
     }
@@ -52,5 +60,8 @@ enum SharedStorage {
     static func forget(_ id: UUID) {
         defaults.removeObject(forKey: "shieldDay." + id.uuidString)
         defaults.removeObject(forKey: "fingerprint." + id.uuidString)
+        for reminder in Reminder.allCases.map(\.rawValue) {
+            defaults.removeObject(forKey: "reminder.\(reminder).\(id.uuidString)")
+        }
     }
 }
