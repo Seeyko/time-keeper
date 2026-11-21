@@ -3,6 +3,7 @@ import UIKit
 
 enum Theme {
     static var accent: Color { dynamic(light: 0x1F3A8A, dark: 0x9DB7FF) }
+    static var toggle: Color { dynamic(light: 0x1F3A8A, dark: 0x3F63D8) }
     static var onAccent: Color { dynamic(light: 0xFFFFFF, dark: 0x0B1530) }
     static var blocked: Color { dynamic(light: 0xB3261E, dark: 0xFF8A80) }
     static var pending: Color { dynamic(light: 0x8A5300, dark: 0xFFB84D) }
@@ -75,6 +76,8 @@ struct SectionTitle: View {
             .foregroundStyle(.primary)
             .textCase(nil)
             .padding(.top, 8)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(uiColor: .systemBackground).padding(.horizontal, -40).padding(.vertical, -8))
             .accessibilityAddTraits(.isHeader)
     }
 }

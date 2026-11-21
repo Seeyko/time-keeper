@@ -12,6 +12,7 @@
 		0CAD474273E5D10355283C2C /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
 		16E0802369EB9A210ADC5B69 /* TimeKeeperShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD3B46068D60F11BD6E072 /* Engine.swift */; };
+		3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798B9B60F4D7071DC2C9DD83 /* Theme.swift */; };
 		56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
 		7ADC1EFBA63776BC0C6DD6FB /* ShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */; };
 		8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */; };
@@ -86,6 +87,7 @@
 		54DFC4114B884004CC41B5D2 /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 		61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCBEEC30CF8F24FCDB5D40E /* TimeKeeperTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TimeKeeperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		798B9B60F4D7071DC2C9DD83 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		828BBDD4382219E02C5ED2D9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorView.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				B50E142C4310B9631FB1E67A /* Info.plist */,
 				828BBDD4382219E02C5ED2D9 /* MainView.swift */,
 				A382015E0376534C022DA77A /* OnboardingView.swift */,
+				798B9B60F4D7071DC2C9DD83 /* Theme.swift */,
 				BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */,
 				AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */,
 			);
@@ -319,11 +322,11 @@
 				};
 			};
 			buildConfigurationList = A70C3804D7589B31ADD54D15 /* Build configuration list for PBXProject "TimeKeeper" */;
-			developmentRegion = en;
+			developmentRegion = fr;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
-				en,
+				fr,
 			);
 			mainGroup = A8DE67D1213CF63F1883F7D8;
 			minimizedProjectReferenceProxies = 1;
@@ -399,6 +402,7 @@
 				EA3780306B56BF401111E31D /* OnboardingView.swift in Sources */,
 				C6C174523400F45178F14F37 /* Rules.swift in Sources */,
 				F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */,
+				3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */,
 				8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
