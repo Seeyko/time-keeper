@@ -375,6 +375,7 @@ struct OnboardingFlow: View {
             .buttonStyle(PrimaryButtonStyle())
             .disabled(ctaDisabled)
             .opacity(step == .apps && !appsChosen ? 0 : 1)
+            .accessibilityHidden(step == .apps && !appsChosen)
             .sensoryFeedback(.selection, trigger: step)
             if step == .notify {
                 Button("Plus tard") { go(1) }
