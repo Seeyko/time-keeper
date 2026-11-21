@@ -51,6 +51,10 @@ struct GroupEditorView: View {
                 }
             } header: {
                 SectionTitle("Apps et sites")
+            } footer: {
+                Text("Un site manque ? Ouvre-le une fois dans Safari.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
             if !isNew {
