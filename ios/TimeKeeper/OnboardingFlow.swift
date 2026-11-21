@@ -2,7 +2,33 @@ import SwiftUI
 import FamilyControls
 
 enum OnboardingStep: Int, CaseIterable {
-    case welcome, aha, goals, access, apps, minutes, notify, site, lock, ready
+    case welcome, hours, aha, how, goals, access, apps, minutes, notify, site, lock, ready
+}
+
+enum PhoneHours: Int, CaseIterable, Identifiable {
+    case two = 2, four = 4, six = 6, eight = 8
+
+    var id: Int { rawValue }
+
+    var label: String {
+        switch self {
+        case .two: "Moins de 2 h"
+        case .four: "2 à 4 h"
+        case .six: "4 à 6 h"
+        case .eight: "Plus de 6 h"
+        }
+    }
+
+    var daily: Double {
+        switch self {
+        case .two: 1.5
+        case .four: 3
+        case .six: 5
+        case .eight: 7
+        }
+    }
+
+    var daysPerYear: Int { Int((daily * 365 / 24).rounded()) }
 }
 
 enum OnboardingGoal: String, CaseIterable, Identifiable {
@@ -33,8 +59,8 @@ struct OnboardingFlow: View {
     @State private var siteInvalid = false
     private let dayStart = DayStart(hour: 4, minute: 0)
     @State private var lock = false
-    @State private var found = false
-    @State private var tries = 0
+    @State private var hours: PhoneHours = .four
+    @State private var requesting = false
     @State private var showPicker = false
     @State private var accessDenied = false
     @State private var demoPicked = false
@@ -103,7 +129,9 @@ struct OnboardingFlow: View {
     private var content: some View {
         switch step {
         case .welcome: welcome
+        case .hours: hoursStep
         case .aha: aha
+        case .how: how
         case .goals: goalsStep
         case .access: access
         case .apps: apps
@@ -126,33 +154,38 @@ struct OnboardingFlow: View {
         }
     }
 
-    private var aha: some View {
-        VStack(spacing: 20) {
-            if found {
-                Spacer()
-                Owl(name: "owl-non", label: "Le hibou fait non de la tête", height: 200)
-                Text("Il n'y en a pas.")
-                    .font(Theme.title)
-                    .multilineTextAlignment(.center)
-                Text("Ta limite tient pour toi.")
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                Spacer()
-            } else {
-                Text("Trouve le bouton Ignorer.")
-                    .font(Theme.heading)
-                    .multilineTextAlignment(.center)
-                    .padding(.top, 8)
-                ShieldPreview(tries: tries) {
-                    tries += 1
-                } onClose: {
-                    found = true
-                }
-                .sensoryFeedback(.impact(weight: .light), trigger: tries)
-                Spacer(minLength: 0)
+    private var hoursStep: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            StepTitle("Combien de temps sur ton téléphone, par jour ?")
+                .padding(.bottom, 12)
+            ForEach(PhoneHours.allCases) { option in
+                Choice(label: option.label, on: hours == option) { hours = option }
             }
         }
-        .sensoryFeedback(trigger: found) { _, now in now ? .success : nil }
+    }
+
+    private var aha: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            CountUp(target: hours.daysPerYear)
+            Text("jours par an sur ton téléphone.")
+                .font(Theme.heading)
+                .multilineTextAlignment(.center)
+            Text("Time Keeper t'en rend une partie.")
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            Spacer()
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    private var how: some View {
+        VStack(spacing: 18) {
+            StepTitle("Quand ton temps est fini, l'app se ferme.", line: "Pas de bouton « Encore 5 minutes ». Rien à contourner.")
+                .padding(.top, 8)
+            ShieldPreview()
+            Spacer(minLength: 0)
+        }
     }
 
     private var goalsStep: some View {
@@ -160,33 +193,22 @@ struct OnboardingFlow: View {
             StepTitle("Qu'est-ce qui te prend le plus de temps ?")
                 .padding(.bottom, 12)
             ForEach(OnboardingGoal.allCases) { option in
-                let on = goal == option
-                Button {
-                    goal = option
-                } label: {
-                    HStack {
-                        Text(option.label).font(.body.weight(.medium))
-                        Spacer()
-                        if on {
-                            Image(systemName: "checkmark").font(.body.weight(.semibold)).foregroundStyle(Theme.accent)
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .frame(minHeight: 56)
-                    .contentShape(Rectangle())
-                    .background(on ? Theme.accentGround : Color.clear, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(on ? Theme.accent : Theme.hairline, lineWidth: 2))
-                }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(on ? .isSelected : [])
-                .sensoryFeedback(.selection, trigger: on)
+                Choice(label: option.label, on: goal == option) { goal = option }
             }
         }
     }
 
     private var access: some View {
         VStack(alignment: .leading, spacing: 10) {
-            StepTitle("Autorise Temps d'écran.", line: "Il bloque, sans son bouton Ignorer. Rien ne quitte ton iPhone.")
+            StepTitle("Autorise Temps d'écran.", line: "C'est lui qui compte ton temps et bloque. Rien ne quitte ton iPhone.")
+            if requesting {
+                HStack(spacing: 10) {
+                    ProgressView()
+                    Text("iOS ouvre sa fenêtre…").foregroundStyle(.secondary)
+                }
+                .padding(.top, 8)
+                .transition(.opacity)
+            }
             if accessDenied {
                 Text("Sans cette autorisation, rien ne se bloque.")
                     .font(.subheadline)
@@ -198,31 +220,49 @@ struct OnboardingFlow: View {
 
     private var apps: some View {
         VStack(alignment: .leading, spacing: 10) {
-            StepTitle("Quelles apps limiter ?", line: "Un seul compteur pour toutes.")
+            StepTitle("Quelles apps te prennent du temps ?", line: "Elles partagent un seul compteur.")
             Spacer()
             if appsChosen && !model.demo {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 18), count: 4), spacing: 18) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 18) {
                     ForEach(Array(selection.applicationTokens), id: \.self) { token in
-                        Label(token).labelStyle(.iconOnly).scaleEffect(2.2).frame(height: 60)
+                        ChosenApp { Label(token) }
                     }
                     ForEach(Array(selection.categoryTokens), id: \.self) { token in
-                        Label(token).labelStyle(.iconOnly).scaleEffect(2.2).frame(height: 60)
+                        ChosenApp { Label(token) }
                     }
                 }
-            } else {
+                Button("Modifier") { showPicker = true }
+                    .font(.body.weight(.medium))
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            } else if appsChosen {
                 HStack(spacing: 18) {
                     ForEach(0..<4, id: \.self) { index in
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .fill(appsChosen ? Theme.accent.opacity(0.25 + Double(index) * 0.25) : Color.clear)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .strokeBorder(appsChosen ? Color.clear : Theme.hairline, style: StrokeStyle(lineWidth: 2, dash: [6, 5]))
-                            }
+                            .fill(Theme.accent.opacity(0.25 + Double(index) * 0.25))
                             .frame(width: 60, height: 60)
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .accessibilityHidden(true)
+            } else {
+                Button {
+                    next()
+                } label: {
+                    VStack(spacing: 10) {
+                        Image(systemName: "plus")
+                            .font(.title.weight(.semibold))
+                        Text("Choisir les apps")
+                            .font(.headline)
+                    }
+                    .foregroundStyle(Theme.accent)
+                    .frame(maxWidth: .infinity, minHeight: 160)
+                    .background(Theme.accentGround, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .strokeBorder(Theme.accent.opacity(0.5), style: StrokeStyle(lineWidth: 2, dash: [7, 6]))
+                    }
+                }
+                .buttonStyle(.plain)
             }
             Spacer()
         }
@@ -294,7 +334,7 @@ struct OnboardingFlow: View {
     private var ready: some View {
         VStack(spacing: 14) {
             Owl(name: "owl-lit", label: "Le hibou lit un livre", height: 150)
-                .padding(.top, 8)
+                .padding(.top, 28)
             Text("Ton temps te revient.")
                 .font(Theme.heading)
                 .multilineTextAlignment(.center)
@@ -334,6 +374,8 @@ struct OnboardingFlow: View {
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(ctaDisabled)
+            .opacity(step == .apps && !appsChosen ? 0 : 1)
+            .accessibilityHidden(step == .apps && !appsChosen)
             .sensoryFeedback(.selection, trigger: step)
             if step == .notify {
                 Button("Plus tard") { go(1) }
@@ -349,21 +391,16 @@ struct OnboardingFlow: View {
         }
         .padding(.horizontal, 24)
         .padding(.bottom, 8)
-        .opacity(step == .aha && !found ? 0 : 1)
-        .allowsHitTesting(!(step == .aha && !found))
-        .animation(.easeIn(duration: 0.3).delay(found ? 1 : 0), value: found)
     }
 
     private var cta: String {
         switch step {
-        case .welcome: "Voir comment"
-        case .aha: "Poser ma limite"
-        case .access: "Autoriser"
-        case .apps: appsChosen ? "Continuer" : "Choisir les apps"
-        case .notify: "Me prévenir"
+        case .welcome: "Commencer"
+        case .how: "Poser ma limite"
+        case .access: requesting ? "Un instant…" : "Autoriser"
+                case .notify: "Me prévenir"
         case .site: "Bloquer ce site"
         case .lock: "Verrouiller"
-        case .ready: goal == .site ? "Voir mon site bloqué" : "Voir ma limite"
         default: "Continuer"
         }
     }
@@ -371,6 +408,8 @@ struct OnboardingFlow: View {
     private var ctaDisabled: Bool {
         switch step {
         case .site: site.trimmingCharacters(in: .whitespaces).isEmpty
+        case .apps: !appsChosen
+        case .access: requesting
         default: false
         }
     }
@@ -402,19 +441,21 @@ struct OnboardingFlow: View {
             index += delta
         }
         guard flow.indices.contains(index) else { return }
-        if flow[index] == .aha { found = false; tries = 0 }
         step = flow[index]
     }
 
     private func requestAccess() {
         if model.demo { go(1); return }
+        requesting = true
         Task {
             do {
                 try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
                 accessDenied = false
+                requesting = false
                 go(1)
             } catch {
                 accessDenied = true
+                requesting = false
             }
         }
     }
@@ -526,46 +567,89 @@ private struct ValueStepper: View {
 }
 
 private struct ShieldPreview: View {
-    let tries: Int
-    let onMiss: () -> Void
-    let onClose: () -> Void
-
     var body: some View {
         VStack(spacing: 14) {
-            Button(action: onMiss) {
-                VStack(spacing: 14) {
-                    Image("owl-cadenas")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 64, height: 64)
-                        .accessibilityHidden(true)
-                    Text("Cette app est bloquée")
-                        .font(.headline)
-                    Text("Ta limite du jour est atteinte. Ça se débloque demain, pas avant.")
-                        .font(.subheadline)
-                        .foregroundStyle(Theme.nightSecondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.top, 40)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Écran de blocage")
-            Button(action: onClose) {
-                Text("Fermer")
-                    .font(.headline)
-                    .foregroundStyle(Theme.night)
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                    .background(.white, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            }
-            .buttonStyle(.plain)
+            Image("owl-cadenas")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 64, height: 64)
+                .accessibilityHidden(true)
+            Text("Cette app est bloquée")
+                .font(.headline)
+            Text("Ta limite du jour est atteinte. Ça se débloque demain, pas avant.")
+                .font(.subheadline)
+                .foregroundStyle(Theme.nightSecondary)
+                .multilineTextAlignment(.center)
+            Spacer()
+            Text("Fermer")
+                .font(.headline)
+                .foregroundStyle(Theme.night)
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(.white, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
+        .padding(.top, 40)
         .foregroundStyle(.white)
         .padding(24)
-        .frame(width: 300, height: 420)
+        .frame(width: 280, height: 400)
         .background(Theme.night, in: RoundedRectangle(cornerRadius: 36, style: .continuous))
-        .offset(x: tries % 2 == 1 ? -6 : 0)
-        .animation(.spring(response: 0.2, dampingFraction: 0.3), value: tries)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Exemple d'écran de blocage : cette app est bloquée, un seul bouton Fermer.")
+    }
+}
+
+private struct Choice: View {
+    let label: String
+    let on: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Text(label).font(.body.weight(.medium))
+                Spacer()
+                if on {
+                    Image(systemName: "checkmark").font(.body.weight(.semibold)).foregroundStyle(Theme.accent)
+                }
+            }
+            .padding(.horizontal, 16)
+            .frame(minHeight: 56)
+            .contentShape(Rectangle())
+            .background(on ? Theme.accentGround : Color.clear, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(on ? Theme.accent : Theme.hairline, lineWidth: 2))
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(on ? .isSelected : [])
+        .sensoryFeedback(.selection, trigger: on)
+    }
+}
+
+private struct ChosenApp<Content: View>: View {
+    @ViewBuilder let label: () -> Content
+
+    var body: some View {
+        VStack(spacing: 6) {
+            label().labelStyle(.iconOnly).scaleEffect(2).frame(height: 52)
+            label().labelStyle(.titleOnly).font(.caption).lineLimit(1)
+        }
+    }
+}
+
+private struct CountUp: View {
+    let target: Int
+    @State private var value = 0
+    @ScaledMetric(relativeTo: .largeTitle) private var size: CGFloat = 88
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Text("\(value)")
+            .font(.system(size: size, weight: .semibold, design: .serif).monospacedDigit())
+            .foregroundStyle(Theme.accent)
+            .contentTransition(.numericText(value: Double(value)))
+            .sensoryFeedback(.impact(weight: .medium), trigger: value == target)
+            .task {
+                if reduceMotion { value = target; return }
+                try? await Task.sleep(for: .milliseconds(300))
+                withAnimation(.smooth(duration: 1.2)) { value = target }
+            }
     }
 }
