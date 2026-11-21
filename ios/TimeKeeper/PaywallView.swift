@@ -51,7 +51,13 @@ struct PaywallView: View {
         .offerCodeRedemption(isPresented: $redeeming) { _ in
             Task { await store.refresh() }
         }
-        .task { await store.refresh() }
+        .task {
+            await store.refresh()
+            Analytics.capture("paywall_viewed", ["trial_eligible": store.trialEligible])
+        }
+        .onChange(of: plan) { _, option in
+            Analytics.capture("paywall_plan_selected", ["product_id": option.rawValue])
+        }
     }
 
     private var footer: some View {
@@ -75,7 +81,10 @@ struct PaywallView: View {
                 .animation(.easeInOut(duration: 0.2), value: plan)
             HStack(spacing: 14) {
                 Button("Restaurer") { Task { await store.restore() } }
-                Button("J'ai un code") { redeeming = true }
+                Button("J'ai un code") {
+                    redeeming = true
+                    Analytics.capture("offer_code_opened")
+                }
                 Button("Conditions") { openURL(Store.terms) }
                 Button("Confidentialité") { openURL(Store.privacy) }
             }

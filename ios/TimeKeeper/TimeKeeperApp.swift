@@ -51,6 +51,7 @@ struct RootView: View {
         .task { await store.refresh() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
+                Analytics.capture("app_opened")
                 model.refresh()
                 Task { await store.refresh() }
             }
@@ -81,6 +82,7 @@ final class AppModel: ObservableObject {
     }
 
     func finishOnboarding() {
+        Analytics.capture("onboarding_completed", person: ["onboarding_termine": true])
         if !demo {
             UserDefaults.standard.set(true, forKey: AppModel.onboardedKey)
         }

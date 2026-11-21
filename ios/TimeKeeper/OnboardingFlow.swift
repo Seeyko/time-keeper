@@ -96,6 +96,8 @@ struct OnboardingFlow: View {
             footer
         }
         .animation(reduceMotion ? .easeInOut(duration: 0.2) : .smooth(duration: 0.35), value: step)
+        .onAppear { Analytics.capture("onboarding_step_viewed", ["step": "\(step)"]) }
+        .onChange(of: step) { _, now in Analytics.capture("onboarding_step_viewed", ["step": "\(now)"]) }
         .familyActivityPicker(isPresented: $showPicker, selection: $selection)
         .tint(Theme.accent)
     }
