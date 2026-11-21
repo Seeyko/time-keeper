@@ -3,19 +3,34 @@ import FamilyControls
 
 struct OnboardingView: View {
     @State private var error: String?
+    @State private var taps = 0
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 12) {
             Spacer()
-            Image(systemName: "hourglass")
-                .font(.system(size: 64))
-                .foregroundStyle(.tint)
+            Dial()
+                .fill(Theme.accent, style: FillStyle(eoFill: true))
+                .frame(width: 96, height: 96)
+                .padding(.bottom, 20)
+                .accessibilityHidden(true)
             Text("Time Keeper")
-                .font(.largeTitle.bold())
-            Text("Time Keeper a besoin de Temps d'écran pour bloquer. Rien ne quitte ton iPhone.")
+                .font(Theme.title)
+            Text("Il a besoin de Temps d'écran pour bloquer. Rien ne quitte ton iPhone.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
+            if let error {
+                Text(error)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Theme.blocked)
+            }
+            Spacer()
+        }
+        .padding(.horizontal, 24)
+        .frame(maxWidth: .infinity)
+        .safeAreaInset(edge: .bottom) {
             Button {
+                taps += 1
                 Task {
                     do {
                         try await AuthorizationCenter.shared.requestAuthorization(for: .individual)
@@ -26,13 +41,10 @@ struct OnboardingView: View {
             } label: {
                 Text("Autoriser l'accès").frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            if let error {
-                Text(error).font(.footnote).foregroundStyle(.red)
-            }
-            Spacer()
+            .buttonStyle(PrimaryButtonStyle())
+            .sensoryFeedback(.selection, trigger: taps)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 16)
         }
-        .padding(24)
     }
 }

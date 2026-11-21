@@ -5,6 +5,10 @@ import FamilyControls
 struct TimeKeeperApp: App {
     @StateObject private var model = AppModel(demo: ProcessInfo.processInfo.arguments.contains("-demo"))
 
+    init() {
+        Theme.applyNavigationTitle()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -26,6 +30,7 @@ struct RootView: View {
                 OnboardingView()
             }
         }
+        .tint(Theme.accent)
         .onAppear { model.refresh() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { model.refresh() }
