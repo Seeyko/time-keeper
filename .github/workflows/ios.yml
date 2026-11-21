@@ -65,6 +65,28 @@ jobs:
           echo "$ASC_KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/asc/AuthKey.p8"
           chmod 600 "$RUNNER_TEMP/asc/AuthKey.p8"
           echo "ASC_KEY_PATH=$RUNNER_TEMP/asc/AuthKey.p8" >> "$GITHUB_ENV"
+      - name: Certificat et profils de distribution
+        env:
+          DIST_CERT_P12_BASE64: ${{ secrets.DIST_CERT_P12_BASE64 }}
+          DIST_CERT_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+          PROFILES_TAR_BASE64: ${{ secrets.PROFILES_TAR_BASE64 }}
+        run: |
+          KEYCHAIN="$RUNNER_TEMP/signature.keychain-db"
+          KEYCHAIN_PASSWORD=$(openssl rand -hex 24)
+          echo "$DIST_CERT_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/asc/dist.p12"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 3600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security import "$RUNNER_TEMP/asc/dist.p12" -P "$DIST_CERT_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" > /dev/null
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+          echo "KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/profiles"
+          echo "$PROFILES_TAR_BASE64" | base64 --decode | tar -xz -C "$RUNNER_TEMP/profiles"
+          for dir in "$HOME/Library/MobileDevice/Provisioning Profiles" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"; do
+            mkdir -p "$dir"
+            cp "$RUNNER_TEMP"/profiles/*.mobileprovision "$dir"/
+          done
       - name: Archive
         working-directory: ios
         run: |
@@ -85,11 +107,12 @@ jobs:
             -archivePath "$RUNNER_TEMP/TimeKeeper.xcarchive" \
             -exportOptionsPlist ci/ExportOptions.plist \
             -exportPath "$RUNNER_TEMP/export" \
-            -allowProvisioningUpdates \
             -authenticationKeyPath "$ASC_KEY_PATH" \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID"
           echo "- Build $BUILD_NUMBER envoyé sur TestFlight" >> "$GITHUB_STEP_SUMMARY"
       - name: Nettoyage
         if: always()
-        run: rm -rf "$RUNNER_TEMP/asc"
+        run: |
+          if [ -n "${KEYCHAIN:-}" ]; then security delete-keychain "$KEYCHAIN" || true; fi
+          rm -rf "$RUNNER_TEMP/asc" "$RUNNER_TEMP/profiles"
