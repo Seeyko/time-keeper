@@ -6,6 +6,7 @@
 <img src="screenshots/1-accueil.png" width="200" alt="Les limites du jour">
 <img src="screenshots/2-limite.png" width="200" alt="Une limite ouverte">
 <img src="screenshots/3-sites-bloques.png" width="200" alt="Les sites bloqués">
+<img src="screenshots/5-assouplissement.png" width="200" alt="Un assouplissement en attente">
 <img src="screenshots/4-bienvenue.png" width="200" alt="Le premier lancement">
 </p>
 
