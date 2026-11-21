@@ -1,0 +1,102 @@
+{
+  "size": [
+    1320,
+    2868
+  ],
+  "raw": [
+    1206,
+    2622
+  ],
+  "slides": [
+    {
+      "file": "01-limite-qui-tient",
+      "screen": "../../screenshots/1-accueil.png",
+      "title": "Une limite de temps d'écran <em>qui tient</em>",
+      "loupe": {
+        "crop": [
+          300,
+          790,
+          540,
+          180
+        ],
+        "zoom": 1.7
+      }
+    },
+    {
+      "file": "02-juste-fermer",
+      "screen": "raw/shield.png",
+      "dark": true,
+      "title": "Limite atteinte&#8239;?<br><em>Juste « Fermer ».</em>",
+      "loupe": {
+        "crop": [
+          603,
+          2316,
+          1206,
+          230
+        ],
+        "zoom": 1.4
+      }
+    },
+    {
+      "file": "03-un-site-pas-le-navigateur",
+      "screen": "../../screenshots/3-sites-bloques.png",
+      "title": "Bloque un site,<br><em>pas le navigateur</em>",
+      "loupe": {
+        "crop": [
+          330,
+          1255,
+          600,
+          140
+        ],
+        "zoom": 1.7
+      }
+    },
+    {
+      "file": "04-assouplir-24h",
+      "screen": "../../screenshots/5-assouplissement.png",
+      "title": "Envie de tricher&#8239;?<br>Il faudra <em>attendre 24&nbsp;h</em>",
+      "loupe": {
+        "crop": [
+          603,
+          650,
+          1150,
+          290
+        ],
+        "zoom": 1.4
+      }
+    },
+    {
+      "file": "05-impossible-a-supprimer",
+      "screen": "../../screenshots/1-accueil.png",
+      "title": "Même supprimer l'app<br><em>ne marche pas</em>",
+      "loupe": {
+        "crop": [
+          603,
+          2330,
+          1120,
+          160
+        ],
+        "zoom": 1.3
+      }
+    },
+    {
+      "file": "06-rien-ne-quitte-ton-iphone",
+      "screen": "../../screenshots/4-bienvenue.png",
+      "title": "<em>Rien</em> ne quitte<br>ton iPhone",
+      "loupe": {
+        "crop": [
+          603,
+          1560,
+          820,
+          80
+        ],
+        "zoom": 1.6
+      }
+    },
+    {
+      "file": "07-ton-temps-te-revient",
+      "title": "Ton temps<br><em>te revient</em>",
+      "line": "Sans compte · Sans pub · Open source"
+    }
+  ]
+}
