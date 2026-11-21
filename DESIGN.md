@@ -88,6 +88,7 @@ Le hibou de l'icône est la seule illustration. Dans l'app, il apparaît dans l'
 ## Do's and Don'ts
 - Ne jamais proposer de débloquer, rallonger ou ignorer.
 - L'écran de blocage a un seul bouton : « Fermer ».
+- Seule exception à « jamais de déblocage » : dans un build TestFlight (`AppTransaction.environment` différent de `production`), une section « TestFlight » en bas de l'accueil offre « Tout débloquer et recommencer ». Elle n'existe jamais dans un build App Store.
 - Montre l'état dans la ligne (« Bloqué jusqu'à 04:00 ») au lieu de l'expliquer sous la liste.
 - Pas de carte, pas de sablier, pas d'orange en couleur d'action.
 - Pas de rouge ailleurs que sur « Bloqué », une erreur de saisie, une suppression et le refus de Temps d'écran dans l'onboarding (sans cet accès, rien ne bloque).

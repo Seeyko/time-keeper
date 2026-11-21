@@ -13,7 +13,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 | `DESIGN.md` | le système de design |
 
 ## La règle produit
-- **Jamais de déblocage sur le moment.** Pas de bouton « ignorer », pas de « +15 min », pas de code. Toute évolution garde ça.
+- **Jamais de déblocage sur le moment.** Pas de bouton « ignorer », pas de « +15 min », pas de code. Toute évolution garde ça. Seule exception : le bouton « Tout débloquer et recommencer », visible uniquement dans un build TestFlight.
 - Ce qui rend plus strict s'applique tout de suite. Ce qui assouplit (temps plus long, app retirée, limite supprimée, site débloqué, verrou coupé, heure de début de journée changée) s'applique `Policy.loosenDelay` plus tard (24 h). Le test `RulesTests` le prouve pour chaque cas.
 - Modifier une limite ne remet pas le compteur à zéro (`includesPastActivity`).
 

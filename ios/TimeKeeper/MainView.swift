@@ -7,6 +7,7 @@ struct MainView: View {
     @State private var newGroup: LimitGroup?
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.openURL) private var openURL
+    @State private var confirmReset = false
 
     private var pendingIcon: some View {
         Image(systemName: "clock")
@@ -125,6 +126,15 @@ struct MainView: View {
                 } header: {
                     SectionTitle("Réglages")
                 }
+
+                if model.isTester {
+                    Section {
+                        Button("Tout débloquer et recommencer", role: .destructive) { confirmReset = true }
+                            .frame(minHeight: 44)
+                    } header: {
+                        SectionTitle("TestFlight")
+                    }
+                }
             }
             .listStyle(.plain)
             .navigationTitle("Time Keeper")
@@ -135,6 +145,11 @@ struct MainView: View {
                 .tint(Theme.accent)
             }
             .delayedAlert($delayedUntil)
+            .confirmationDialog("Tout débloquer et recommencer ?", isPresented: $confirmReset, titleVisibility: .visible) {
+                Button("Tout débloquer", role: .destructive) { model.resetForTesting() }
+            }
+            .sensoryFeedback(.warning, trigger: confirmReset)
+            .task { await model.detectTester() }
         }
         .sensoryFeedback(.success, trigger: model.draft)
     }

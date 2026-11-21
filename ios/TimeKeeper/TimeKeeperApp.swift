@@ -1,6 +1,7 @@
 import SwiftUI
 import FamilyControls
 import UserNotifications
+import StoreKit
 
 @main
 struct TimeKeeperApp: App {
@@ -52,6 +53,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var hasOnboarded: Bool
     @Published private(set) var reminders: ReminderSettings
     @Published private(set) var notificationsDenied = false
+    @Published private(set) var isTester = false
 
     private static let onboardedKey = "onboarded.v1"
 
@@ -150,6 +152,23 @@ final class AppModel: ObservableObject {
         var rules = draft
         rules.dayStart = dayStart
         return save(rules)
+    }
+
+    func detectTester() async {
+        guard !demo, let result = try? await AppTransaction.shared else { return }
+        switch result {
+        case .verified(let transaction), .unverified(let transaction, _):
+            isTester = transaction.environment != .production
+        }
+    }
+
+    func resetForTesting() {
+        guard isTester else { return }
+        SharedStorage.save(TimeKeeperState())
+        Engine.sync(Rules())
+        UserDefaults.standard.set(false, forKey: AppModel.onboardedKey)
+        state = SharedStorage.load()
+        hasOnboarded = false
     }
 
     func cancelPending() {
