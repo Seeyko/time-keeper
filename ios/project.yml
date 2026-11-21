@@ -28,6 +28,8 @@ targets:
     info:
       path: TimeKeeper/Info.plist
       properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDisplayName: Time Keeper
         AppGroupID: $(APP_GROUP_ID)
         ITSAppUsesNonExemptEncryption: false
@@ -55,6 +57,8 @@ targets:
     info:
       path: TimeKeeperMonitor/Info.plist
       properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDisplayName: TimeKeeperMonitor
         AppGroupID: $(APP_GROUP_ID)
         NSExtension:
@@ -76,6 +80,8 @@ targets:
     info:
       path: TimeKeeperShieldConfig/Info.plist
       properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDisplayName: TimeKeeperShieldConfig
         NSExtension:
           NSExtensionPointIdentifier: com.apple.ManagedSettingsUI.shield-configuration-service
@@ -95,6 +101,8 @@ targets:
     info:
       path: TimeKeeperShieldAction/Info.plist
       properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDisplayName: TimeKeeperShieldAction
         NSExtension:
           NSExtensionPointIdentifier: com.apple.ManagedSettings.shield-action-service
