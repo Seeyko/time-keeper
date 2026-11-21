@@ -39,7 +39,7 @@ function dial(cx, cy, r) {
 function background(i, s) {
   const end = !s.screen;
   const cx = end ? W / 2 : i % 2 === 0 ? W : 0;
-  const cy = end ? 1050 : 1750;
+  const cy = end ? 1250 : 1750;
   const r = end ? 470 : 1180;
   return `
   <svg class="bg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -49,7 +49,7 @@ function background(i, s) {
         <stop offset=".55" stop-color="#0E1D4C"/>
         <stop offset="1" stop-color="#16307A"/>
       </linearGradient>
-      <radialGradient id="glow" cx="${end ? 0.5 : cx === 0 ? 0.15 : 0.85}" cy="${end ? 0.37 : 0.62}" r=".75">
+      <radialGradient id="glow" cx="${end ? 0.5 : cx === 0 ? 0.15 : 0.85}" cy="${end ? 0.44 : 0.62}" r=".75">
         <stop offset="0" stop-color="#5B7FFF" stop-opacity=".38"/>
         <stop offset="1" stop-color="#5B7FFF" stop-opacity="0"/>
       </radialGradient>
@@ -91,7 +91,7 @@ function loupe(s) {
 }
 
 function closing(s) {
-  return `<svg class="mark" viewBox="0 0 96 96"><path fill="#fff" fill-rule="evenodd" d="M48 0a48 48 0 1 1 0 96A48 48 0 1 1 48 0zM48 6.72a41.28 41.28 0 1 0 0 82.56A41.28 41.28 0 1 0 48 6.72zM48 48V14.4A33.6 33.6 0 0 1 77.1 64.8z"/></svg>
+  return `<img class="mark" src="${url('../../ios/TimeKeeper/Assets.xcassets/AppIcon.appiconset/icon-1024.png')}">
   <h1 class="end">${s.title}</h1><p class="line">${s.line}</p>`;
 }
 
@@ -109,9 +109,9 @@ function page(s, i) {
   .screen{position:relative;width:${phone.w}px;height:${ph}px;border-radius:${124}px;overflow:hidden;background:url('${s.screen ? url(s.screen) : ''}') 0 0/100% 100%}
   .status{position:absolute;left:0;right:0;top:0;height:${175 * k}px;display:flex;align-items:center;justify-content:space-between;padding:${14 * k}px ${110 * k}px 0 ${150 * k}px;box-sizing:border-box;font:600 ${50 * k}px Inter,sans-serif}
   .island{position:absolute;top:${34 * k}px;left:50%;width:${370 * k}px;height:${110 * k}px;margin-left:${-185 * k}px;border-radius:${60 * k}px;background:#000}
-  .mark{position:absolute;left:${W / 2 - 150}px;top:900px;width:300px;height:300px}
-  h1.end{top:1340px;font-size:190px}
-  .line{position:absolute;left:0;right:0;top:1820px;margin:0;text-align:center;font:500 54px Inter,sans-serif;color:#B9CCFF;letter-spacing:.5px}
+  .mark{position:absolute;left:${W / 2 - 190}px;top:1060px;width:380px;height:380px;border-radius:86px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+  h1.end{top:1540px;font-size:190px}
+  .line{position:absolute;left:0;right:0;top:2020px;margin:0;text-align:center;font:500 54px Inter,sans-serif;color:#B9CCFF;letter-spacing:.5px}
   .loupe{position:absolute;background-repeat:no-repeat;box-shadow:0 0 0 10px #fff,0 40px 90px rgba(3,8,30,.6),inset 0 0 0 1px rgba(0,0,0,.08)}
   </style></head><body>
   ${background(i, s)}
