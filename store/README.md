@@ -12,4 +12,10 @@ NODE_PATH=$(npm root -g) node store/make/render.cjs
 - `make/fonts` : Instrument Serif (licence OFL).
 - `make/owl` : le hibou dans six poses, détouré.
 
+Les images du README (`.github/readme/`) sortent de `make/readme.cjs`, à partir de ces captures et de `screenshots/onboarding/` :
+
+```sh
+NODE_PATH=$(npm root -g) node store/make/readme.cjs
+```
+
 Les légendes et le texte de la fiche sont dans `fiche/version-1.0.md`.
