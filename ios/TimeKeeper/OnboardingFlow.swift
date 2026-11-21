@@ -334,7 +334,7 @@ struct OnboardingFlow: View {
     private var ready: some View {
         VStack(spacing: 14) {
             Owl(name: "owl-lit", label: "Le hibou lit un livre", height: 150)
-                .padding(.top, 8)
+                .padding(.top, 28)
             Text("Ton temps te revient.")
                 .font(Theme.heading)
                 .multilineTextAlignment(.center)
@@ -374,6 +374,7 @@ struct OnboardingFlow: View {
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(ctaDisabled)
+            .opacity(step == .apps && !appsChosen ? 0 : 1)
             .sensoryFeedback(.selection, trigger: step)
             if step == .notify {
                 Button("Plus tard") { go(1) }
@@ -396,8 +397,7 @@ struct OnboardingFlow: View {
         case .welcome: "Commencer"
         case .how: "Poser ma limite"
         case .access: requesting ? "Un instant…" : "Autoriser"
-        case .apps: appsChosen ? "Continuer" : "Choisir les apps"
-        case .notify: "Me prévenir"
+                case .notify: "Me prévenir"
         case .site: "Bloquer ce site"
         case .lock: "Verrouiller"
         case .ready: goal == .site ? "Voir mon site bloqué" : "Voir ma limite"
@@ -408,6 +408,7 @@ struct OnboardingFlow: View {
     private var ctaDisabled: Bool {
         switch step {
         case .site: site.trimmingCharacters(in: .whitespaces).isEmpty
+        case .apps: !appsChosen
         case .access: requesting
         default: false
         }
@@ -573,7 +574,7 @@ private struct ShieldPreview: View {
                 .scaledToFit()
                 .frame(width: 64, height: 64)
                 .accessibilityHidden(true)
-            Text("Instagram est bloquée")
+            Text("Cette app est bloquée")
                 .font(.headline)
             Text("Ta limite du jour est atteinte. Ça se débloque demain, pas avant.")
                 .font(.subheadline)
@@ -592,7 +593,7 @@ private struct ShieldPreview: View {
         .frame(width: 280, height: 400)
         .background(Theme.night, in: RoundedRectangle(cornerRadius: 36, style: .continuous))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Exemple d'écran de blocage : Instagram est bloquée, un seul bouton Fermer.")
+        .accessibilityLabel("Exemple d'écran de blocage : cette app est bloquée, un seul bouton Fermer.")
     }
 }
 
