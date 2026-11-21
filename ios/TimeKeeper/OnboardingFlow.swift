@@ -512,8 +512,9 @@ private struct ShieldPreview: View {
         VStack(spacing: 14) {
             Button(action: onMiss) {
                 VStack(spacing: 14) {
-                    Dial()
-                        .fill(.white, style: FillStyle(eoFill: true))
+                    Image("owl-cadenas")
+                        .resizable()
+                        .scaledToFit()
                         .frame(width: 64, height: 64)
                         .accessibilityHidden(true)
                     Text("Cette app est bloquée")
