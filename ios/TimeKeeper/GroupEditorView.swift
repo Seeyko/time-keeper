@@ -4,6 +4,7 @@ import FamilyControls
 struct GroupEditorView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
+    @ScaledMetric(relativeTo: .largeTitle) private var timeSize: CGFloat = 48
 
     @State var group: LimitGroup
     let isNew: Bool
@@ -13,17 +14,32 @@ struct GroupEditorView: View {
     @State private var delayedUntil: Date?
 
     var body: some View {
-        Form {
-            Section("Nom") {
-                TextField("Ex. Réseaux sociaux", text: $group.name)
+        List {
+            Section {
+                Stepper(value: $group.minutes, in: Policy.minutesRange, step: 5) {
+                    Text(formatMinutes(group.minutes))
+                        .font(.system(size: timeSize, design: .serif).monospacedDigit())
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
+                }
+                .sensoryFeedback(.selection, trigger: group.minutes)
+            } header: {
+                SectionTitle("Temps par jour")
+            }
+
+            Section {
+                TextField("Réseaux sociaux", text: $group.name)
+            } header: {
+                SectionTitle("Nom")
             }
 
             Section {
                 Button {
                     showPicker = true
                 } label: {
-                    LabeledContent("Choisir apps, catégories, sites", value: "\(group.itemCount)")
+                    LabeledContent("Choisir", value: "\(group.itemCount)")
                 }
+                .sensoryFeedback(.selection, trigger: showPicker)
                 ForEach(Array(group.selection.applicationTokens), id: \.self) { token in
                     Label(token)
                 }
@@ -34,26 +50,19 @@ struct GroupEditorView: View {
                     Label(token)
                 }
             } header: {
-                Text("Ce qui est limité")
+                SectionTitle("Apps et sites")
             } footer: {
                 Text("Un seul compteur pour tout ce qui est choisi.")
-            }
-
-            Section("Temps par jour") {
-                Stepper(value: $group.minutes, in: Policy.minutesRange, step: 5) {
-                    Text(formatMinutes(group.minutes)).font(.title3.monospacedDigit())
-                }
-                .sensoryFeedback(.selection, trigger: group.minutes)
             }
 
             if !isNew {
                 Section {
                     Button("Supprimer cette limite", role: .destructive) { confirmDelete = true }
-                } footer: {
-                    Text("Effectif dans 24 h.")
+                        .sensoryFeedback(.warning, trigger: confirmDelete) { _, shown in shown }
                 }
             }
         }
+        .listStyle(.plain)
         .navigationTitle(isNew ? "Nouvelle limite" : group.name)
         .navigationBarTitleDisplayMode(.inline)
         .familyActivityPicker(isPresented: $showPicker, selection: $group.selection)

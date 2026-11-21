@@ -11,17 +11,32 @@ struct MainView: View {
             List {
                 if let date = model.state.pendingEffective, model.state.pending != nil {
                     Section {
-                        Label {
-                            VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "clock")
+                                .font(.title3)
+                                .foregroundStyle(Theme.pending)
+                                .accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text("Assouplissement en attente").font(.headline)
                                 Text("Effectif le \(date.formatted(date: .abbreviated, time: .shortened))")
-                                    .font(.subheadline).foregroundStyle(.secondary)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.pending)
                             }
-                        } icon: {
-                            Image(systemName: "clock.badge.exclamationmark")
+                            Spacer(minLength: 8)
+                            Button("Annuler") { model.cancelPending() }
+                                .buttonStyle(.borderless)
+                                .font(.callout.weight(.semibold))
+                                .foregroundStyle(Theme.pending)
+                                .frame(minHeight: 44)
+                                .accessibilityLabel("Annuler l'assouplissement")
                         }
-                        Button("Annuler l'assouplissement") { model.cancelPending() }
-                            .sensoryFeedback(.impact, trigger: model.state.pending == nil)
+                        .padding(.vertical, 6)
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(Theme.pendingGround)
+                                .padding(.horizontal, 8)
+                        )
+                        .listRowSeparator(.hidden)
                     }
                 }
 
@@ -31,7 +46,7 @@ struct MainView: View {
                             GroupEditorView(group: group, isNew: false)
                         } label: {
                             GroupRow(group: group,
-                                     blocked: model.isBlockedToday(group.id),
+                                     blockedUntil: model.isBlockedToday(group.id) ? model.active.dayStart.label : nil,
                                      pending: model.hasPendingChange(group.id))
                         }
                     }
@@ -40,10 +55,9 @@ struct MainView: View {
                     } label: {
                         Label("Ajouter une limite", systemImage: "plus")
                     }
+                    .sensoryFeedback(.selection, trigger: newGroup?.id)
                 } header: {
-                    Text("Limites par jour")
-                } footer: {
-                    Text("Temps écoulé : bloqué jusqu'à \(model.active.dayStart.label).")
+                    SectionTitle("Limites par jour")
                 }
 
                 Section {
@@ -53,9 +67,7 @@ struct MainView: View {
                         LabeledContent("Sites bloqués", value: "\(model.draft.blockedDomains.count)")
                     }
                 } header: {
-                    Text("Toujours bloqués")
-                } footer: {
-                    Text("Dans Safari, Chrome et les autres navigateurs.")
+                    SectionTitle("Sites")
                 }
 
                 Section {
@@ -65,19 +77,20 @@ struct MainView: View {
                         set: { on in handle(model.setDenyAppRemoval(on)) }
                     ))
                 } header: {
-                    Text("Réglages")
-                } footer: {
-                    Text("Plus strict : tout de suite. Plus souple : 24 h plus tard.")
+                    SectionTitle("Réglages")
                 }
             }
+            .listStyle(.plain)
             .navigationTitle("Time Keeper")
             .sheet(item: $newGroup) { group in
                 NavigationStack {
                     GroupEditorView(group: group, isNew: true)
                 }
+                .tint(Theme.accent)
             }
             .delayedAlert($delayedUntil)
         }
+        .sensoryFeedback(.success, trigger: model.draft)
     }
 
     private var dayStartBinding: Binding<Date> {
@@ -101,32 +114,37 @@ struct MainView: View {
 
 private struct GroupRow: View {
     let group: LimitGroup
-    let blocked: Bool
+    let blockedUntil: String?
     let pending: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(group.name.isEmpty ? "Sans nom" : group.name).font(.headline)
-                Spacer()
-                if blocked {
-                    Text("Bloqué").font(.caption.bold())
-                        .padding(.horizontal, 8).padding(.vertical, 2)
-                        .background(.red.opacity(0.15), in: Capsule())
-                        .foregroundStyle(.red)
+                if let blockedUntil {
+                    HStack(spacing: 4) {
+                        Image(systemName: "lock.fill").accessibilityHidden(true)
+                        Text("Bloqué jusqu'à \(blockedUntil)")
+                    }
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(Theme.blocked)
+                } else if pending {
+                    Text("Modification dans 24 h")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(Theme.pending)
+                } else if !group.isEmpty {
+                    Text("\(group.itemCount) élément\(group.itemCount > 1 ? "s" : "")")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
                 }
             }
-            Text(subtitle).font(.subheadline).foregroundStyle(.secondary)
-            if pending {
-                Text("Modification dans 24 h").font(.caption).foregroundStyle(.orange)
-            }
+            Spacer(minLength: 8)
+            Text(formatMinutes(group.minutes))
+                .font(Theme.value)
+                .accessibilityLabel("\(formatMinutes(group.minutes)) par jour")
         }
+        .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
-    }
-
-    private var subtitle: String {
-        let time = "\(formatMinutes(group.minutes)) par jour"
-        return group.isEmpty ? time : "\(time) · \(group.itemCount) élément\(group.itemCount > 1 ? "s" : "")"
     }
 }
 

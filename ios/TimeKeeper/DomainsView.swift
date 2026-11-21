@@ -11,36 +11,33 @@ struct DomainsView: View {
     var body: some View {
         List {
             Section {
-                HStack {
+                Text("Dans tous les navigateurs. L'app se met dans une limite.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .listRowSeparator(.hidden)
+                HStack(spacing: 8) {
                     TextField("youtube.com", text: $input)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .keyboardType(.URL)
                         .onSubmit(add)
+                        .padding(.horizontal, 14)
+                        .frame(minHeight: 50)
+                        .background(Theme.field, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                     Button("Ajouter", action: add)
+                        .buttonStyle(PrimaryButtonStyle())
                         .disabled(input.isEmpty)
                 }
+                .listRowSeparator(.hidden)
                 if invalid {
-                    Text("Ce n'est pas un site.").font(.footnote).foregroundStyle(.red)
-                }
-            } footer: {
-                Text(verbatim: "Bloque aussi www. et m. L'app, elle, se met dans une limite.")
-            }
-
-            let missing = suggestions.filter { !model.draft.blockedDomains.contains($0) }
-            if !missing.isEmpty {
-                Section("Suggestions") {
-                    ForEach(missing, id: \.self) { domain in
-                        Button {
-                            handle(model.addDomain(domain))
-                        } label: {
-                            Label(domain, systemImage: "plus.circle")
-                        }
-                    }
+                    Text("Ce n'est pas un site.")
+                        .font(.footnote)
+                        .foregroundStyle(Theme.blocked)
+                        .listRowSeparator(.hidden)
                 }
             }
 
-            Section("Bloqués") {
+            Section {
                 if model.draft.blockedDomains.isEmpty {
                     Text("Aucun site").foregroundStyle(.secondary)
                 }
@@ -53,13 +50,33 @@ struct DomainsView: View {
                 }
                 ForEach(model.active.blockedDomains.filter { model.isDomainPendingRemoval($0) }, id: \.self) { domain in
                     HStack {
-                        Text(domain).strikethrough()
+                        Text(domain).strikethrough().foregroundStyle(.secondary)
                         Spacer()
-                        Text("débloqué dans 24 h").font(.caption).foregroundStyle(.orange)
+                        Text("débloqué dans 24 h")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(Theme.pending)
                     }
+                }
+            } header: {
+                SectionTitle("Bloqués")
+            }
+
+            let missing = suggestions.filter { !model.draft.blockedDomains.contains($0) }
+            if !missing.isEmpty {
+                Section {
+                    ForEach(missing, id: \.self) { domain in
+                        Button {
+                            handle(model.addDomain(domain))
+                        } label: {
+                            Label(domain, systemImage: "plus")
+                        }
+                    }
+                } header: {
+                    SectionTitle("Suggestions")
                 }
             }
         }
+        .listStyle(.plain)
         .navigationTitle("Sites bloqués")
         .delayedAlert($delayedUntil)
     }
