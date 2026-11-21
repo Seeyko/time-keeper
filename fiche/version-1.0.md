@@ -50,6 +50,8 @@ SANS COMPTE, SANS PUB
 Time Keeper s'appuie sur Temps d'écran d'Apple. Le code est ouvert, sous licence MIT.
 
 Abonnement annuel avec 7 jours d'essai, ou achat à vie.
+Conditions d'utilisation : https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Confidentialité : https://github.com/Seeyko/time-keeper/blob/main/PRIVACY.md
 
 Time Keeper demande l'accès à Temps d'écran pour pouvoir bloquer. iOS 17.4 ou plus récent.
 
@@ -110,8 +112,18 @@ NO ACCOUNT, NO ADS
 Time Keeper runs on Apple's Screen Time. The code is open source, MIT licence.
 
 Yearly subscription with a 7-day free trial, or a lifetime purchase.
+Terms of use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacy: https://github.com/Seeyko/time-keeper/blob/main/PRIVACY.md
 
 Time Keeper asks for Screen Time access to block apps. Requires iOS 17.4 or later.
+
+## Liens (toutes les langues)
+
+| Champ | URL |
+|---|---|
+| Confidentialité | https://github.com/Seeyko/time-keeper/blob/main/PRIVACY.md |
+| Assistance | https://github.com/Seeyko/time-keeper/issues |
+| Conditions d'utilisation (fin de la description) | https://www.apple.com/legal/internet-services/itunes/dev/stdeula/ |
 
 ## Ce qui reste à faire après la sortie
 - En-tête 21:9 et image des résultats de recherche (bibliothèque d'éléments), une fois la 1.0 validée.
