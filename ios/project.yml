@@ -25,6 +25,7 @@ targets:
     sources: [TimeKeeper, Shared]
     scheme:
       testTargets: [TimeKeeperTests]
+      storeKitConfiguration: TimeKeeper.storekit
     info:
       path: TimeKeeper/Info.plist
       properties:

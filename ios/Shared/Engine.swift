@@ -70,6 +70,10 @@ enum Engine {
 
     static func sync(_ rules: Rules) {
         let center = DeviceActivityCenter()
+        if SharedStorage.suspended {
+            suspend(center)
+            return
+        }
 
         let currentIDs = Set(rules.groups.map(\.id))
         let monitored = Set(rules.groups.filter { !$0.isEmpty }.map(\.activityName))
@@ -116,6 +120,16 @@ enum Engine {
 
         let global = ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "global"))
         global.application.denyAppRemoval = rules.denyAppRemoval ? true : nil
+    }
+
+    private static func suspend(_ center: DeviceActivityCenter) {
+        center.stopMonitoring(center.activities.filter { LimitGroup.id(from: $0) != nil })
+        for id in SharedStorage.knownGroupIDs {
+            Shield.clear(id)
+            SharedStorage.setFingerprint(nil, for: id)
+        }
+        ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "domains")).clearAllSettings()
+        ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "global")).clearAllSettings()
     }
 
     static func filteredDomainNames(_ base: [String]) -> [String] {

@@ -14,7 +14,8 @@ final class DeviceActivityMonitorExtension: DeviceActivityMonitor {
 
     override func eventDidReachThreshold(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
         super.eventDidReachThreshold(event, activity: activity)
-        guard let id = LimitGroup.id(from: activity),
+        guard !SharedStorage.suspended,
+              let id = LimitGroup.id(from: activity),
               let group = SharedStorage.load().active.groups.first(where: { $0.id == id }) else { return }
         if let reminder = Reminder(rawValue: event.rawValue) {
             let settings = SharedStorage.reminderSettings

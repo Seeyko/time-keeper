@@ -10,14 +10,14 @@
 <img src="screenshots/4-bienvenue.png" width="200" alt="Le premier lancement">
 </p>
 
-App iOS libre et gratuite (Swift / SwiftUI) pour :
+App iOS libre (MIT, Swift / SwiftUI) pour :
 
 1. **Limiter des apps par temps d'écran quotidien.** Exemple : Instagram + TikTok, 30 min par jour au total. Une fois le temps écoulé, elles sont bloquées jusqu'au début de la journée suivante. L'heure de début de journée se règle (minuit, 4 h, 6 h…).
 2. **Bloquer des sites précis** (youtube.com, instagram.com…) **dans tous les navigateurs** (Safari, Chrome…) sans bloquer le navigateur lui-même.
 3. **Prévenir avant la fin.** Une notification à la moitié du temps, puis quand il reste 5 minutes, pour fermer l'app à temps. Ça se règle, et rien ne tourne en fond.
 4. **Rester strict.** L'écran de blocage n'a qu'un bouton « Fermer ». Il n'y a ni « Ignorer la limite », ni « Encore 15 minutes », ni code de déblocage.
 
-Pas d'abonnement, pas de serveur, pas de compte : tout tourne sur l'iPhone.
+Pas de serveur, pas de compte : tout tourne sur l'iPhone. Sur l'App Store, elle coûte 19,99 € par an (7 jours offerts) ou 39,99 € à vie. Compilée soi-même depuis ce dépôt, elle reste gratuite.
 
 ## Comment c'est strict
 
