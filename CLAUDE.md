@@ -1,6 +1,6 @@
 # Time Keeper
 
-App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien et des sites dans tous les navigateurs, sans aucun moyen de débloquer sur le moment. Gratuite, sans compte, sans serveur. FR. Bundle `com.seeyko.timekeeper`. Dépôt `Seeyko/time-keeper`, destiné à être public.
+App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien et des sites dans tous les navigateurs, sans aucun moyen de débloquer sur le moment. Payante sur l'App Store (19,99 €/an avec 7 jours offerts, ou 39,99 € à vie), sans compte, sans serveur. FR. Bundle `com.seeyko.timekeeper`. Dépôt `Seeyko/time-keeper`, destiné à être public.
 
 ## Le dépôt
 
@@ -16,6 +16,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 - **Jamais de déblocage sur le moment.** Pas de bouton « ignorer », pas de « +15 min », pas de code. Toute évolution garde ça.
 - Ce qui rend plus strict s'applique tout de suite. Ce qui assouplit (temps plus long, app retirée, limite supprimée, site débloqué, verrou coupé, heure de début de journée changée) s'applique `Policy.loosenDelay` plus tard (24 h). Le test `RulesTests` le prouve pour chaque cas.
 - Modifier une limite ne remet pas le compteur à zéro (`includesPastActivity`).
+- **Le paywall** (`PaywallView`, `Store`) : dur, sans croix, après l'onboarding. Sans achat valide, l'app suspend les blocages (`SharedStorage.suspended`) sans effacer les règles, qui reviennent dès l'achat. Un abonnement résilié reste actif jusqu'à la fin de la période payée : jamais de déblocage sur le moment. L'accès offert passe par des codes d'offre Apple, à usage unique, que Tom donne lui-même.
 
 ## Les règles
 - **Mac de build partagé** : on code à l'aveugle. Un seul build et un seul simulateur à la fois, à la fin, avec `nice`.
@@ -25,7 +26,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 - **Une PR par étape**, merge quand la CI est verte. Le code d'un build envoyé au store est sur `main`.
 - **Présente chaque travail fini** pour un non-technique : un titre humain, une description courte, des captures, puis le lien (skill `present-work` de tom-playbook).
 - **Pas de commentaire dans le code, pas de code mort.**
-- **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir). `-onboarding` rejoue l'onboarding avec les mêmes données fictives.
+- **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir). `-onboarding` rejoue l'onboarding avec les mêmes données fictives. `-demo -paywall` montre le paywall, avec les prix du fichier `ios/TimeKeeper.storekit` (France).
 - **Outils** : le CLI `asc` pour App Store Connect.
 
 ## Charte de design

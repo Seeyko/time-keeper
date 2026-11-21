@@ -57,6 +57,11 @@ enum SharedStorage {
         defaults.set(value, forKey: "fingerprint." + id.uuidString)
     }
 
+    static var suspended: Bool {
+        get { defaults.bool(forKey: "suspended.v1") }
+        set { defaults.set(newValue, forKey: "suspended.v1") }
+    }
+
     static var knownGroupIDs: Set<UUID> {
         get { Set((defaults.stringArray(forKey: knownGroupsKey) ?? []).compactMap(UUID.init(uuidString:))) }
         set { defaults.set(newValue.map(\.uuidString), forKey: knownGroupsKey) }

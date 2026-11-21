@@ -8,6 +8,10 @@ struct TimeKeeperApp: App {
         demo: ProcessInfo.processInfo.arguments.contains("-demo"),
         demoOnboarding: ProcessInfo.processInfo.arguments.contains("-onboarding")
     )
+    @StateObject private var store = Store(
+        demo: ["-demo", "-onboarding", "-paywall"].contains(where: ProcessInfo.processInfo.arguments.contains),
+        paywall: ProcessInfo.processInfo.arguments.contains("-paywall")
+    )
 
     init() {
         Theme.applyNavigationTitle()
@@ -17,12 +21,14 @@ struct TimeKeeperApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(model)
+                .environmentObject(store)
         }
     }
 }
 
 struct RootView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var store: Store
     @ObservedObject private var auth = AuthorizationCenter.shared
     @Environment(\.scenePhase) private var scenePhase
 
@@ -30,6 +36,8 @@ struct RootView: View {
         Group {
             if !model.hasOnboarded {
                 OnboardingFlow()
+            } else if store.access != .granted {
+                PaywallView()
             } else if model.demo || auth.authorizationStatus == .approved {
                 MainView()
             } else {
@@ -37,10 +45,15 @@ struct RootView: View {
             }
         }
         .animation(.smooth, value: model.hasOnboarded)
+        .animation(.smooth, value: store.access)
         .tint(Theme.accent)
         .onAppear { model.refresh() }
+        .task { await store.refresh() }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { model.refresh() }
+            if phase == .active {
+                model.refresh()
+                Task { await store.refresh() }
+            }
         }
     }
 }

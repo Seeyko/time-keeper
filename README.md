@@ -90,7 +90,7 @@ Un assouplissement en attente peut toujours être annulé (c'est plus strict), j
 
 ## Prix
 
-Sans compte et sans pub. Sur l'App Store : **7 jours d'essai**, puis **19,99 € par an** ou **39,99 € à vie**. Le code reste ouvert sous licence MIT : tu peux aussi le compiler toi-même (voir plus bas).
+Sans compte et sans pub. Sur l'App Store : **7 jours d'essai**, puis **19,99 € par an** ou **39,99 € à vie**. Le code reste ouvert sous licence MIT : compilée toi-même depuis ce dépôt, elle reste gratuite (voir plus bas).
 
 ## Confidentialité
 
