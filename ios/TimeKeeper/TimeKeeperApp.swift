@@ -3,7 +3,7 @@ import FamilyControls
 
 @main
 struct TimeKeeperApp: App {
-    @StateObject private var model = AppModel()
+    @StateObject private var model = AppModel(demo: ProcessInfo.processInfo.arguments.contains("-demo"))
 
     var body: some Scene {
         WindowGroup {
@@ -20,7 +20,7 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            if auth.authorizationStatus == .approved {
+            if model.demo || auth.authorizationStatus == .approved {
                 MainView()
             } else {
                 OnboardingView()
@@ -35,12 +35,19 @@ struct RootView: View {
 
 @MainActor
 final class AppModel: ObservableObject {
-    @Published private(set) var state = SharedStorage.load()
+    let demo: Bool
+    @Published private(set) var state: TimeKeeperState
+
+    init(demo: Bool) {
+        self.demo = demo
+        state = demo ? AppModel.demoState : SharedStorage.load()
+    }
 
     var draft: Rules { state.draft }
     var active: Rules { state.active }
 
     func refresh() {
+        if demo { return }
         guard AuthorizationCenter.shared.authorizationStatus == .approved else { return }
         Engine.applyPendingIfDue()
         state = SharedStorage.load()
@@ -48,6 +55,11 @@ final class AppModel: ObservableObject {
 
     @discardableResult
     func save(_ rules: Rules) -> SaveOutcome {
+        if demo {
+            state = Engine.plan(state, draft: rules, now: Date())
+            if let date = state.pendingEffective, state.pending != nil { return .delayed(until: date) }
+            return .immediate
+        }
         let outcome = Engine.save(draft: rules)
         state = SharedStorage.load()
         return outcome
@@ -87,16 +99,21 @@ final class AppModel: ObservableObject {
         return save(rules)
     }
 
-    /// Renonce aux assouplissements en attente (toujours autorisé : c'est plus strict).
+    func setDayStart(_ dayStart: DayStart) -> SaveOutcome {
+        var rules = draft
+        rules.dayStart = dayStart
+        return save(rules)
+    }
+
     func cancelPending() {
         save(active)
     }
 
     func isBlockedToday(_ id: UUID) -> Bool {
-        SharedStorage.isShieldedToday(id)
+        if demo { return state.active.groups.first?.id == id }
+        return SharedStorage.isShieldedToday(id)
     }
 
-    /// Vrai si cette limite va changer quand le délai sera écoulé.
     func hasPendingChange(_ id: UUID) -> Bool {
         guard state.pending != nil else { return false }
         return draft.groups.first(where: { $0.id == id }) != active.groups.first(where: { $0.id == id })
@@ -104,5 +121,18 @@ final class AppModel: ObservableObject {
 
     func isDomainPendingRemoval(_ domain: String) -> Bool {
         state.pending != nil && active.blockedDomains.contains(domain) && !draft.blockedDomains.contains(domain)
+    }
+
+    private static var demoState: TimeKeeperState {
+        var rules = Rules()
+        rules.groups = [
+            LimitGroup(name: "Réseaux sociaux", minutes: 30),
+            LimitGroup(name: "Vidéo", minutes: 45),
+            LimitGroup(name: "Jeux", minutes: 20),
+        ]
+        rules.blockedDomains = ["youtube.com", "instagram.com", "tiktok.com"]
+        rules.denyAppRemoval = true
+        rules.dayStart = DayStart(hour: 4, minute: 0)
+        return TimeKeeperState(active: rules)
     }
 }

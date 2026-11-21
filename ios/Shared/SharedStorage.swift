@@ -1,6 +1,5 @@
 import Foundation
 
-/// Stockage dans l'App Group, lisible par l'app et l'extension de monitoring.
 enum SharedStorage {
     static let groupID: String = (Bundle.main.object(forInfoDictionaryKey: "AppGroupID") as? String) ?? ""
 
@@ -25,22 +24,17 @@ enum SharedStorage {
         }
     }
 
-    // MARK: - Jour courant (le blocage tient jusqu'à minuit)
-
-    static func dayKey(_ date: Date = Date()) -> String {
-        let c = Calendar.current.dateComponents([.year, .month, .day], from: date)
-        return String(format: "%04d-%02d-%02d", c.year ?? 0, c.month ?? 0, c.day ?? 0)
+    static func todayKey(_ date: Date = Date()) -> String {
+        load().active.dayStart.dayKey(for: date)
     }
 
     static func markShieldedToday(_ id: UUID) {
-        defaults.set(dayKey(), forKey: "shieldDay." + id.uuidString)
+        defaults.set(todayKey(), forKey: "shieldDay." + id.uuidString)
     }
 
     static func isShieldedToday(_ id: UUID) -> Bool {
-        defaults.string(forKey: "shieldDay." + id.uuidString) == dayKey()
+        defaults.string(forKey: "shieldDay." + id.uuidString) == todayKey()
     }
-
-    // MARK: - Empreinte de la config surveillée (évite de relancer le suivi inutilement)
 
     static func fingerprint(_ id: UUID) -> String? {
         defaults.string(forKey: "fingerprint." + id.uuidString)
@@ -49,8 +43,6 @@ enum SharedStorage {
     static func setFingerprint(_ value: String?, for id: UUID) {
         defaults.set(value, forKey: "fingerprint." + id.uuidString)
     }
-
-    // MARK: - Groupes connus (pour nettoyer les blocages des limites supprimées)
 
     static var knownGroupIDs: Set<UUID> {
         get { Set((defaults.stringArray(forKey: knownGroupsKey) ?? []).compactMap(UUID.init(uuidString:))) }

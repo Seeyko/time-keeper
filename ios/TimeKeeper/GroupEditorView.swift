@@ -36,20 +36,21 @@ struct GroupEditorView: View {
             } header: {
                 Text("Ce qui est limité")
             } footer: {
-                Text("Le temps est partagé : 30 min pour Instagram + TikTok = 30 min au total.")
+                Text("Un seul compteur pour tout ce qui est choisi.")
             }
 
-            Section("Temps autorisé par jour") {
+            Section("Temps par jour") {
                 Stepper(value: $group.minutes, in: Policy.minutesRange, step: 5) {
                     Text(formatMinutes(group.minutes)).font(.title3.monospacedDigit())
                 }
+                .sensoryFeedback(.selection, trigger: group.minutes)
             }
 
             if !isNew {
                 Section {
                     Button("Supprimer cette limite", role: .destructive) { confirmDelete = true }
                 } footer: {
-                    Text("La suppression ne prend effet que 24 h plus tard.")
+                    Text("Effectif dans 24 h.")
                 }
             }
         }

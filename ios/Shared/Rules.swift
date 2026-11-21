@@ -3,17 +3,38 @@ import FamilyControls
 import ManagedSettings
 import DeviceActivity
 
-/// Les règles "anti-triche".
 enum Policy {
-    /// Délai avant qu'un assouplissement (limite plus haute, app retirée, site débloqué,
-    /// verrou désactivé, limite supprimée) prenne effet. Tout ce qui rend plus strict est immédiat.
     static let loosenDelay: TimeInterval = 24 * 60 * 60
     static let minutesRange = 5...600
-    /// ManagedSettings accepte un nombre limité de domaines dans le filtre web.
     static let maxFilteredDomains = 50
 }
 
-/// Une limite quotidienne : un ensemble d'apps / catégories / sites qui partagent un même temps.
+struct DayStart: Codable, Equatable, Sendable {
+    var hour = 0
+    var minute = 0
+
+    var secondsFromMidnight: TimeInterval { TimeInterval(hour * 3600 + minute * 60) }
+
+    var intervalStart: DateComponents { DateComponents(hour: hour, minute: minute, second: 0) }
+
+    var intervalEnd: DateComponents {
+        let end = (hour * 3600 + minute * 60 + 24 * 3600 - 1) % (24 * 3600)
+        return DateComponents(hour: end / 3600, minute: (end % 3600) / 60, second: end % 60)
+    }
+
+    func dayKey(for date: Date, calendar: Calendar = .current) -> String {
+        let shifted = date.addingTimeInterval(-secondsFromMidnight)
+        let c = calendar.dateComponents([.year, .month, .day], from: shifted)
+        return String(format: "%04d-%02d-%02d", c.year ?? 0, c.month ?? 0, c.day ?? 0)
+    }
+
+    func nextStart(after date: Date, calendar: Calendar = .current) -> Date {
+        calendar.nextDate(after: date, matching: intervalStart, matchingPolicy: .nextTime) ?? date
+    }
+
+    var label: String { String(format: "%02d:%02d", hour, minute) }
+}
+
 struct LimitGroup: Codable, Identifiable {
     var id = UUID()
     var name: String
@@ -52,44 +73,39 @@ extension LimitGroup: Equatable {
     }
 }
 
-/// L'ensemble des règles de blocage.
 struct Rules: Codable, Equatable {
     var groups: [LimitGroup] = []
-    /// Domaines bloqués en permanence, dans tous les navigateurs (filtre web système).
     var blockedDomains: [String] = []
-    /// Empêche la suppression d'apps (dont Time Keeper) tant que c'est actif.
     var denyAppRemoval = false
+    var dayStart = DayStart()
 
-    /// Combine deux jeux de règles en gardant, pour chaque point, le plus strict.
-    /// L'ordre et les noms suivent `b`.
-    static func strictest(_ a: Rules, _ b: Rules) -> Rules {
+    static func strictest(_ active: Rules, _ requested: Rules) -> Rules {
         var out = Rules()
-        for gb in b.groups {
-            if let ga = a.groups.first(where: { $0.id == gb.id }) {
-                var merged = gb
-                merged.minutes = min(ga.minutes, gb.minutes)
-                merged.selection.applicationTokens = ga.selection.applicationTokens.union(gb.selection.applicationTokens)
-                merged.selection.categoryTokens = ga.selection.categoryTokens.union(gb.selection.categoryTokens)
-                merged.selection.webDomainTokens = ga.selection.webDomainTokens.union(gb.selection.webDomainTokens)
+        for wanted in requested.groups {
+            if let current = active.groups.first(where: { $0.id == wanted.id }) {
+                var merged = wanted
+                merged.minutes = min(current.minutes, wanted.minutes)
+                merged.selection.applicationTokens = current.selection.applicationTokens.union(wanted.selection.applicationTokens)
+                merged.selection.categoryTokens = current.selection.categoryTokens.union(wanted.selection.categoryTokens)
+                merged.selection.webDomainTokens = current.selection.webDomainTokens.union(wanted.selection.webDomainTokens)
                 out.groups.append(merged)
             } else {
-                out.groups.append(gb)
+                out.groups.append(wanted)
             }
         }
-        for ga in a.groups where !b.groups.contains(where: { $0.id == ga.id }) {
-            out.groups.append(ga)
+        for current in active.groups where !requested.groups.contains(where: { $0.id == current.id }) {
+            out.groups.append(current)
         }
-        out.blockedDomains = b.blockedDomains + a.blockedDomains.filter { !b.blockedDomains.contains($0) }
-        out.denyAppRemoval = a.denyAppRemoval || b.denyAppRemoval
+        out.blockedDomains = requested.blockedDomains + active.blockedDomains.filter { !requested.blockedDomains.contains($0) }
+        out.denyAppRemoval = active.denyAppRemoval || requested.denyAppRemoval
+        out.dayStart = active.dayStart
         return out
     }
 
-    /// Vrai si `self` ne relâche rien par rapport à `other`.
     func isAtLeastAsStrict(as other: Rules) -> Bool {
         Rules.strictest(other, self) == self
     }
 
-    /// "https://www.YouTube.com/watch?v=x" -> "youtube.com". Nil si ce n'est pas un domaine.
     static func normalizeDomain(_ input: String) -> String? {
         var s = input.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if let r = s.range(of: "://") { s = String(s[r.upperBound...]) }
@@ -101,14 +117,10 @@ struct Rules: Codable, Equatable {
     }
 }
 
-/// État persistant partagé entre l'app et les extensions (App Group).
 struct TimeKeeperState: Codable {
-    /// Règles appliquées maintenant.
     var active = Rules()
-    /// Règles plus souples demandées, appliquées à `pendingEffective`.
     var pending: Rules?
     var pendingEffective: Date?
 
-    /// Ce que l'utilisateur voit et édite : la version future si elle existe.
     var draft: Rules { pending ?? active }
 }

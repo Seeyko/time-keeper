@@ -12,7 +12,7 @@ struct OnboardingView: View {
                 .foregroundStyle(.tint)
             Text("Time Keeper")
                 .font(.largeTitle.bold())
-            Text("Pour bloquer des apps et des sites, Time Keeper a besoin de l'accès à Temps d'écran. Tout reste sur ton iPhone.")
+            Text("Time Keeper a besoin de Temps d'écran pour bloquer. Rien ne quitte ton iPhone.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
             Button {

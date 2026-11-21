@@ -2,7 +2,6 @@ import ManagedSettings
 import ManagedSettingsUI
 import UIKit
 
-/// L'écran de blocage : pas de "Ignorer la limite", pas de "Encore 15 minutes". Juste "Fermer".
 final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
 
     private func make(title: String) -> ShieldConfiguration {
@@ -12,7 +11,7 @@ final class ShieldConfigurationExtension: ShieldConfigurationDataSource {
             icon: UIImage(systemName: "hourglass"),
             title: ShieldConfiguration.Label(text: title, color: .white),
             subtitle: ShieldConfiguration.Label(
-                text: "Ta limite du jour est atteinte. Ça se débloque à minuit, pas avant.",
+                text: "Ta limite du jour est atteinte. Ça se débloque demain, pas avant.",
                 color: .lightGray
             ),
             primaryButtonLabel: ShieldConfiguration.Label(text: "Fermer", color: .black),

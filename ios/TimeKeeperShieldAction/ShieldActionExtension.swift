@@ -1,6 +1,5 @@
 import ManagedSettings
 
-/// Quel que soit le bouton touché sur l'écran de blocage, on ferme. Jamais de déblocage.
 final class ShieldActionExtension: ShieldActionDelegate {
 
     override func handle(action: ShieldAction, for application: ApplicationToken,

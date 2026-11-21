@@ -4,13 +4,10 @@ import ManagedSettings
 import DeviceActivity
 
 enum SaveOutcome: Equatable {
-    /// Tout est appliqué maintenant (le changement rend plus strict, ou ne change rien).
     case immediate
-    /// Une partie du changement assouplit les règles : elle s'applique à cette date.
     case delayed(until: Date)
 }
 
-/// Pose et retire les blocages.
 enum Shield {
     static func apply(_ group: LimitGroup) {
         let store = ManagedSettingsStore(named: group.storeName)
@@ -27,52 +24,51 @@ enum Shield {
 }
 
 enum Engine {
-    private static let domainsStore = ManagedSettingsStore.Name(rawValue: "domains")
-    private static let globalStore = ManagedSettingsStore.Name(rawValue: "global")
-
-    /// Enregistre ce que l'utilisateur a demandé.
-    /// Ce qui est plus strict s'applique tout de suite, ce qui assouplit attend `Policy.loosenDelay`.
     @discardableResult
     static func save(draft: Rules, now: Date = Date()) -> SaveOutcome {
         var state = SharedStorage.load()
-        state.active = Rules.strictest(state.active, draft)
-
-        if draft == state.active {
-            state.pending = nil
-            state.pendingEffective = nil
-        } else {
-            // Le délai ne repart pas de zéro si la nouvelle demande est au moins aussi stricte que l'ancienne.
-            let keepTimer = state.pending.map { draft.isAtLeastAsStrict(as: $0) } ?? false
-            if !keepTimer || state.pendingEffective == nil {
-                state.pendingEffective = now.addingTimeInterval(Policy.loosenDelay)
-            }
-            state.pending = draft
-        }
-
+        state = plan(state, draft: draft, now: now)
         SharedStorage.save(state)
         sync(state.active)
         if let date = state.pendingEffective, state.pending != nil { return .delayed(until: date) }
         return .immediate
     }
 
-    /// À appeler à chaque ouverture de l'app : applique les assouplissements dont le délai est passé,
-    /// et remet les réglages système en phase avec les règles.
-    static func applyPendingIfDue(now: Date = Date()) {
-        var state = SharedStorage.load()
+    static func plan(_ current: TimeKeeperState, draft: Rules, now: Date) -> TimeKeeperState {
+        var state = current
+        state.active = Rules.strictest(state.active, draft)
+        if draft == state.active {
+            state.pending = nil
+            state.pendingEffective = nil
+        } else {
+            let keepTimer = state.pending.map { draft.isAtLeastAsStrict(as: $0) } ?? false
+            if !keepTimer || state.pendingEffective == nil {
+                state.pendingEffective = now.addingTimeInterval(Policy.loosenDelay)
+            }
+            state.pending = draft
+        }
+        return state
+    }
+
+    static func promote(_ current: TimeKeeperState, now: Date) -> TimeKeeperState {
+        var state = current
         if let pending = state.pending, let date = state.pendingEffective, date <= now {
             state.active = pending
             state.pending = nil
             state.pendingEffective = nil
-            SharedStorage.save(state)
         }
+        return state
+    }
+
+    static func applyPendingIfDue(now: Date = Date()) {
+        let state = promote(SharedStorage.load(), now: now)
+        SharedStorage.save(state)
         sync(state.active)
     }
 
-    /// Aligne DeviceActivity et ManagedSettings sur les règles actives.
     static func sync(_ rules: Rules) {
         let center = DeviceActivityCenter()
 
-        // 1. Limites supprimées : arrêter le suivi et lever leur blocage.
         let currentIDs = Set(rules.groups.map(\.id))
         let monitored = Set(rules.groups.filter { !$0.isEmpty }.map(\.activityName))
         for activity in center.activities where LimitGroup.id(from: activity) != nil && !monitored.contains(activity) {
@@ -84,21 +80,19 @@ enum Engine {
         }
         SharedStorage.knownGroupIDs = currentIDs
 
-        // 2. Limites actives.
         let schedule = DeviceActivitySchedule(
-            intervalStart: DateComponents(hour: 0, minute: 0),
-            intervalEnd: DateComponents(hour: 23, minute: 59, second: 59),
+            intervalStart: rules.dayStart.intervalStart,
+            intervalEnd: rules.dayStart.intervalEnd,
             repeats: true
         )
         for group in rules.groups {
-            // Déjà bloqué aujourd'hui : on garde le blocage (avec la sélection à jour) jusqu'à minuit.
             if SharedStorage.isShieldedToday(group.id) { Shield.apply(group) }
 
             guard !group.isEmpty else {
                 SharedStorage.setFingerprint(nil, for: group.id)
                 continue
             }
-            let fp = fingerprint(group)
+            let fp = fingerprint(group, dayStart: rules.dayStart)
             if center.activities.contains(group.activityName), SharedStorage.fingerprint(group.id) == fp {
                 continue
             }
@@ -107,7 +101,6 @@ enum Engine {
                 categories: group.selection.categoryTokens,
                 webDomains: group.selection.webDomainTokens,
                 threshold: DateComponents(minute: group.minutes),
-                // Compte le temps déjà passé aujourd'hui : modifier une limite ne remet pas le compteur à zéro.
                 includesPastActivity: true
             )
             center.stopMonitoring([group.activityName])
@@ -115,30 +108,31 @@ enum Engine {
                 try center.startMonitoring(group.activityName, during: schedule, events: [LimitGroup.eventName: event])
                 SharedStorage.setFingerprint(fp, for: group.id)
             } catch {
-                NSLog("TimeKeeper: startMonitoring a échoué pour \(group.name): \(error)")
+                NSLog("TimeKeeper startMonitoring \(group.name): \(error)")
             }
         }
 
-        // 3. Sites bloqués en permanence, dans tous les navigateurs.
-        let domains = ManagedSettingsStore(named: domainsStore)
+        let domains = ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "domains"))
         let filtered = filteredDomains(rules.blockedDomains)
         domains.webContent.blockedByFilter = filtered.isEmpty ? nil : .specific(filtered)
 
-        // 4. Verrou anti-suppression.
-        ManagedSettingsStore(named: globalStore).application.denyAppRemoval = rules.denyAppRemoval ? true : nil
+        let global = ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "global"))
+        global.application.denyAppRemoval = rules.denyAppRemoval ? true : nil
     }
 
-    /// youtube.com -> youtube.com, www.youtube.com, m.youtube.com (dans la limite autorisée).
-    static func filteredDomains(_ base: [String]) -> Set<WebDomain> {
-        var names: [String] = base
+    static func filteredDomainNames(_ base: [String]) -> [String] {
+        var names = base
         for d in base { names += ["www." + d, "m." + d] }
         var seen = Set<String>()
-        let unique = names.filter { seen.insert($0).inserted }
-        return Set(unique.prefix(Policy.maxFilteredDomains).map { WebDomain(domain: $0) })
+        return Array(names.filter { seen.insert($0).inserted }.prefix(Policy.maxFilteredDomains))
     }
 
-    private static func fingerprint(_ group: LimitGroup) -> String {
+    static func filteredDomains(_ base: [String]) -> Set<WebDomain> {
+        Set(filteredDomainNames(base).map { WebDomain(domain: $0) })
+    }
+
+    private static func fingerprint(_ group: LimitGroup, dayStart: DayStart) -> String {
         let data = (try? JSONEncoder().encode(group.selection)) ?? Data()
-        return "\(group.minutes)|\(data.base64EncodedString())"
+        return "\(dayStart.label)|\(group.minutes)|\(data.base64EncodedString())"
     }
 }

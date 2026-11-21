@@ -21,10 +21,10 @@ struct DomainsView: View {
                         .disabled(input.isEmpty)
                 }
                 if invalid {
-                    Text("Ce n'est pas un nom de domaine valide.").font(.footnote).foregroundStyle(.red)
+                    Text("Ce n'est pas un site.").font(.footnote).foregroundStyle(.red)
                 }
             } footer: {
-                Text("Le domaine et ses sous-domaines courants (www., m.) sont bloqués dans tous les navigateurs. L'app YouTube ou Instagram, elle, se limite dans une limite quotidienne.")
+                Text("Bloque aussi www. et m. L'app, elle, se met dans une limite.")
             }
 
             let missing = suggestions.filter { !model.draft.blockedDomains.contains($0) }
