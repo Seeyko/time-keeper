@@ -22,7 +22,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 - **Mac de build partagé** : on code à l'aveugle. Un seul build et un seul simulateur à la fois, à la fin, avec `nice`.
 - **Aucun secret dans le dépôt, il est public.** `SECRETS.md` dit où vit chaque clé. Jamais de runner auto-hébergé : une PR d'un fork pourrait exécuter du code sur la machine.
 - **Déploiement** : chaque fusion sur `main` envoie un build sur TestFlight (`.github/workflows/ios.yml`, environnement `testflight`, actif quand la variable `TESTFLIGHT_ENABLED` vaut `true`).
-- **Confidentialité** : aucune donnée ne quitte l'iPhone. Pas d'analytique.
+- **Confidentialité** : les règles, les apps, les sites et les durées ne quittent jamais l'iPhone. Seule une analytique anonyme part vers PostHog (UE, IP jetée, identifiant aléatoire, interrupteur « Statistiques anonymes ») : écrans de l'onboarding, paywall, achats, et les messages « Ton avis ». Choix de Tom, 2026-11-21. Détail dans `docs/analytique.md`, à garder d'accord avec `PRIVACY.md`.
 - **Une PR par étape**, merge quand la CI est verte. Le code d'un build envoyé au store est sur `main`.
 - **Présente chaque travail fini** pour un non-technique : un titre humain, une description courte, des captures, puis le lien (skill `present-work` de tom-playbook).
 - **Pas de commentaire dans le code, pas de code mort.**

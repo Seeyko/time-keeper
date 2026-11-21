@@ -5,6 +5,8 @@ struct MainView: View {
     @EnvironmentObject private var model: AppModel
     @State private var delayedUntil: Date?
     @State private var newGroup: LimitGroup?
+    @State private var feedback = false
+    @State private var analytics = Analytics.enabled
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.openURL) private var openURL
 
@@ -122,6 +124,14 @@ struct MainView: View {
                         .foregroundStyle(Theme.accent)
                         .frame(minHeight: 44)
                     }
+                    Toggle("Statistiques anonymes", isOn: $analytics)
+                        .tint(Theme.toggle)
+                        .onChange(of: analytics) { _, on in Analytics.enabled = on }
+                        .sensoryFeedback(.selection, trigger: analytics)
+                    Button("Ton avis") { feedback = true }
+                        .foregroundStyle(Theme.accent)
+                        .frame(minHeight: 44)
+                        .sensoryFeedback(.selection, trigger: feedback)
                 } header: {
                     SectionTitle("Réglages")
                 }
@@ -132,6 +142,10 @@ struct MainView: View {
                     GroupEditorView(group: group, isNew: true)
                 }
                 .tint(Theme.accent)
+            }
+            .sheet(isPresented: $feedback) {
+                NavigationStack { FeedbackView() }
+                    .tint(Theme.accent)
             }
             .delayedAlert($delayedUntil)
         }

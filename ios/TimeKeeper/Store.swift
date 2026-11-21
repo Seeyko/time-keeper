@@ -30,6 +30,16 @@ enum Plan: String, CaseIterable, Identifiable, Sendable {
     }
 }
 
+extension Product.PurchaseResult {
+    var outcome: String {
+        switch self {
+        case .pending: "purchase_pending"
+        case .userCancelled: "purchase_cancelled"
+        default: "purchase_unverified"
+        }
+    }
+}
+
 @MainActor
 final class Store: ObservableObject {
     enum Access: Equatable {
@@ -87,10 +97,27 @@ final class Store: ObservableObject {
         guard let product = products[plan], purchasing == nil else { return }
         purchasing = plan
         defer { purchasing = nil }
-        guard let result = try? await product.purchase(), case .success(.verified(let transaction)) = result else { return }
-        if transaction.offer?.type == .introductory {
+        Analytics.capture("purchase_started", ["product_id": plan.rawValue])
+        let result: Product.PurchaseResult
+        do {
+            result = try await product.purchase()
+        } catch {
+            Analytics.capture("purchase_failed", ["product_id": plan.rawValue, "error": String(describing: error)])
+            return
+        }
+        guard case .success(.verified(let transaction)) = result else {
+            Analytics.capture(result.outcome, ["product_id": plan.rawValue])
+            return
+        }
+        let trial = transaction.offer?.type == .introductory
+        if trial {
             scheduleTrialReminder(from: transaction.purchaseDate)
         }
+        Analytics.capture(trial ? "trial_started" : "purchase_completed", [
+            "product_id": plan.rawValue,
+            "revenue": trial ? 0 : NSDecimalNumber(decimal: product.price).doubleValue,
+            "currency": product.priceFormatStyle.currencyCode,
+        ], person: ["plan": plan.rawValue])
         await transaction.finish()
         await refresh()
     }
@@ -98,9 +125,13 @@ final class Store: ObservableObject {
     func restore() async {
         try? await AppStore.sync()
         await refresh()
+        Analytics.capture("purchase_restored", ["found": access == .granted])
     }
 
     private func setAccess(_ value: Access) {
+        if access != value, value != .unknown {
+            Analytics.capture("access_changed", ["access": value == .granted ? "granted" : "none"], person: ["acces": value == .granted])
+        }
         access = value
         if demo { return }
         UserDefaults.standard.set(value == .granted, forKey: Store.grantedKey)
