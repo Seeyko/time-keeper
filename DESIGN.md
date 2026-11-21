@@ -73,7 +73,7 @@ Animations système uniquement.
 - La confirmation de suppression s'ouvre : `.warning`.
 
 ## Illustrations
-Le hibou de l'icône est la seule illustration. Dans l'app, il apparaît dans l'onboarding (bienvenue, réussite du aha, verrou, fin) et sur l'écran de blocage, jamais sur les écrans de tous les jours : ils restent sobres. Les poses détourées sont dans `Assets.xcassets` (`owl-montre`, `owl-non`, `owl-cadenas`, `owl-lit`) et viennent de `store/make/owl`.
+Le hibou de l'icône est la seule illustration. Dans l'app, il apparaît dans l'onboarding (bienvenue, réussite du aha, verrou, fin) et sur l'écran de blocage, jamais sur les écrans de tous les jours : ils restent sobres. Les poses détourées sont dans `Assets.xcassets` (`owl-garde`, `owl-patient`, `owl-non`, `owl-cadenas`, `owl-lit`) et viennent de `store/make/owl`.
 - Pourquoi : l'onboarding doit faire sentir la valeur et donner de la chaleur, l'outil de tous les jours doit rester un cadran (Tom, 2026-11-21).
 
 ### L'icône

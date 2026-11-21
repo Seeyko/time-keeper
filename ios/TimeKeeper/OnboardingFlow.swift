@@ -118,7 +118,7 @@ struct OnboardingFlow: View {
     private var welcome: some View {
         VStack(spacing: 20) {
             Spacer()
-            Owl(name: "owl-montre", label: "Le hibou de Time Keeper serre sa montre", height: 190)
+            Owl(name: "owl-garde", label: "Le hibou de Time Keeper croise les ailes", height: 190)
             Text("Ta limite va enfin tenir.")
                 .font(Theme.title)
                 .multilineTextAlignment(.center)
@@ -266,7 +266,7 @@ struct OnboardingFlow: View {
     private var notifyStep: some View {
         VStack(spacing: 16) {
             Spacer()
-            Owl(name: "owl-montre", label: "Le hibou serre sa montre", height: 190)
+            Owl(name: "owl-patient", label: "Le hibou attend, assis sur sa montre", height: 190)
             Text("Je te préviens avant la fin.")
                 .font(Theme.heading)
                 .multilineTextAlignment(.center)
