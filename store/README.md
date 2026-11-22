@@ -4,8 +4,11 @@ Sept captures 1320 × 2868 (iPhone 6,9"), générées depuis les captures brutes
 
 ```sh
 npm i -g playwright
-NODE_PATH=$(npm root -g) node store/make/render.cjs
+NODE_PATH=$(npm root -g) node store/make/render.cjs                    # iPhone 6,9" -> store/
+NODE_PATH=$(npm root -g) node store/make/render.cjs slides-ipad.json   # iPad 13" -> store/ipad/
 ```
+
+Les captures iPad (2064 × 2752) partent de `screenshots/ipad/`, faites sur le simulateur iPad Pro 13 pouces avec `-demo`.
 
 - `make/slides.json` : le titre, l'écran et la loupe de chaque capture (`crop` = centre x, centre y, largeur, hauteur en pixels de la capture brute).
 - `make/shield.html` : l'écran de blocage, que le simulateur ne sait pas afficher.
