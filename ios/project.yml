@@ -20,7 +20,6 @@ settings:
   configs:
     Release:
       CODE_SIGN_STYLE: Manual
-      CODE_SIGN_IDENTITY: Apple Distribution
 
 targets:
   TimeKeeper:
@@ -54,6 +53,7 @@ targets:
       configs:
         Release:
           PROVISIONING_PROFILE_SPECIFIER: Time Keeper App Store
+          CODE_SIGN_IDENTITY: Apple Distribution
     dependencies:
       - target: TimeKeeperMonitor
       - target: TimeKeeperShieldConfig
@@ -85,6 +85,7 @@ targets:
       configs:
         Release:
           PROVISIONING_PROFILE_SPECIFIER: Time Keeper Monitor App Store
+          CODE_SIGN_IDENTITY: Apple Distribution
 
   TimeKeeperShieldConfig:
     type: app-extension
@@ -109,6 +110,7 @@ targets:
       configs:
         Release:
           PROVISIONING_PROFILE_SPECIFIER: Time Keeper ShieldConfig App Store
+          CODE_SIGN_IDENTITY: Apple Distribution
 
   TimeKeeperShieldAction:
     type: app-extension
@@ -133,6 +135,7 @@ targets:
       configs:
         Release:
           PROVISIONING_PROFILE_SPECIFIER: Time Keeper ShieldAction App Store
+          CODE_SIGN_IDENTITY: Apple Distribution
 
   TimeKeeperTests:
     type: bundle.unit-test
