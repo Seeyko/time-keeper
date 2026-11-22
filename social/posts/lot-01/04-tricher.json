@@ -1,0 +1,59 @@
+{
+  "slug": "04-tricher",
+  "format": "liste",
+  "style": "natif:bandeau",
+  "hashtags": [
+    "tempsdecran",
+    "screentime",
+    "doomscrolling",
+    "iphone"
+  ],
+  "son": "Un son tendance calme (lo-fi ou piano), volume bas. Pas de voix.",
+  "slides": [
+    {
+      "titre": "4 façons de tricher *avec ta limite*",
+      "hibou": {
+        "pose": "non",
+        "y": 0.82,
+        "h": 0.42
+      }
+    },
+    {
+      "type": "liste",
+      "titre": "Avec Temps d'écran :",
+      "liste": [
+        "1. « Ignorer la limite »",
+        "2. Taper ton code (tu le connais)",
+        "3. Supprimer l'app, la réinstaller",
+        "4. Ouvrir le site dans Chrome"
+      ]
+    },
+    {
+      "type": "liste",
+      "titre": "Avec Time Keeper :",
+      "liste": [
+        "1. Pas de bouton Ignorer",
+        "2. Pas de code",
+        "3. Suppression d'apps verrouillée",
+        "4. Le site bloqué partout"
+      ]
+    },
+    {
+      "type": "app",
+      "titre": "Et assouplir une règle ? *24 h plus tard.*",
+      "capture": "ecran:5-assouplissement.png",
+      "rogne": [
+        0,
+        0.5
+      ]
+    },
+    {
+      "type": "cta",
+      "titre": "Plus de triche *à 23 h*."
+    }
+  ],
+  "legende": {
+    "tiktok": "Avec Temps d'écran, tu as 4 façons de tricher. Time Keeper les ferme : pas de bouton, pas de code, suppression verrouillée, et assouplir prend 24 h. Lien en bio. Toi aussi tu connais ton code par cœur ?",
+    "insta": "Avec Temps d'écran, tricher prend 4 secondes.\n\nTime Keeper ferme les 4 portes : pas de bouton « Ignorer », pas de code, suppression d'apps verrouillée, site bloqué dans tous les navigateurs. Assouplir une règle prend 24 h.\n\nToi aussi tu connais ton code par cœur ?\n\nTime Keeper, sur iPhone. 7 jours offerts, puis 19,99 € par an ou 39,99 € à vie. Lien en bio."
+  }
+}
