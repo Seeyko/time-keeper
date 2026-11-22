@@ -94,7 +94,6 @@ jobs:
           xcodebuild -project TimeKeeper.xcodeproj -scheme TimeKeeper \
             -configuration Release -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/TimeKeeper.xcarchive" \
-            -allowProvisioningUpdates \
             -authenticationKeyPath "$ASC_KEY_PATH" \
             -authenticationKeyID "$ASC_KEY_ID" \
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
