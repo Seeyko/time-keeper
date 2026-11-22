@@ -5,18 +5,20 @@ const { pathToFileURL } = require('node:url');
 const { resolve } = require('node:path');
 
 const here = __dirname;
-const conf = JSON.parse(readFileSync(resolve(here, 'slides.json'), 'utf8'));
+const conf = JSON.parse(readFileSync(resolve(here, process.argv[2] ?? 'slides.json'), 'utf8'));
 const [W, H] = conf.size;
 const [RW, RH] = conf.raw;
-const out = resolve(here, process.argv[2] ?? '..');
+const out = resolve(here, conf.out);
 const only = process.argv[3];
 mkdirSync(out, { recursive: true });
 
 const url = (p) => pathToFileURL(resolve(here, p)).href;
 
-const phone = { x: 160, y: 900, w: 1000 };
+const dev = conf.device;
+const phone = { x: dev.x, y: dev.y, w: dev.w };
 const k = phone.w / RW;
-const bezel = 26;
+const bezel = dev.bezel;
+const sb = dev.statusBar;
 
 function dial(cx, cy, r) {
   const ticks = [];
@@ -71,7 +73,7 @@ function statusBar(dark) {
   const bg = dark ? '#0B1530' : '#fff';
   return `<div class="status" style="background:${bg};color:${c}">
     <span>9:41</span>
-    <svg viewBox="0 0 78 14" width="${78 * 2.3 * k * 1.3}" fill="${c}">
+    <svg viewBox="0 0 78 14" width="${sb.icons * k}" fill="${c}">
       <rect x="0" y="9" width="3.4" height="4" rx="1"/><rect x="5" y="6.5" width="3.4" height="6.5" rx="1"/><rect x="10" y="4" width="3.4" height="9" rx="1"/><rect x="15" y="1.5" width="3.4" height="11.5" rx="1"/>
       <path d="M31 3.2a11 11 0 0 1 15 0l-1.5 1.6a8.8 8.8 0 0 0-12 0zM33.6 6a7.2 7.2 0 0 1 9.8 0l-1.6 1.6a4.9 4.9 0 0 0-6.6 0zM36.2 8.8a3.4 3.4 0 0 1 4.6 0L38.5 11.2z"/>
       <rect x="52.5" y="1.5" width="22" height="11" rx="3.3" fill="none" stroke="${c}" stroke-opacity=".4"/><rect x="54.5" y="3.5" width="18" height="7" rx="1.8"/><rect x="75.5" y="5" width="1.6" height="4" rx=".8" fill-opacity=".4"/>
@@ -102,14 +104,14 @@ function page(s, i) {
   @font-face{font-family:IS;font-style:italic;src:url('${url('fonts/InstrumentSerif-Italic.woff2')}')}
   html,body{margin:0;width:${W}px;height:${H}px;overflow:hidden;background:#070E24}
   .bg{position:absolute;inset:0}
-  .head{position:absolute;left:80px;right:80px;top:170px;text-align:center}
-  .head p{margin:0;font:400 118px/1.04 IS,serif;color:#fff;letter-spacing:-.5px;text-wrap:balance}
-  .head h1{margin:30px 0 0;font:italic 400 80px/1.08 IS,serif;color:#B9CCFF;text-wrap:balance}
+  .head{position:absolute;left:80px;right:80px;top:${conf.head.top}px;text-align:center}
+  .head p{margin:0;font:400 ${conf.head.thought}px/1.04 IS,serif;color:#fff;letter-spacing:-.5px;text-wrap:balance}
+  .head h1{margin:30px 0 0;font:italic 400 ${conf.head.answer}px/1.08 IS,serif;color:#B9CCFF;text-wrap:balance}
   .owl{position:absolute;filter:drop-shadow(0 30px 50px rgba(0,0,0,.45))}
-  .phone{position:absolute;left:${phone.x - bezel}px;top:${phone.y - bezel}px;width:${phone.w}px;height:${ph}px;padding:${bezel}px;border-radius:${150}px;background:#0A0A0D;
+  .phone{position:absolute;left:${phone.x - bezel}px;top:${phone.y - bezel}px;width:${phone.w}px;height:${ph}px;padding:${bezel}px;border-radius:${dev.radius}px;background:#0A0A0D;
     box-shadow:0 0 0 3px #2A2C33,0 60px 140px rgba(0,0,0,.55)}
-  .screen{position:relative;width:${phone.w}px;height:${ph}px;border-radius:${124}px;overflow:hidden;background:url('${s.screen ? url(s.screen) : ''}') 0 0/100% 100%}
-  .status{position:absolute;left:0;right:0;top:0;height:${175 * k}px;display:flex;align-items:center;justify-content:space-between;padding:${14 * k}px ${110 * k}px 0 ${150 * k}px;box-sizing:border-box;font:600 ${50 * k}px Inter,sans-serif}
+  .screen{position:relative;width:${phone.w}px;height:${ph}px;border-radius:${dev.screenRadius}px;overflow:hidden;background:url('${s.screen ? url(s.screen) : ''}') 0 0/100% 100%}
+  .status{position:absolute;left:0;right:0;top:0;height:${sb.h * k}px;display:flex;align-items:center;justify-content:space-between;padding:${sb.top * k}px ${sb.right * k}px 0 ${sb.left * k}px;box-sizing:border-box;font:600 ${sb.font * k}px Inter,sans-serif}
   .island{position:absolute;top:${34 * k}px;left:50%;width:${370 * k}px;height:${110 * k}px;margin-left:${-185 * k}px;border-radius:${60 * k}px;background:#000}
   .mark{position:absolute;left:${W / 2 - 190}px;top:1060px;width:380px;height:380px;border-radius:86px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
   h1.end{position:absolute;left:0;right:0;margin:0;text-align:center;top:1540px;font:400 190px/1.02 IS,serif;color:#fff}
@@ -120,7 +122,7 @@ function page(s, i) {
   </style></head><body>
   ${background(i, s)}
   ${s.screen ? `<div class="head"><p>${s.thought}</p><h1>${s.answer}</h1></div>
-  <div class="phone"><div class="screen">${statusBar(s.dark)}<div class="island"></div></div></div>
+  <div class="phone"><div class="screen">${sb.always || s.dark ? statusBar(s.dark) : ''}${dev.island ? '<div class="island"></div>' : ''}</div></div>
   ${loupe(s)}` : closing(s)}
   ${s.owl ? `<img class="owl" src="${url(s.owl.src)}" style="left:${s.owl.x}px;top:${s.owl.y}px;height:${s.owl.h}px;${s.owl.flip ? 'transform:scaleX(-1)' : ''}">` : ''}
   </body></html>`;
@@ -128,10 +130,10 @@ function page(s, i) {
 
 (async () => {
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 402, height: 874 }, deviceScaleFactor: 3 });
+const ctx = await browser.newContext({ viewport: { width: RW / conf.shield.scale, height: RH / conf.shield.scale }, deviceScaleFactor: conf.shield.scale });
 const p = await ctx.newPage();
 await p.goto(url('shield.html'));
-await p.screenshot({ path: resolve(here, 'raw/shield.png') });
+await p.screenshot({ path: resolve(here, conf.shield.out) });
 
 const big = await browser.newContext({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
 const q = await big.newPage();

@@ -1,4 +1,5 @@
 {
+  "out": "..",
   "size": [
     1320,
     2868
@@ -7,6 +8,33 @@
     1206,
     2622
   ],
+  "head": {
+    "top": 170,
+    "thought": 118,
+    "answer": 80
+  },
+  "device": {
+    "x": 160,
+    "y": 900,
+    "w": 1000,
+    "bezel": 26,
+    "radius": 150,
+    "screenRadius": 124,
+    "island": true,
+    "statusBar": {
+      "always": true,
+      "h": 175,
+      "top": 14,
+      "left": 150,
+      "right": 110,
+      "font": 50,
+      "icons": 233.22
+    }
+  },
+  "shield": {
+    "scale": 3,
+    "out": "raw/shield.png"
+  },
   "slides": [
     {
       "file": "01-encore-5-minutes",
