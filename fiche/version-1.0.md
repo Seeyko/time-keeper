@@ -4,7 +4,7 @@ Chaque valeur envoyée à App Store Connect est écrite ici. Les captures sorten
 
 ## Pour qui on écrit
 
-La personne arrive le soir, téléphone en main, après une heure de scroll qu'elle n'a pas choisie. Elle a déjà essayé Temps d'écran d'Apple et d'autres bloqueurs : elle a appuyé sur « Ignorer », elle a payé un abonnement, elle a dû bloquer tout Safari pour couper un seul site.
+Jeunes actifs couche-tard (choix de Tom, 23/11) : 25 à 32 ans, un travail de bureau, au lit à 23 h, sur TikTok ou YouTube jusqu'à 1 h, debout à 7 h. Ils arrivent le soir, téléphone en main, après une heure de scroll qu'ils n'ont pas choisie. Elle a déjà essayé Temps d'écran d'Apple et d'autres bloqueurs : elle a appuyé sur « Ignorer », elle a payé un abonnement, elle a dû bloquer tout Safari pour couper un seul site.
 
 | Sa douleur, dite par Tom | Ce que l'app fait vraiment |
 |---|---|
@@ -24,20 +24,20 @@ Une vraie étude d'audience (avis des concurrents, forums) reste à faire pour a
 | Champ | Valeur | Taille |
 |---|---|---|
 | Nom | Time Keeper – Temps d'écran | 27 car. |
-| Sous-titre | Bloqueur d'apps et de sites | 27 car. |
-| Mots-clés | limite,bloquer,réseaux,sociaux,addiction,détox,digitale,concentration,téléphone,navigateur,focus | 100 octets |
-| Texte promotionnel | Les autres bloqueurs ont un bouton « ignorer ». Pas celui-ci : limite atteinte, l'app reste fermée jusqu'à demain. Essaie 7 jours. | 130 car. |
+| Sous-titre | Bloqueur d'apps sans Ignorer | 28 car. |
+| Mots-clés | limite,bloquer,site,réseaux,sociaux,sommeil,scroll,soir,nuit,coucher,détox,addiction,navigateur | 97 octets |
+| Texte promotionnel | 23 h, au lit. Ta limite tombe et il n'y a pas de bouton « Ignorer » : l'app reste fermée jusqu'au matin. Essaie 7 jours. | 123 car. |
 
 ### Description
 
 Time Keeper limite ton temps d'écran et bloque des sites, sans aucun moyen de tricher sur le moment.
 
-Tu connais le message « Limite atteinte ». Tu appuies sur « Ignorer », et tu continues. Ici, ce bouton n'existe pas.
+Au lit à 23 h, encore sur ton téléphone à 1 h ? Tu connais le message « Limite atteinte ». Tu appuies sur « Ignorer », et tu continues. Ici, ce bouton n'existe pas.
 
 LIMITE ATTEINTE, C'EST FINI POUR AUJOURD'HUI
 • Une limite par jour pour un groupe d'apps : par exemple 30 min de réseaux sociaux, toutes apps confondues.
 • Quand le temps est écoulé, l'app est bloquée jusqu'au lendemain. L'écran de blocage a un seul bouton : « Fermer ».
-• Tu choisis l'heure où commence ta journée, pratique si tu te couches tard.
+• Tu choisis l'heure où commence ta journée, 4 h par exemple : ton compteur ne repart pas à minuit pile.
 • Modifier une limite ne remet pas le compteur à zéro.
 
 UN SITE, PAS TOUT LE NAVIGATEUR
@@ -59,15 +59,19 @@ Time Keeper demande l'accès à Temps d'écran pour pouvoir bloquer. iOS 17.4 ou
 
 Chaque capture part d'une phrase que la personne s'est déjà dite, puis montre la réponse de l'app. Le hibou change de pose à chaque fois.
 
-| # | Fichier | Ce qu'elle se dit | La réponse | Hibou |
+| # | Fichier | Ce qu'il se dit | La réponse | Hibou |
 |---|---|---|---|---|
-| 1 | `01-encore-5-minutes` | « Encore 5 minutes… » Il y a deux heures. | Une limite de temps d'écran qui tient vraiment. | bras croisés |
-| 2 | `02-juste-fermer` | « J'appuie sur Ignorer sans même réfléchir. » | Ici, il n'y a qu'un bouton : Fermer. | montre le bouton |
-| 3 | `03-un-site-pas-le-navigateur` | « Je veux bloquer un site, pas tout mon navigateur. » | Un site bloqué partout. Le reste du web reste ouvert. | cadenas |
-| 4 | `04-assouplir-24h` | « Je rallonge ma limite dès que ça m'arrange. » | Assouplir une règle prend 24 h. | patient sur sa montre |
+| 1 | `01-encore-5-minutes` | « Au lit à 23 h. » Le téléphone posé à 1 h. | Une limite de temps d'écran qui tient vraiment. | bras croisés |
+| 2 | `02-juste-fermer` | « À minuit, j'appuie sur Ignorer sans réfléchir. » | Ici, il n'y a qu'un bouton : Fermer. | montre le bouton |
+| 3 | `03-un-site-pas-le-navigateur` | « Encore une vidéo YouTube avant de dormir. » | Un site bloqué dans tous les navigateurs. | cadenas |
+| 4 | `04-assouplir-24h` | « Le soir, je rallonge ma limite dès que ça m'arrange. » | Assouplir une règle prend 24 h. | patient sur sa montre |
 | 5 | `05-impossible-a-supprimer` | « Je supprime l'app et c'est réglé. » | Pas cette fois : la suppression est verrouillée. | fait non |
-| 6 | `06-nouvelle-journee` | « Je me couche à 1 h, mon compteur repart à minuit. » | Ta journée commence à l'heure que tu choisis. | bras croisés |
-| 7 | `07-ton-temps-te-revient` | « Ce soir, j'ai lu un livre. » | Ton temps te revient. | lit un livre |
+| 6 | `06-nouvelle-journee` | « À 1 h du matin, mon compteur est déjà à zéro. » | Ta journée commence à l'heure que tu choisis. | bras croisés |
+| 7 | `07-ton-temps-te-revient` | « Ce soir, j'ai éteint à 23 h. » | Tes soirées te reviennent. | lit un livre |
+
+### Vidéo d'aperçu (iPhone 6,9")
+
+28 s, 886 × 1920, sortie de `store/make/preview.cjs`. L'onboarding jusqu'à l'écran de blocage, l'accueil, un site bloqué, l'assouplissement en 24 h, puis « Tes soirées te reviennent ».
 
 Les trois premières portent les mots cherchés : limite, temps d'écran, bloquer, site, navigateur.
 
@@ -87,19 +91,19 @@ En France, Apple lit aussi la fiche anglaise du Royaume-Uni : ses mots-clés son
 |---|---|---|
 | Nom | Time Keeper: Screen Time | 24 car. |
 | Sous-titre | Strict app & website blocker | 28 car. |
-| Mots-clés | limit,block,social,media,detox,addiction,phone,browser,daily,lock,productivity,focus,dopamine,scroll | 100 octets |
-| Texte promotionnel | Other blockers have an "ignore" button. This one doesn't: once your limit is reached, the app stays closed until tomorrow. Try it free for 7 days. | 146 car. |
+| Mots-clés | limit,block,social,media,sleep,bedtime,night,scroll,detox,addiction,phone,browser,lock,dopamine | 95 octets |
+| Texte promotionnel | 11 pm, in bed. Your limit hits and there's no "Ignore" button: the app stays closed until morning. Try it free for 7 days. | 122 car. |
 
 ### Description (en)
 
 Time Keeper limits your screen time and blocks websites, with no way to cheat in the moment. The app is in French for now.
 
-You know the "Time limit" screen. You tap "Ignore" and keep scrolling. Here, that button doesn't exist.
+In bed at 11 pm, still on your phone at 1 am? You know the "Time limit" screen. You tap "Ignore" and keep scrolling. Here, that button doesn't exist.
 
 LIMIT REACHED MEANS DONE FOR TODAY
 • One daily limit for a group of apps: for example 30 min of social media, across all of them.
 • When time is up, the app stays blocked until tomorrow. The block screen has a single button: "Close".
-• Pick when your day starts, handy if you go to bed late.
+• Pick when your day starts, 4 am for example, so your counter doesn't reset at midnight.
 • Changing a limit doesn't reset the counter.
 
 ONE WEBSITE, NOT THE WHOLE BROWSER
@@ -131,6 +135,7 @@ Time Keeper asks for Screen Time access to block apps. Requires iOS 17.4 or late
 - Relevé de la fiche deux fois par semaine.
 
 ## Journal
+- 2026-11-23 : fiche, légendes et vidéo réécrites pour les jeunes actifs couche-tard, captures refaites sur l'app au style des Réglages.
 - 2026-11-21 : première fiche complète, 7 captures sur fond cadran.
 - 2026-11-22 : l'app devient payante : capture 6 remplacée (heure de début de journée), « gratuit » et les promesses de confidentialité retirés en attendant la décision sur l'analytique.
 - 2026-11-21 : légendes réécrites en phrases que la personne se dit, hibou dans six poses.

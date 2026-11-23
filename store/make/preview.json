@@ -1,0 +1,12 @@
+{
+  "size": [886, 1920],
+  "clip": { "x": 133, "y": 470, "w": 620, "bezel": 14, "radius": 86, "screenRadius": 74 },
+  "fps": 30,
+  "segments": [
+    { "clip": "v1-onboarding.mp4", "from": 0, "dur": 7, "text": "« Au lit à 23 h.<br>Le téléphone posé à 1 h. »" },
+    { "clip": "v2-accueil.mp4", "from": 0, "dur": 4.5, "text": "Une limite par jour.<br><em>Sans bouton Ignorer.</em>" },
+    { "clip": "v4-sites.mp4", "from": 0, "dur": 6, "text": "Un site bloqué<br><em>dans tous les navigateurs.</em>" },
+    { "clip": "v3-assouplir.mp4", "from": 0, "dur": 7.5, "text": "Assouplir une règle<br><em>prend 24&nbsp;h.</em>" },
+    { "end": true, "dur": 3, "text": "Tes soirées<br><em>te reviennent</em>" }
+  ]
+}
