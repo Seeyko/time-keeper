@@ -17,8 +17,14 @@ struct DomainsView: View {
                     .keyboardType(.URL)
                     .submitLabel(.done)
                     .onSubmit(add)
-                Button("Bloquer ce site", action: add)
-                    .disabled(input.isEmpty)
+                Button(action: add) {
+                    Label {
+                        Text("Bloquer ce site")
+                    } icon: {
+                        Tile(symbol: "plus", tint: .blue)
+                    }
+                }
+                .disabled(input.isEmpty)
             } footer: {
                 if invalid {
                     Text("Écris-le comme ça : youtube.com")
@@ -30,7 +36,7 @@ struct DomainsView: View {
 
             Section {
                 ForEach(model.draft.blockedDomains, id: \.self) { domain in
-                    Text(domain)
+                    TileLabel(domain, symbol: "globe", tint: .indigo)
                 }
                 .onDelete { offsets in
                     let domains = offsets.map { model.draft.blockedDomains[$0] }
@@ -62,8 +68,9 @@ struct DomainsView: View {
                 }
             }
         }
-        .groupedScreen()
+        .listStyle(.insetGrouped)
         .navigationTitle("Sites bloqués")
+        .navigationBarTitleDisplayMode(.large)
         .delayedAlert($delayedUntil)
     }
 

@@ -36,13 +36,13 @@ struct SettingsView: View {
 
             Section {
                 DatePicker(selection: dayStartBinding, displayedComponents: .hourAndMinute) {
-                    TileLabel("Remise à zéro à", symbol: "arrow.counterclockwise", tint: Theme.toggle)
+                    TileLabel("Remise à zéro à", symbol: "arrow.counterclockwise", tint: .blue)
                 }
                 Toggle(isOn: Binding(
                     get: { model.draft.denyAppRemoval },
                     set: { on in handle(model.setDenyAppRemoval(on)) }
                 )) {
-                    TileLabel("Verrouiller la suppression d'apps", symbol: "lock.fill", tint: Theme.bark)
+                    TileLabel("Verrouiller la suppression d'apps", symbol: "lock.fill", tint: .gray)
                 }
             }
 
@@ -51,7 +51,7 @@ struct SettingsView: View {
                     get: { model.reminders.atHalf },
                     set: { on in var r = model.reminders; r.atHalf = on; model.setReminders(r) }
                 )) {
-                    TileLabel("Me prévenir à la moitié", symbol: "bell.fill", tint: Theme.ochre)
+                    TileLabel("Me prévenir à la moitié", symbol: "bell.fill", tint: .orange)
                 }
                 Picker(selection: Binding(
                     get: { model.reminders.minutesBefore },
@@ -61,7 +61,7 @@ struct SettingsView: View {
                         Text(minutes == 0 ? "Jamais" : "\(minutes) min").tag(minutes)
                     }
                 } label: {
-                    TileLabel("Me prévenir avant la fin", symbol: "timer", tint: Theme.ochre)
+                    TileLabel("Me prévenir avant la fin", symbol: "timer", tint: .orange)
                 }
                 if model.notificationsDenied && (model.reminders.atHalf || model.reminders.minutesBefore > 0) {
                     Button("Autoriser les notifications") {
@@ -74,14 +74,14 @@ struct SettingsView: View {
 
             Section {
                 Toggle(isOn: $analytics) {
-                    TileLabel("Statistiques anonymes", symbol: "chart.bar.fill", tint: Theme.slate)
+                    TileLabel("Statistiques anonymes", symbol: "chart.bar.fill", tint: .purple)
                 }
                 .onChange(of: analytics) { _, on in Analytics.enabled = on }
                 Button {
                     feedback = true
                 } label: {
                     HStack {
-                        TileLabel("Ton avis", symbol: "envelope.fill", tint: Theme.blush)
+                        TileLabel("Ton avis", symbol: "envelope.fill", tint: .teal)
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.footnote.weight(.semibold))
@@ -91,8 +91,8 @@ struct SettingsView: View {
                 .foregroundStyle(.primary)
             }
         }
-        .groupedScreen()
-        .tint(Theme.toggle)
+        .listStyle(.insetGrouped)
+        .tint(.green)
         .navigationTitle("Réglages")
         .navigationBarTitleDisplayMode(.large)
         .sensoryFeedback(.selection, trigger: model.reminders)

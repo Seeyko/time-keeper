@@ -13,10 +13,6 @@ struct TimeKeeperApp: App {
         paywall: ProcessInfo.processInfo.arguments.contains("-paywall")
     )
 
-    init() {
-        Theme.applyNavigationTitle()
-    }
-
     var body: some Scene {
         WindowGroup {
             RootView()

@@ -74,7 +74,7 @@ struct MainView: View {
                         Label {
                             Text("Ajouter une limite")
                         } icon: {
-                            Tile(symbol: "plus", tint: Theme.toggle)
+                            Tile(symbol: "plus", tint: .blue)
                         }
                     }
                     .sensoryFeedback(.selection, trigger: newGroup?.id)
@@ -89,7 +89,7 @@ struct MainView: View {
                         LabeledContent {
                             Text("\(model.draft.blockedDomains.count)")
                         } label: {
-                            TileLabel("Sites bloqués", symbol: "globe", tint: Theme.blush)
+                            TileLabel("Sites bloqués", symbol: "globe", tint: .indigo)
                         }
                     }
                 } header: {
@@ -100,11 +100,11 @@ struct MainView: View {
                     NavigationLink {
                         SettingsView()
                     } label: {
-                        TileLabel("Réglages", symbol: "gearshape.fill", tint: Theme.slate)
+                        TileLabel("Réglages", symbol: "gearshape.fill", tint: .gray)
                     }
                 }
             }
-            .groupedScreen()
+            .listStyle(.insetGrouped)
             .sheet(item: $newGroup) { group in
                 NavigationStack {
                     GroupEditorView(group: group, isNew: true)
@@ -133,7 +133,7 @@ private struct GroupRow: View {
                 details
             } icon: {
                 Tile(symbol: blockedUntil == nil ? "clock.fill" : "lock.fill",
-                     tint: blockedUntil == nil ? Theme.toggle : Theme.blocked)
+                     tint: blockedUntil == nil ? .blue : Theme.blocked)
             }
         }
         .accessibilityElement(children: .combine)

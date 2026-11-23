@@ -32,28 +32,27 @@ Tout est dans `ios/TimeKeeper/Theme.swift`. Une couleur porte un sens, jamais un
 | `Theme.accentGround` | `#EEF2FC` | `#172447` | le fond d'un choix sélectionné (onboarding) |
 | `Theme.hairline` | `#E4E6EB` | `#2C2E35` | les filets et contours de choix |
 | nuit | `#0B1530` | `#0B1530` | l'écran de blocage, toujours sombre |
-| `Theme.ground` | `#F6EFE5` | `#0E0F13` | le fond crème de toutes les listes, entre les groupes |
 | `Theme.paper` | `#F7EBDB` | `#F7EBDB` | le crème de l'icône, derrière le hibou des Réglages |
-| `Theme.bark`, `ochre`, `slate`, `blush` | brun, ocre, ardoise, rose | idem, plus clairs | les pastilles d'icône, prises au hibou |
 
 - Pourquoi le bleu et plus l'orange : l'orange sur blanc ne passe pas le contraste (4,5:1) et se lisait comme une alerte. L'ambre reste, mais seulement pour « en attente ».
 - Un état ne tient jamais à la couleur seule : « Bloqué » a un cadenas et son texte.
 
 ## Typography
-- Titres d'écran : serif système (New York), `Theme.title`. Le serif fait le « classique ».
+- Titres de l'onboarding et des écrans d'accès : serif système (New York), `Theme.title`. Le serif fait le « classique ». Les titres de navigation restent en SF Pro, comme iOS.
 - Dans les listes, rien de sur mesure : titres de section, lignes, valeurs, champs et boutons sont ceux d'iOS, en SF Pro. Les durées ont des chiffres de largeur fixe. Pourquoi : Tom veut les composants natifs de l'iPhone au maximum (2026-11-23).
 - L'onboarding et le paywall gardent le serif pour leurs titres et leurs durées (`Theme.heading`, `Theme.value`).
 - Dynamic Type partout. Une taille fixe passe par `@ScaledMetric`.
 
 ## Layout
-- Toutes les listes (accueil, limite, sites, Réglages) : le style des Réglages d'iPhone, `groupedScreen()` dans `Theme.swift`. Des groupes arrondis blancs sur un fond crème, une pastille d'icône (`Tile`, `TileLabel`) au début des lignes. Pourquoi : l'accueil ressemblait déjà à une page de réglages, autant qu'il ait l'air natif, aux couleurs du hibou (Tom, 2026-11-23).
+- Toutes les listes (accueil, limite, sites, Réglages) copient les Réglages d'iOS 26 : `List` en `.insetGrouped` sur le fond système, grands titres en SF Pro, barre de navigation Liquid Glass d'origine, une pastille d'icône (`Tile`, `TileLabel`) aux couleurs système au début des lignes, interrupteurs verts. Pourquoi : Tom veut les vrais Réglages de l'iPhone, composants natifs au maximum (2026-11-23).
+- Les pastilles : bleu pour une limite et pour ajouter (cadenas rouge `Theme.blocked` quand elle bloque), indigo pour les sites, gris pour les Réglages et le verrou, orange pour les rappels, violet pour les statistiques, sarcelle pour « Ton avis ».
 - L'accueil : les limites, les sites, puis une ligne « Réglages » qui ouvre leur écran.
 - Un écran = un titre et, seulement si c'est indispensable, une ligne courte. Pas d'eyebrow, pas de pied de section qui explique.
 - Un seul bouton plein par écran. Sur l'accueil il est fixe en bas.
 - Cibles de 44 pt au moins.
 
 ## Elevation & Depth
-Aucune ombre, aucune bordure. Deux surfaces teintées : la bannière « Assouplissement en attente » et le fond crème des listes.
+Aucune ombre, aucune bordure. Deux surfaces teintées : la bannière « Assouplissement en attente » et la pastille du hibou dans les Réglages.
 
 ## Shapes
 Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran est un anneau avec un tiers rempli.
@@ -61,7 +60,6 @@ Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran 
 ## Components
 - `Dial` (`Theme.swift`) : la marque dans l'app. Elle sert à l'accueil. L'icône la reprend sur la montre du hibou.
 - `PrimaryButtonStyle` (`Theme.swift`) : le bouton plein.
-- Les pastilles de l'accueil : bleu pour une limite (cadenas rouge quand elle bloque), rose pour les sites, ardoise pour les Réglages.
 - `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
 - `delayedAlert` (`MainView.swift`) : l'explication du délai de 24 h au moment où il s'applique. L'onboarding le dit aussi une fois, avant le choix du temps et du verrou, parce que c'est là qu'il change la décision.
 - L'écran de blocage (`ShieldConfigurationExtension.swift`) : fond nuit, le hibou au cadenas (`owl-cadenas`, copié dans l'extension), un bouton blanc « Fermer ». Ses coins sont dessinés par iOS : on ne les règle pas.

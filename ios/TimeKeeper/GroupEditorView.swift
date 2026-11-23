@@ -60,7 +60,7 @@ struct GroupEditorView: View {
                 }
             }
         }
-        .groupedScreen()
+        .listStyle(.insetGrouped)
         .navigationTitle(isNew ? "Nouvelle limite" : group.name)
         .navigationBarTitleDisplayMode(.inline)
         .familyActivityPicker(isPresented: $showPicker, selection: $group.selection)
