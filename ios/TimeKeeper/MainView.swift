@@ -53,13 +53,7 @@ struct MainView: View {
                             }
                         }
                         .padding(.vertical, 6)
-                        .listRowInsets(EdgeInsets(top: 8, leading: 28, bottom: 8, trailing: 28))
-                        .listRowBackground(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(Theme.pendingGround)
-                                .padding(.horizontal, 16)
-                        )
-                        .listRowSeparator(.hidden)
+                        .listRowBackground(Theme.pendingGround)
                     }
                 }
 
@@ -76,7 +70,11 @@ struct MainView: View {
                     Button {
                         newGroup = LimitGroup(name: "")
                     } label: {
-                        Label("Ajouter une limite", systemImage: "plus")
+                        Label {
+                            Text("Ajouter une limite")
+                        } icon: {
+                            Tile(symbol: "plus", tint: Theme.toggle)
+                        }
                     }
                     .sensoryFeedback(.selection, trigger: newGroup?.id)
                 } header: {
@@ -87,29 +85,30 @@ struct MainView: View {
                     NavigationLink {
                         DomainsView()
                     } label: {
-                        LabeledContent("Sites bloqués", value: "\(model.draft.blockedDomains.count)")
+                        LabeledContent {
+                            Text("\(model.draft.blockedDomains.count)")
+                        } label: {
+                            TileLabel("Sites bloqués", symbol: "globe", tint: Theme.blush)
+                        }
                     }
                 } header: {
                     SectionTitle("Sites")
                 }
+
+                Section {
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        TileLabel("Réglages", symbol: "gearshape.fill", tint: Theme.slate)
+                    }
+                }
             }
-            .listStyle(.plain)
+            .groupedScreen()
             .sheet(item: $newGroup) { group in
                 NavigationStack {
                     GroupEditorView(group: group, isNew: true)
                 }
                 .tint(Theme.accent)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        settings = true
-                    } label: {
-                        Image(systemName: "gearshape")
-                    }
-                    .accessibilityLabel("Réglages")
-                    .sensoryFeedback(.selection, trigger: settings)
-                }
             }
             .navigationDestination(isPresented: $settings) { SettingsView() }
         }
@@ -124,6 +123,8 @@ private struct GroupRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
+            Tile(symbol: blockedUntil == nil ? "clock.fill" : "lock.fill",
+                 tint: blockedUntil == nil ? Theme.toggle : Theme.blocked)
             VStack(alignment: .leading, spacing: 2) {
                 Text(group.name.isEmpty ? "Sans nom" : group.name).font(.headline)
                 if let blockedUntil {

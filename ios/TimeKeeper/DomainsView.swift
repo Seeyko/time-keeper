@@ -71,7 +71,7 @@ struct DomainsView: View {
                 }
             }
         }
-        .listStyle(.plain)
+        .groupedScreen()
         .navigationTitle("Sites bloqués")
         .delayedAlert($delayedUntil)
     }

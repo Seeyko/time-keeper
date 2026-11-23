@@ -12,7 +12,6 @@ enum Theme {
     static var accentGround: Color { dynamic(light: 0xEEF2FC, dark: 0x172447) }
     static var hairline: Color { dynamic(light: 0xE4E6EB, dark: 0x2C2E35) }
     static var ground: Color { dynamic(light: 0xF6EFE5, dark: 0x0E0F13) }
-    static var card: Color { dynamic(light: 0xFFFFFF, dark: 0x1C1D22) }
     static var paper: Color { dynamic(light: 0xF7EBDB, dark: 0xF7EBDB) }
     static var bark: Color { dynamic(light: 0x5B3A26, dark: 0x8A6248) }
     static var ochre: Color { dynamic(light: 0xC27E1C, dark: 0xD9952E) }
@@ -84,12 +83,54 @@ struct SectionTitle: View {
 
     var body: some View {
         Text(text)
-            .font(Theme.section)
+            .font(.system(.title3, design: .serif, weight: .semibold))
             .foregroundStyle(.primary)
             .textCase(nil)
-            .padding(.top, 8)
+            .padding(.top, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(uiColor: .systemBackground).padding(.horizontal, -40).padding(.vertical, -8))
             .accessibilityAddTraits(.isHeader)
+    }
+}
+
+struct Tile: View {
+    let symbol: String
+    let tint: Color
+    @ScaledMetric(relativeTo: .body) private var size = 29
+
+    var body: some View {
+        Image(systemName: symbol)
+            .font(.system(size: size * 0.55, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(width: size, height: size)
+            .background(tint, in: RoundedRectangle(cornerRadius: size * 0.25, style: .continuous))
+            .accessibilityHidden(true)
+    }
+}
+
+struct TileLabel: View {
+    let title: String
+    let symbol: String
+    let tint: Color
+
+    init(_ title: String, symbol: String, tint: Color) {
+        self.title = title
+        self.symbol = symbol
+        self.tint = tint
+    }
+
+    var body: some View {
+        Label {
+            Text(title)
+        } icon: {
+            Tile(symbol: symbol, tint: tint)
+        }
+    }
+}
+
+extension View {
+    func groupedScreen() -> some View {
+        listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(Theme.ground)
     }
 }
