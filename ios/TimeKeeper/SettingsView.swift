@@ -14,7 +14,7 @@ struct SettingsView: View {
     var body: some View {
         List {
             Section {
-                HeaderCard(title: "Time Keeper", detail: "Version \(version)") {
+                HeaderCard(title: "Réglages", detail: "Time Keeper, version \(version)") {
                     Image("owl-garde")
                         .resizable()
                         .scaledToFit()
@@ -85,7 +85,6 @@ struct SettingsView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("Réglages")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.selection, trigger: model.reminders)
         .sensoryFeedback(.selection, trigger: analytics)

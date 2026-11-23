@@ -65,12 +65,12 @@ enum Glyph {
 
     var central: String {
         switch self {
-        case .clock: "central-clock-filled"
+        case .clock: "central-clock-outlined"
         case .clockAlert: "central-clock-alert-filled"
         case .lock: "central-lock-filled"
         case .plus: "central-plus-large-filled"
         case .globe: "central-globe-filled"
-        case .gear: "central-settings-gear-1-filled"
+        case .gear: "central-settings-gear-2-filled"
         case .reset: "central-arrow-rotate-counter-clockwise-filled"
         case .bell: "central-bell-filled"
         case .chart: "central-chart-1-filled"
@@ -148,16 +148,15 @@ struct HeaderCard<Icon: View>: View {
     @ViewBuilder let icon: Icon
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
             icon
             Text(title)
-                .font(.title2.weight(.bold))
+                .font(.largeTitle.weight(.bold))
             Text(detail)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 8)
         .accessibilityElement(children: .combine)
     }
