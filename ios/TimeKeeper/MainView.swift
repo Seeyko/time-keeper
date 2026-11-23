@@ -105,7 +105,6 @@ struct MainView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("Time Keeper")
             .sheet(item: $newGroup) { group in
                 NavigationStack {
                     GroupEditorView(group: group, isNew: true)
