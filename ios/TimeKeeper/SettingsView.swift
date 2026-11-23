@@ -14,36 +14,28 @@ struct SettingsView: View {
     var body: some View {
         List {
             Section {
-                HStack(spacing: 14) {
+                HeaderCard(title: "Time Keeper", detail: "Version \(version)") {
                     Image("owl-garde")
                         .resizable()
                         .scaledToFit()
-                        .padding(6)
-                        .frame(width: 60, height: 60)
-                        .background(Theme.paper, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .padding(8)
+                        .frame(width: 72, height: 72)
+                        .background(Theme.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                         .accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Time Keeper")
-                            .font(.title3.weight(.semibold))
-                        Text("Version \(version)")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
                 }
-                .padding(.vertical, 4)
-                .accessibilityElement(children: .combine)
             }
 
             Section {
                 DatePicker(selection: dayStartBinding, displayedComponents: .hourAndMinute) {
-                    TileLabel("Remise à zéro à", symbol: "arrow.counterclockwise", tint: .blue)
+                    TileLabel("Remise à zéro à", glyph: .reset, tint: .blue)
                 }
                 Toggle(isOn: Binding(
                     get: { model.draft.denyAppRemoval },
                     set: { on in handle(model.setDenyAppRemoval(on)) }
                 )) {
-                    TileLabel("Verrouiller la suppression d'apps", symbol: "lock.fill", tint: .gray)
+                    TileLabel("Verrouiller la suppression d'apps", glyph: .lock, tint: .gray)
                 }
+                .tint(.green)
             }
 
             Section {
@@ -51,8 +43,9 @@ struct SettingsView: View {
                     get: { model.reminders.atHalf },
                     set: { on in var r = model.reminders; r.atHalf = on; model.setReminders(r) }
                 )) {
-                    TileLabel("Me prévenir à la moitié", symbol: "bell.fill", tint: .orange)
+                    TileLabel("Me prévenir à la moitié", glyph: .bell, tint: .orange)
                 }
+                .tint(.green)
                 Picker(selection: Binding(
                     get: { model.reminders.minutesBefore },
                     set: { m in var r = model.reminders; r.minutesBefore = m; model.setReminders(r) }
@@ -61,27 +54,27 @@ struct SettingsView: View {
                         Text(minutes == 0 ? "Jamais" : "\(minutes) min").tag(minutes)
                     }
                 } label: {
-                    TileLabel("Me prévenir avant la fin", symbol: "timer", tint: .orange)
+                    TileLabel("Me prévenir avant la fin", glyph: .clockAlert, tint: .orange)
                 }
                 if model.notificationsDenied && (model.reminders.atHalf || model.reminders.minutesBefore > 0) {
                     Button("Autoriser les notifications") {
                         if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
                     }
-                    .foregroundStyle(Theme.accent)
                     .frame(minHeight: 44)
                 }
             }
 
             Section {
                 Toggle(isOn: $analytics) {
-                    TileLabel("Statistiques anonymes", symbol: "chart.bar.fill", tint: .purple)
+                    TileLabel("Statistiques anonymes", glyph: .chart, tint: .purple)
                 }
+                .tint(.green)
                 .onChange(of: analytics) { _, on in Analytics.enabled = on }
                 Button {
                     feedback = true
                 } label: {
                     HStack {
-                        TileLabel("Ton avis", symbol: "envelope.fill", tint: .teal)
+                        TileLabel("Ton avis", glyph: .email, tint: .teal)
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.footnote.weight(.semibold))
@@ -92,15 +85,14 @@ struct SettingsView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .tint(.green)
         .navigationTitle("Réglages")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.selection, trigger: model.reminders)
         .sensoryFeedback(.selection, trigger: analytics)
         .sensoryFeedback(.selection, trigger: feedback)
         .sheet(isPresented: $feedback) {
             NavigationStack { FeedbackView() }
-                .tint(Theme.accent)
+                .tint(.blue)
         }
         .delayedAlert($delayedUntil)
     }

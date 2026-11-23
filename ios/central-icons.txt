@@ -1,0 +1,10 @@
+filled IconClock
+filled IconClockAlert
+filled IconLock
+filled IconPlusLarge
+filled IconGlobe
+filled IconSettingsGear1
+filled IconArrowRotateCounterClockwise
+filled IconBell
+filled IconChart1
+filled IconEmail1

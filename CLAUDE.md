@@ -28,6 +28,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 - **Pas de commentaire dans le code, pas de code mort.**
 - **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir). `-onboarding` rejoue l'onboarding avec les mêmes données fictives. `-demo -settings` ouvre les Réglages, `-demo -sites` les sites bloqués. `-demo -paywall` montre le paywall, avec les prix du fichier `ios/TimeKeeper.storekit` (France).
 - **Outils** : le CLI `asc` pour App Store Connect.
+- **Icônes** : Central Icons (licence de Tom), listées dans `ios/central-icons.txt`, générées par `python3 ios/ci/central-icons.py` dans `Assets.xcassets/Central/`, ignoré par git. Leur licence interdit de les publier : jamais de SVG commité. Sur le Mac, `CENTRAL_ICONS_DIR` pointe vers les paquets `@central-icons-react` déjà installés de RMP. Sans elles, `Glyph` retombe sur les symboles Apple.
 
 ## Charte de design
 Voir `DESIGN.md`. Un écran = un titre et, seulement si c'est indispensable, une ligne courte. Tutoiement, phrases de 20 mots au plus. Chaque contrôle a son haptique.

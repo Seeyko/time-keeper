@@ -74,7 +74,7 @@ struct MainView: View {
                         Label {
                             Text("Ajouter une limite")
                         } icon: {
-                            Tile(symbol: "plus", tint: .blue)
+                            Tile(glyph: .plus, tint: .blue)
                         }
                     }
                     .sensoryFeedback(.selection, trigger: newGroup?.id)
@@ -89,7 +89,7 @@ struct MainView: View {
                         LabeledContent {
                             Text("\(model.draft.blockedDomains.count)")
                         } label: {
-                            TileLabel("Sites bloqués", symbol: "globe", tint: .indigo)
+                            TileLabel("Sites bloqués", glyph: .globe, tint: .indigo)
                         }
                     }
                 } header: {
@@ -100,20 +100,22 @@ struct MainView: View {
                     NavigationLink {
                         SettingsView()
                     } label: {
-                        TileLabel("Réglages", symbol: "gearshape.fill", tint: .gray)
+                        TileLabel("Réglages", glyph: .gear, tint: .gray)
                     }
                 }
             }
             .listStyle(.insetGrouped)
+            .navigationTitle("Time Keeper")
             .sheet(item: $newGroup) { group in
                 NavigationStack {
                     GroupEditorView(group: group, isNew: true)
                 }
-                .tint(Theme.accent)
+                .tint(.blue)
             }
             .navigationDestination(isPresented: $settings) { SettingsView() }
             .navigationDestination(isPresented: $sites) { DomainsView() }
         }
+        .tint(.blue)
         .sensoryFeedback(.success, trigger: model.draft)
     }
 }
@@ -132,8 +134,8 @@ private struct GroupRow: View {
             Label {
                 details
             } icon: {
-                Tile(symbol: blockedUntil == nil ? "clock.fill" : "lock.fill",
-                     tint: blockedUntil == nil ? .blue : Theme.blocked)
+                Tile(glyph: blockedUntil == nil ? .clock : .lock,
+                     tint: blockedUntil == nil ? .blue : .red)
             }
         }
         .accessibilityElement(children: .combine)
@@ -148,7 +150,7 @@ private struct GroupRow: View {
                     Text("Bloqué jusqu'à \(blockedUntil)")
                 }
                 .font(.subheadline)
-                .foregroundStyle(Theme.blocked)
+                .foregroundStyle(.red)
             } else if pending {
                 Text("Changement en attente")
                     .font(.subheadline)

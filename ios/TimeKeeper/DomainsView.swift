@@ -11,6 +11,12 @@ struct DomainsView: View {
     var body: some View {
         List {
             Section {
+                HeaderCard(title: "Sites bloqués", detail: "Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.") {
+                    Tile(glyph: .globe, tint: .indigo, points: 60)
+                }
+            }
+
+            Section {
                 TextField("youtube.com", text: $input)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -21,22 +27,20 @@ struct DomainsView: View {
                     Label {
                         Text("Bloquer ce site")
                     } icon: {
-                        Tile(symbol: "plus", tint: .blue)
+                        Tile(glyph: .plus, tint: .blue)
                     }
                 }
                 .disabled(input.isEmpty)
             } footer: {
                 if invalid {
                     Text("Écris-le comme ça : youtube.com")
-                        .foregroundStyle(Theme.blocked)
-                } else {
-                    Text("Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.")
+                        .foregroundStyle(.red)
                 }
             }
 
             Section {
                 ForEach(model.draft.blockedDomains, id: \.self) { domain in
-                    TileLabel(domain, symbol: "globe", tint: .indigo)
+                    TileLabel(domain, glyph: .globe, tint: .indigo)
                 }
                 .onDelete { offsets in
                     let domains = offsets.map { model.draft.blockedDomains[$0] }
@@ -60,7 +64,11 @@ struct DomainsView: View {
                         Button {
                             handle(model.addDomain(domain))
                         } label: {
-                            Label(domain, systemImage: "plus")
+                            Label {
+                                Text(domain).foregroundStyle(.primary)
+                            } icon: {
+                                Tile(glyph: .plus, tint: .blue)
+                            }
                         }
                     }
                 } header: {
@@ -70,7 +78,7 @@ struct DomainsView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Sites bloqués")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .delayedAlert($delayedUntil)
     }
 
