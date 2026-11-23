@@ -21,7 +21,7 @@ Tout est dans `ios/TimeKeeper/Theme.swift`. Une couleur porte un sens, jamais un
 
 | Nom | Clair | Sombre | Rôle |
 |---|---|---|---|
-| fond | fond système | fond système | l'écran, sans carte |
+| fond | fond système | fond système | l'écran de l'onboarding et du paywall |
 | encre | `label` | `label` | le texte |
 | `Theme.accent` | `#1F3A8A` | `#9DB7FF` | l'action, le cadran (l'acier bleui des aiguilles), le plumage du hibou de l'icône |
 | `Theme.onAccent` | `#FFFFFF` | `#0B1530` | le texte posé sur l'accent |
@@ -40,9 +40,9 @@ Tout est dans `ios/TimeKeeper/Theme.swift`. Une couleur porte un sens, jamais un
 - Un état ne tient jamais à la couleur seule : « Bloqué » a un cadenas et son texte.
 
 ## Typography
-- Titres d'écran et de section : serif système (New York), `Theme.title` et `Theme.section`. Le serif fait le « classique ».
-- Les durées (« 30 min ») : `Theme.value`, serif à chiffres de largeur fixe, pour qu'elles s'alignent comme dans un registre.
-- Tout le reste : SF Pro, styles système.
+- Titres d'écran : serif système (New York), `Theme.title`. Le serif fait le « classique ».
+- Dans les listes, rien de sur mesure : titres de section, lignes, valeurs, champs et boutons sont ceux d'iOS, en SF Pro. Les durées ont des chiffres de largeur fixe. Pourquoi : Tom veut les composants natifs de l'iPhone au maximum (2026-11-23).
+- L'onboarding et le paywall gardent le serif pour leurs titres et leurs durées (`Theme.heading`, `Theme.value`).
 - Dynamic Type partout. Une taille fixe passe par `@ScaledMetric`.
 
 ## Layout
@@ -61,7 +61,6 @@ Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran 
 ## Components
 - `Dial` (`Theme.swift`) : la marque dans l'app. Elle sert à l'accueil. L'icône la reprend sur la montre du hibou.
 - `PrimaryButtonStyle` (`Theme.swift`) : le bouton plein.
-- `SectionTitle` (`Theme.swift`) : le titre de section en serif (title3), au-dessus d'un groupe, à la place de l'étiquette grise en capitales.
 - Les pastilles de l'accueil : bleu pour une limite (cadenas rouge quand elle bloque), rose pour les sites, ardoise pour les Réglages.
 - `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
 - `delayedAlert` (`MainView.swift`) : l'explication du délai de 24 h au moment où il s'applique. L'onboarding le dit aussi une fois, avant le choix du temps et du verrou, parce que c'est là qu'il change la décision.
@@ -98,7 +97,7 @@ Le hibou de l'icône est la seule illustration. Dans l'app, il apparaît dans l'
 - Ne jamais proposer de débloquer, rallonger ou ignorer.
 - L'écran de blocage a un seul bouton : « Fermer ».
 - Montre l'état dans la ligne (« Bloqué jusqu'à 04:00 ») au lieu de l'expliquer sous la liste.
-- Pas de carte, pas de sablier, pas d'orange en couleur d'action.
+- Pas de sablier, pas d'orange en couleur d'action.
 - Pas de rouge ailleurs que sur « Bloqué », une erreur de saisie, une suppression et le refus de Temps d'écran dans l'onboarding (sans cet accès, rien ne bloque).
 
 ## Vérifier ce fichier

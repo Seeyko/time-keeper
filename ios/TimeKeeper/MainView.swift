@@ -5,6 +5,7 @@ struct MainView: View {
     @EnvironmentObject private var model: AppModel
     @State private var newGroup: LimitGroup?
     @State private var settings = ProcessInfo.processInfo.arguments.contains("-settings")
+    @State private var sites = ProcessInfo.processInfo.arguments.contains("-sites")
     @Environment(\.dynamicTypeSize) private var typeSize
 
     private var pendingIcon: some View {
@@ -78,7 +79,7 @@ struct MainView: View {
                     }
                     .sensoryFeedback(.selection, trigger: newGroup?.id)
                 } header: {
-                    SectionTitle("Limites par jour")
+                    Text("Limites par jour")
                 }
 
                 Section {
@@ -92,7 +93,7 @@ struct MainView: View {
                         }
                     }
                 } header: {
-                    SectionTitle("Sites")
+                    Text("Sites")
                 }
 
                 Section {
@@ -111,6 +112,7 @@ struct MainView: View {
                 .tint(Theme.accent)
             }
             .navigationDestination(isPresented: $settings) { SettingsView() }
+            .navigationDestination(isPresented: $sites) { DomainsView() }
         }
         .sensoryFeedback(.success, trigger: model.draft)
     }
@@ -122,34 +124,34 @@ private struct GroupRow: View {
     let pending: Bool
 
     var body: some View {
-        HStack(spacing: 12) {
+        LabeledContent {
+            Text(formatMinutes(group.minutes))
+                .monospacedDigit()
+                .accessibilityLabel("\(formatMinutes(group.minutes)) par jour")
+        } label: {
             Label {
                 details
             } icon: {
                 Tile(symbol: blockedUntil == nil ? "clock.fill" : "lock.fill",
                      tint: blockedUntil == nil ? Theme.toggle : Theme.blocked)
             }
-            Spacer(minLength: 8)
-            Text(formatMinutes(group.minutes))
-                .font(Theme.value)
-                .accessibilityLabel("\(formatMinutes(group.minutes)) par jour")
         }
         .accessibilityElement(children: .combine)
     }
 
     private var details: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(group.name.isEmpty ? "Sans nom" : group.name).font(.headline)
+            Text(group.name.isEmpty ? "Sans nom" : group.name)
             if let blockedUntil {
                 HStack(spacing: 4) {
                     Image(systemName: "lock.fill").accessibilityHidden(true)
                     Text("Bloqué jusqu'à \(blockedUntil)")
                 }
-                .font(.subheadline.weight(.medium))
+                .font(.subheadline)
                 .foregroundStyle(Theme.blocked)
             } else if pending {
                 Text("Changement en attente")
-                    .font(.subheadline.weight(.medium))
+                    .font(.subheadline)
                     .foregroundStyle(Theme.pending)
             } else if !group.isEmpty {
                 Text(group.contentLabel)

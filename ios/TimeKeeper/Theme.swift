@@ -22,7 +22,6 @@ enum Theme {
 
     static var title: Font { .system(.largeTitle, design: .serif, weight: .semibold) }
     static var heading: Font { .system(.title, design: .serif, weight: .semibold) }
-    static var section: Font { .system(.title2, design: .serif, weight: .semibold) }
     static var value: Font { .system(.title2, design: .serif).monospacedDigit() }
 
     @MainActor
@@ -71,24 +70,6 @@ struct PrimaryButtonStyle: ButtonStyle {
             .foregroundStyle(Theme.onAccent)
             .background(Theme.accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .opacity(isEnabled ? (configuration.isPressed ? 0.8 : 1) : 0.4)
-    }
-}
-
-struct SectionTitle: View {
-    let text: String
-
-    init(_ text: String) {
-        self.text = text
-    }
-
-    var body: some View {
-        Text(text)
-            .font(.system(.title3, design: .serif, weight: .semibold))
-            .foregroundStyle(.primary)
-            .textCase(nil)
-            .padding(.top, 4)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityAddTraits(.isHeader)
     }
 }
 

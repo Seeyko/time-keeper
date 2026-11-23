@@ -24,7 +24,7 @@ struct SettingsView: View {
                         .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Time Keeper")
-                            .font(Theme.section)
+                            .font(.title3.weight(.semibold))
                         Text("Version \(version)")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)

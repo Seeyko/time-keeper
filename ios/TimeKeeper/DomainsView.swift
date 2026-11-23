@@ -11,29 +11,20 @@ struct DomainsView: View {
     var body: some View {
         List {
             Section {
-                Text("Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .listRowSeparator(.hidden)
-                HStack(spacing: 8) {
-                    TextField("youtube.com", text: $input)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.URL)
-                        .onSubmit(add)
-                        .padding(.horizontal, 14)
-                        .frame(minHeight: 50)
-                        .background(Theme.field, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    Button("Bloquer", action: add)
-                        .buttonStyle(PrimaryButtonStyle())
-                        .disabled(input.isEmpty)
-                }
-                .listRowSeparator(.hidden)
+                TextField("youtube.com", text: $input)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                    .submitLabel(.done)
+                    .onSubmit(add)
+                Button("Bloquer ce site", action: add)
+                    .disabled(input.isEmpty)
+            } footer: {
                 if invalid {
                     Text("Écris-le comme ça : youtube.com")
-                        .font(.footnote)
                         .foregroundStyle(Theme.blocked)
-                        .listRowSeparator(.hidden)
+                } else {
+                    Text("Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.")
                 }
             }
 
@@ -67,7 +58,7 @@ struct DomainsView: View {
                         }
                     }
                 } header: {
-                    SectionTitle("Suggestions")
+                    Text("Suggestions")
                 }
             }
         }
