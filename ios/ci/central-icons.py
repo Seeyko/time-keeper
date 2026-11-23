@@ -58,7 +58,11 @@ def install(styles, workdir):
 
 
 def to_svg(package, name):
-    source = json.loads((package / name / "index.mjs.map").read_text())["sourcesContent"][-1]
+    sourcemap = json.loads((package / name / "index.mjs.map").read_text())
+    source = next(
+        content for path, content in zip(sourcemap["sources"], sourcemap["sourcesContent"])
+        if path.endswith(f"{name}/index.tsx")
+    )
     match = re.search(r"<CentralIconBase\s[^>]*>(.*)</CentralIconBase>", source, re.S)
     if not match or "{" in match.group(1):
         sys.exit(f"Tracé introuvable pour {name}")
