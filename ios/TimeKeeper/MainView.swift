@@ -123,34 +123,40 @@ private struct GroupRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Tile(symbol: blockedUntil == nil ? "clock.fill" : "lock.fill",
-                 tint: blockedUntil == nil ? Theme.toggle : Theme.blocked)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(group.name.isEmpty ? "Sans nom" : group.name).font(.headline)
-                if let blockedUntil {
-                    HStack(spacing: 4) {
-                        Image(systemName: "lock.fill").accessibilityHidden(true)
-                        Text("Bloqué jusqu'à \(blockedUntil)")
-                    }
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Theme.blocked)
-                } else if pending {
-                    Text("Changement en attente")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Theme.pending)
-                } else if !group.isEmpty {
-                    Text(group.contentLabel)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+            Label {
+                details
+            } icon: {
+                Tile(symbol: blockedUntil == nil ? "clock.fill" : "lock.fill",
+                     tint: blockedUntil == nil ? Theme.toggle : Theme.blocked)
             }
             Spacer(minLength: 8)
             Text(formatMinutes(group.minutes))
                 .font(Theme.value)
                 .accessibilityLabel("\(formatMinutes(group.minutes)) par jour")
         }
-        .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
+    }
+
+    private var details: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(group.name.isEmpty ? "Sans nom" : group.name).font(.headline)
+            if let blockedUntil {
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill").accessibilityHidden(true)
+                    Text("Bloqué jusqu'à \(blockedUntil)")
+                }
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(Theme.blocked)
+            } else if pending {
+                Text("Changement en attente")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(Theme.pending)
+            } else if !group.isEmpty {
+                Text(group.contentLabel)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 }
 
