@@ -59,8 +59,8 @@ def install(styles, workdir):
 
 def to_svg(package, name):
     source = json.loads((package / name / "index.mjs.map").read_text())["sourcesContent"][-1]
-    match = re.search(r"<CentralIconBase[^>]*>(.*)</CentralIconBase>", source, re.S)
-    if not match:
+    match = re.search(r"<CentralIconBase\s[^>]*>(.*)</CentralIconBase>", source, re.S)
+    if not match or "{" in match.group(1):
         sys.exit(f"Tracé introuvable pour {name}")
     body = re.sub(r"\b([a-zA-Z]+)(?==)", lambda m: re.sub(r"(?<=[a-z])([A-Z])", lambda c: "-" + c.group(1).lower(), m.group(1)), match.group(1))
     body = body.replace("currentColor", "#000000")
