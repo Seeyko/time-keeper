@@ -3,12 +3,10 @@ import FamilyControls
 
 struct MainView: View {
     @EnvironmentObject private var model: AppModel
-    @State private var delayedUntil: Date?
     @State private var newGroup: LimitGroup?
-    @State private var feedback = false
-    @State private var analytics = Analytics.enabled
+    @State private var settings = ProcessInfo.processInfo.arguments.contains("-settings")
+    @State private var sites = ProcessInfo.processInfo.arguments.contains("-sites")
     @Environment(\.dynamicTypeSize) private var typeSize
-    @Environment(\.openURL) private var openURL
 
     private var pendingIcon: some View {
         Image(systemName: "clock")
@@ -56,13 +54,7 @@ struct MainView: View {
                             }
                         }
                         .padding(.vertical, 6)
-                        .listRowInsets(EdgeInsets(top: 8, leading: 28, bottom: 8, trailing: 28))
-                        .listRowBackground(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(Theme.pendingGround)
-                                .padding(.horizontal, 16)
-                        )
-                        .listRowSeparator(.hidden)
+                        .listRowBackground(Theme.pendingGround)
                     }
                 }
 
@@ -79,95 +71,51 @@ struct MainView: View {
                     Button {
                         newGroup = LimitGroup(name: "")
                     } label: {
-                        Label("Ajouter une limite", systemImage: "plus")
+                        Label {
+                            Text("Ajouter une limite")
+                        } icon: {
+                            Tile(glyph: .plus, tint: .blue)
+                        }
                     }
                     .sensoryFeedback(.selection, trigger: newGroup?.id)
                 } header: {
-                    SectionTitle("Limites par jour")
+                    Text("Limites par jour")
                 }
 
                 Section {
                     NavigationLink {
                         DomainsView()
                     } label: {
-                        LabeledContent("Sites bloqués", value: "\(model.draft.blockedDomains.count)")
+                        LabeledContent {
+                            Text("\(model.draft.blockedDomains.count)")
+                        } label: {
+                            TileLabel("Sites bloqués", glyph: .globe, tint: .indigo)
+                        }
                     }
                 } header: {
-                    SectionTitle("Sites")
+                    Text("Sites")
                 }
 
                 Section {
-                    DatePicker("Remise à zéro à", selection: dayStartBinding, displayedComponents: .hourAndMinute)
-                    Toggle("Verrouiller la suppression d'apps", isOn: Binding(
-                        get: { model.draft.denyAppRemoval },
-                        set: { on in handle(model.setDenyAppRemoval(on)) }
-                    ))
-                    .tint(Theme.toggle)
-                    Toggle("Me prévenir à la moitié", isOn: Binding(
-                        get: { model.reminders.atHalf },
-                        set: { on in var r = model.reminders; r.atHalf = on; model.setReminders(r) }
-                    ))
-                    .tint(Theme.toggle)
-                    Picker("Me prévenir avant la fin", selection: Binding(
-                        get: { model.reminders.minutesBefore },
-                        set: { m in var r = model.reminders; r.minutesBefore = m; model.setReminders(r) }
-                    )) {
-                        ForEach(ReminderSettings.beforeChoices, id: \.self) { minutes in
-                            Text(minutes == 0 ? "Jamais" : "\(minutes) min avant").tag(minutes)
-                        }
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        TileLabel("Réglages", glyph: .gear, tint: .gray)
                     }
-                    .sensoryFeedback(.selection, trigger: model.reminders)
-                    if model.notificationsDenied && (model.reminders.atHalf || model.reminders.minutesBefore > 0) {
-                        Button("Autoriser les notifications") {
-                            if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
-                        }
-                        .foregroundStyle(Theme.accent)
-                        .frame(minHeight: 44)
-                    }
-                    Toggle("Statistiques anonymes", isOn: $analytics)
-                        .tint(Theme.toggle)
-                        .onChange(of: analytics) { _, on in Analytics.enabled = on }
-                        .sensoryFeedback(.selection, trigger: analytics)
-                    Button("Ton avis") { feedback = true }
-                        .foregroundStyle(Theme.accent)
-                        .frame(minHeight: 44)
-                        .sensoryFeedback(.selection, trigger: feedback)
-                } header: {
-                    SectionTitle("Réglages")
                 }
             }
-            .listStyle(.plain)
+            .listStyle(.insetGrouped)
             .sheet(item: $newGroup) { group in
                 NavigationStack {
                     GroupEditorView(group: group, isNew: true)
                 }
-                .tint(Theme.accent)
+                .tint(.blue)
             }
-            .sheet(isPresented: $feedback) {
-                NavigationStack { FeedbackView() }
-                    .tint(Theme.accent)
-            }
-            .delayedAlert($delayedUntil)
+            .navigationDestination(isPresented: $settings) { SettingsView() }
+            .navigationDestination(isPresented: $sites) { DomainsView() }
         }
+        .tint(.blue)
         .sensoryFeedback(.success, trigger: model.draft)
-    }
-
-    private var dayStartBinding: Binding<Date> {
-        Binding(
-            get: {
-                let d = model.draft.dayStart
-                return Calendar.current.date(bySettingHour: d.hour, minute: d.minute, second: 0, of: Date()) ?? Date()
-            },
-            set: { date in
-                let c = Calendar.current.dateComponents([.hour, .minute], from: date)
-                let wanted = DayStart(hour: c.hour ?? 0, minute: c.minute ?? 0)
-                if wanted != model.draft.dayStart { handle(model.setDayStart(wanted)) }
-            }
-        )
-    }
-
-    private func handle(_ outcome: SaveOutcome) {
-        if case .delayed(let date) = outcome { delayedUntil = date }
     }
 }
 
@@ -177,33 +125,41 @@ private struct GroupRow: View {
     let pending: Bool
 
     var body: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(group.name.isEmpty ? "Sans nom" : group.name).font(.headline)
-                if let blockedUntil {
-                    HStack(spacing: 4) {
-                        Image(systemName: "lock.fill").accessibilityHidden(true)
-                        Text("Bloqué jusqu'à \(blockedUntil)")
-                    }
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Theme.blocked)
-                } else if pending {
-                    Text("Changement en attente")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Theme.pending)
-                } else if !group.isEmpty {
-                    Text(group.contentLabel)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-            }
-            Spacer(minLength: 8)
+        LabeledContent {
             Text(formatMinutes(group.minutes))
-                .font(Theme.value)
+                .monospacedDigit()
                 .accessibilityLabel("\(formatMinutes(group.minutes)) par jour")
+        } label: {
+            Label {
+                details
+            } icon: {
+                Tile(glyph: blockedUntil == nil ? .clock : .lock,
+                     tint: blockedUntil == nil ? .blue : .red)
+            }
         }
-        .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
+    }
+
+    private var details: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(group.name.isEmpty ? "Sans nom" : group.name)
+            if let blockedUntil {
+                HStack(spacing: 4) {
+                    Image(systemName: "lock.fill").accessibilityHidden(true)
+                    Text("Bloqué jusqu'à \(blockedUntil)")
+                }
+                .font(.subheadline)
+                .foregroundStyle(.red)
+            } else if pending {
+                Text("Changement en attente")
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.pending)
+            } else if !group.isEmpty {
+                Text(group.contentLabel)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 }
 

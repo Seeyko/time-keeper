@@ -1,0 +1,116 @@
+import SwiftUI
+
+struct SettingsView: View {
+    @EnvironmentObject private var model: AppModel
+    @State private var delayedUntil: Date?
+    @State private var feedback = false
+    @State private var analytics = Analytics.enabled
+    @Environment(\.openURL) private var openURL
+
+    private var version: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
+
+    var body: some View {
+        List {
+            Section {
+                HeaderCard(title: "Réglages", detail: "Time Keeper, version \(version)") {
+                    Image("owl-garde")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(8)
+                        .frame(width: 72, height: 72)
+                        .background(Theme.paper, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .accessibilityHidden(true)
+                }
+            }
+
+            Section {
+                DatePicker(selection: dayStartBinding, displayedComponents: .hourAndMinute) {
+                    TileLabel("Remise à zéro à", glyph: .reset, tint: .blue)
+                }
+                Toggle(isOn: Binding(
+                    get: { model.draft.denyAppRemoval },
+                    set: { on in handle(model.setDenyAppRemoval(on)) }
+                )) {
+                    TileLabel("Verrouiller la suppression d'apps", glyph: .lock, tint: .gray)
+                }
+                .tint(.green)
+            }
+
+            Section {
+                Toggle(isOn: Binding(
+                    get: { model.reminders.atHalf },
+                    set: { on in var r = model.reminders; r.atHalf = on; model.setReminders(r) }
+                )) {
+                    TileLabel("Me prévenir à la moitié", glyph: .bell, tint: .orange)
+                }
+                .tint(.green)
+                Picker(selection: Binding(
+                    get: { model.reminders.minutesBefore },
+                    set: { m in var r = model.reminders; r.minutesBefore = m; model.setReminders(r) }
+                )) {
+                    ForEach(ReminderSettings.beforeChoices, id: \.self) { minutes in
+                        Text(minutes == 0 ? "Jamais" : "\(minutes) min").tag(minutes)
+                    }
+                } label: {
+                    TileLabel("Me prévenir avant la fin", glyph: .clockAlert, tint: .orange)
+                }
+                if model.notificationsDenied && (model.reminders.atHalf || model.reminders.minutesBefore > 0) {
+                    Button("Autoriser les notifications") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                    }
+                    .frame(minHeight: 44)
+                }
+            }
+
+            Section {
+                Toggle(isOn: $analytics) {
+                    TileLabel("Statistiques anonymes", glyph: .chart, tint: .purple)
+                }
+                .tint(.green)
+                .onChange(of: analytics) { _, on in Analytics.enabled = on }
+                Button {
+                    feedback = true
+                } label: {
+                    HStack {
+                        TileLabel("Ton avis", glyph: .email, tint: .teal)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .foregroundStyle(.primary)
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationBarTitleDisplayMode(.inline)
+        .sensoryFeedback(.selection, trigger: model.reminders)
+        .sensoryFeedback(.selection, trigger: analytics)
+        .sensoryFeedback(.selection, trigger: feedback)
+        .sheet(isPresented: $feedback) {
+            NavigationStack { FeedbackView() }
+                .tint(.blue)
+        }
+        .delayedAlert($delayedUntil)
+    }
+
+    private var dayStartBinding: Binding<Date> {
+        Binding(
+            get: {
+                let d = model.draft.dayStart
+                return Calendar.current.date(bySettingHour: d.hour, minute: d.minute, second: 0, of: Date()) ?? Date()
+            },
+            set: { date in
+                let c = Calendar.current.dateComponents([.hour, .minute], from: date)
+                let wanted = DayStart(hour: c.hour ?? 0, minute: c.minute ?? 0)
+                if wanted != model.draft.dayStart { handle(model.setDayStart(wanted)) }
+            }
+        )
+    }
+
+    private func handle(_ outcome: SaveOutcome) {
+        if case .delayed(let date) = outcome { delayedUntil = date }
+    }
+}

@@ -87,6 +87,10 @@ jobs:
             mkdir -p "$dir"
             cp "$RUNNER_TEMP"/profiles/*.mobileprovision "$dir"/
           done
+      - name: Central Icons
+        env:
+          CENTRAL_LICENSE_KEY: ${{ secrets.CENTRAL_LICENSE_KEY }}
+        run: python3 ios/ci/central-icons.py
       - name: Archive
         working-directory: ios
         run: |

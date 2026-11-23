@@ -11,35 +11,36 @@ struct DomainsView: View {
     var body: some View {
         List {
             Section {
-                Text("Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .listRowSeparator(.hidden)
-                HStack(spacing: 8) {
-                    TextField("youtube.com", text: $input)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .keyboardType(.URL)
-                        .onSubmit(add)
-                        .padding(.horizontal, 14)
-                        .frame(minHeight: 50)
-                        .background(Theme.field, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    Button("Bloquer", action: add)
-                        .buttonStyle(PrimaryButtonStyle())
-                        .disabled(input.isEmpty)
+                HeaderCard(title: "Sites bloqués", detail: "Tout le temps, dans tous les navigateurs. Pour l'app, crée une limite.") {
+                    Tile(glyph: .globe, tint: .indigo, points: 60)
                 }
-                .listRowSeparator(.hidden)
+            }
+
+            Section {
+                TextField("youtube.com", text: $input)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                    .submitLabel(.done)
+                    .onSubmit(add)
+                Button(action: add) {
+                    Label {
+                        Text("Bloquer ce site")
+                    } icon: {
+                        Tile(glyph: .plus, tint: .blue)
+                    }
+                }
+                .disabled(input.isEmpty)
+            } footer: {
                 if invalid {
                     Text("Écris-le comme ça : youtube.com")
-                        .font(.footnote)
-                        .foregroundStyle(Theme.blocked)
-                        .listRowSeparator(.hidden)
+                        .foregroundStyle(.red)
                 }
             }
 
             Section {
                 ForEach(model.draft.blockedDomains, id: \.self) { domain in
-                    Text(domain)
+                    TileLabel(domain, glyph: .globe, tint: .indigo)
                 }
                 .onDelete { offsets in
                     let domains = offsets.map { model.draft.blockedDomains[$0] }
@@ -63,16 +64,20 @@ struct DomainsView: View {
                         Button {
                             handle(model.addDomain(domain))
                         } label: {
-                            Label(domain, systemImage: "plus")
+                            Label {
+                                Text(domain).foregroundStyle(.primary)
+                            } icon: {
+                                Tile(glyph: .plus, tint: .blue)
+                            }
                         }
                     }
                 } header: {
-                    SectionTitle("Suggestions")
+                    Text("Suggestions")
                 }
             }
         }
-        .listStyle(.plain)
-        .navigationTitle("Sites bloqués")
+        .listStyle(.insetGrouped)
+        .navigationBarTitleDisplayMode(.inline)
         .delayedAlert($delayedUntil)
     }
 

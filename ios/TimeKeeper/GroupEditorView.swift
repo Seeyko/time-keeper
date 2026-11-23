@@ -4,7 +4,6 @@ import FamilyControls
 struct GroupEditorView: View {
     @EnvironmentObject private var model: AppModel
     @Environment(\.dismiss) private var dismiss
-    @ScaledMetric(relativeTo: .largeTitle) private var timeSize: CGFloat = 48
 
     @State var group: LimitGroup
     let isNew: Bool
@@ -17,20 +16,19 @@ struct GroupEditorView: View {
         List {
             Section {
                 Stepper(value: $group.minutes, in: Policy.minutesRange, step: 5) {
-                    Text(formatMinutes(group.minutes))
-                        .font(.system(size: timeSize, design: .serif).monospacedDigit())
-                        .minimumScaleFactor(0.6)
-                        .lineLimit(1)
+                    LabeledContent("Par jour") {
+                        Text(formatMinutes(group.minutes)).monospacedDigit()
+                    }
                 }
                 .sensoryFeedback(.selection, trigger: group.minutes)
             } header: {
-                SectionTitle("Temps total par jour")
+                Text("Temps total par jour")
             }
 
             Section {
                 TextField("Réseaux sociaux", text: $group.name)
             } header: {
-                SectionTitle("Nom")
+                Text("Nom")
             }
 
             Section {
@@ -50,11 +48,9 @@ struct GroupEditorView: View {
                     Label(token)
                 }
             } header: {
-                SectionTitle("Apps et sites")
+                Text("Apps et sites")
             } footer: {
                 Text("Un site manque ? Ouvre-le une fois dans Safari.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
             }
 
             if !isNew {
@@ -64,7 +60,7 @@ struct GroupEditorView: View {
                 }
             }
         }
-        .listStyle(.plain)
+        .listStyle(.insetGrouped)
         .navigationTitle(isNew ? "Nouvelle limite" : group.name)
         .navigationBarTitleDisplayMode(.inline)
         .familyActivityPicker(isPresented: $showPicker, selection: $group.selection)
