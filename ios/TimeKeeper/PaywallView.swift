@@ -8,8 +8,10 @@ struct PaywallView: View {
     @State private var plan: Plan = .yearly
     @State private var redeeming = false
     @State private var taps = 0
+    @Namespace private var selection
 
     private var trial: Bool { plan == .yearly && store.trialEligible }
+    private var motion: Animation { reduceMotion ? .easeInOut(duration: 0.2) : .smooth(duration: 0.4) }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,7 +28,7 @@ struct PaywallView: View {
                         .accessibilityAddTraits(.isHeader)
                     if trial {
                         TrialTimeline()
-                            .transition(.opacity.combined(with: .move(edge: .top)))
+                            .transition(.opacity.combined(with: .scale(scale: 0.96, anchor: .top)))
                     }
                     VStack(spacing: 10) {
                         ForEach(Plan.allCases) { option in
@@ -34,8 +36,11 @@ struct PaywallView: View {
                                 plan: option,
                                 price: store.products[option]?.displayPrice,
                                 badge: option == .yearly && store.trialEligible ? "\(Plan.trialDays) jours offerts" : nil,
-                                selected: plan == option
-                            ) { plan = option }
+                                selected: plan == option,
+                                selection: selection
+                            ) {
+                                withAnimation(motion) { plan = option }
+                            }
                         }
                     }
                 }
@@ -44,7 +49,7 @@ struct PaywallView: View {
             }
             footer
         }
-        .animation(reduceMotion ? .easeInOut(duration: 0.2) : .smooth(duration: 0.45), value: trial)
+        .animation(motion, value: store.trialEligible)
         .sensoryFeedback(.impact(weight: .light), trigger: plan)
         .sensoryFeedback(.impact(weight: .medium), trigger: taps)
         .sensoryFeedback(trigger: store.access) { _, now in now == .granted ? .success : nil }
@@ -67,7 +72,9 @@ struct PaywallView: View {
                 Task { await store.purchase(plan) }
             } label: {
                 ZStack {
-                    Text(plan.cta(trial: trial)).opacity(store.purchasing == nil ? 1 : 0)
+                    Text(plan.cta(trial: trial))
+                        .contentTransition(.opacity)
+                        .opacity(store.purchasing == nil ? 1 : 0)
                     if store.purchasing != nil { ProgressView().tint(Theme.onAccent) }
                 }
                 .frame(maxWidth: .infinity)
@@ -78,7 +85,6 @@ struct PaywallView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .contentTransition(.opacity)
-                .animation(.easeInOut(duration: 0.2), value: plan)
             HStack(spacing: 14) {
                 Button("Restaurer") { Task { await store.restore() } }
                 Button("J'ai un code") {
@@ -136,6 +142,7 @@ private struct PlanRow: View {
     let price: String?
     let badge: String?
     let selected: Bool
+    let selection: Namespace.ID
     let action: () -> Void
 
     var body: some View {
@@ -144,8 +151,7 @@ private struct PlanRow: View {
                 Image(systemName: selected ? "checkmark.circle.fill" : "circle")
                     .font(.title3)
                     .foregroundStyle(selected ? Theme.accent : Theme.hairline)
-                    .scaleEffect(selected ? 1 : 0.9)
-                    .animation(.spring(response: 0.25, dampingFraction: 0.5), value: selected)
+                    .contentTransition(.symbolEffect(.replace))
                 Text(plan.name).font(.headline)
                 if let badge {
                     Text(badge)
@@ -160,11 +166,20 @@ private struct PlanRow: View {
             }
             .padding(.horizontal, 16)
             .frame(minHeight: 60)
-            .background(selected ? Theme.accentGround : .clear, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(selected ? Theme.accent : Theme.hairline, lineWidth: selected ? 2 : 1)
-            )
+            .background {
+                if selected {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(Theme.accentGround)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(Theme.accent, lineWidth: 2)
+                        )
+                        .matchedGeometryEffect(id: "plan", in: selection)
+                } else {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(Theme.hairline, lineWidth: 1)
+                }
+            }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
