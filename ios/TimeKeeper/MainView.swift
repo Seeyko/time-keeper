@@ -3,12 +3,9 @@ import FamilyControls
 
 struct MainView: View {
     @EnvironmentObject private var model: AppModel
-    @State private var delayedUntil: Date?
     @State private var newGroup: LimitGroup?
-    @State private var feedback = false
-    @State private var analytics = Analytics.enabled
+    @State private var settings = ProcessInfo.processInfo.arguments.contains("-settings")
     @Environment(\.dynamicTypeSize) private var typeSize
-    @Environment(\.openURL) private var openURL
 
     private var pendingIcon: some View {
         Image(systemName: "clock")
@@ -95,46 +92,6 @@ struct MainView: View {
                 } header: {
                     SectionTitle("Sites")
                 }
-
-                Section {
-                    DatePicker("Remise à zéro à", selection: dayStartBinding, displayedComponents: .hourAndMinute)
-                    Toggle("Verrouiller la suppression d'apps", isOn: Binding(
-                        get: { model.draft.denyAppRemoval },
-                        set: { on in handle(model.setDenyAppRemoval(on)) }
-                    ))
-                    .tint(Theme.toggle)
-                    Toggle("Me prévenir à la moitié", isOn: Binding(
-                        get: { model.reminders.atHalf },
-                        set: { on in var r = model.reminders; r.atHalf = on; model.setReminders(r) }
-                    ))
-                    .tint(Theme.toggle)
-                    Picker("Me prévenir avant la fin", selection: Binding(
-                        get: { model.reminders.minutesBefore },
-                        set: { m in var r = model.reminders; r.minutesBefore = m; model.setReminders(r) }
-                    )) {
-                        ForEach(ReminderSettings.beforeChoices, id: \.self) { minutes in
-                            Text(minutes == 0 ? "Jamais" : "\(minutes) min avant").tag(minutes)
-                        }
-                    }
-                    .sensoryFeedback(.selection, trigger: model.reminders)
-                    if model.notificationsDenied && (model.reminders.atHalf || model.reminders.minutesBefore > 0) {
-                        Button("Autoriser les notifications") {
-                            if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
-                        }
-                        .foregroundStyle(Theme.accent)
-                        .frame(minHeight: 44)
-                    }
-                    Toggle("Statistiques anonymes", isOn: $analytics)
-                        .tint(Theme.toggle)
-                        .onChange(of: analytics) { _, on in Analytics.enabled = on }
-                        .sensoryFeedback(.selection, trigger: analytics)
-                    Button("Ton avis") { feedback = true }
-                        .foregroundStyle(Theme.accent)
-                        .frame(minHeight: 44)
-                        .sensoryFeedback(.selection, trigger: feedback)
-                } header: {
-                    SectionTitle("Réglages")
-                }
             }
             .listStyle(.plain)
             .sheet(item: $newGroup) { group in
@@ -143,31 +100,20 @@ struct MainView: View {
                 }
                 .tint(Theme.accent)
             }
-            .sheet(isPresented: $feedback) {
-                NavigationStack { FeedbackView() }
-                    .tint(Theme.accent)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        settings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                    .accessibilityLabel("Réglages")
+                    .sensoryFeedback(.selection, trigger: settings)
+                }
             }
-            .delayedAlert($delayedUntil)
+            .navigationDestination(isPresented: $settings) { SettingsView() }
         }
         .sensoryFeedback(.success, trigger: model.draft)
-    }
-
-    private var dayStartBinding: Binding<Date> {
-        Binding(
-            get: {
-                let d = model.draft.dayStart
-                return Calendar.current.date(bySettingHour: d.hour, minute: d.minute, second: 0, of: Date()) ?? Date()
-            },
-            set: { date in
-                let c = Calendar.current.dateComponents([.hour, .minute], from: date)
-                let wanted = DayStart(hour: c.hour ?? 0, minute: c.minute ?? 0)
-                if wanted != model.draft.dayStart { handle(model.setDayStart(wanted)) }
-            }
-        )
-    }
-
-    private func handle(_ outcome: SaveOutcome) {
-        if case .delayed(let date) = outcome { delayedUntil = date }
     }
 }
 
