@@ -37,7 +37,7 @@ struct SettingsView: View {
 
             Section {
                 DatePicker(selection: dayStartBinding, displayedComponents: .hourAndMinute) {
-                    SettingsLabel("Remise à zéro à", symbol: "arrow.counterclockwise", tint: Theme.accent)
+                    SettingsLabel("Remise à zéro à", symbol: "arrow.counterclockwise", tint: Theme.toggle)
                 }
                 Toggle(isOn: Binding(
                     get: { model.draft.denyAppRemoval },
@@ -60,7 +60,7 @@ struct SettingsView: View {
                     set: { m in var r = model.reminders; r.minutesBefore = m; model.setReminders(r) }
                 )) {
                     ForEach(ReminderSettings.beforeChoices, id: \.self) { minutes in
-                        Text(minutes == 0 ? "Jamais" : "\(minutes) min avant").tag(minutes)
+                        Text(minutes == 0 ? "Jamais" : "\(minutes) min").tag(minutes)
                     }
                 } label: {
                     SettingsLabel("Me prévenir avant la fin", symbol: "timer", tint: Theme.ochre)
