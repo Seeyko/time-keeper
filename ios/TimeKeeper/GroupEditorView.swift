@@ -50,7 +50,7 @@ struct GroupEditorView: View {
             } header: {
                 Text("Apps et sites")
             } footer: {
-                Text("Un site manque ? Ouvre-le une fois dans Safari.")
+                Text("Ici, un site n'est bloqué que dans Safari. Pour tous les navigateurs, ajoute-le aux sites bloqués.")
             }
 
             if !isNew {
