@@ -34,7 +34,7 @@ struct PaywallView: View {
                         ForEach(Plan.allCases) { option in
                             PlanRow(
                                 plan: option,
-                                price: store.products[option]?.displayPrice,
+                                price: store.price(option),
                                 badge: option == .yearly && store.trialEligible ? "\(Plan.trialDays) jours offerts" : nil,
                                 selected: plan == option,
                                 selection: selection
@@ -81,7 +81,7 @@ struct PaywallView: View {
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(store.products[plan] == nil || store.purchasing != nil)
-            Text(store.products[plan].map { plan.terms(price: $0.displayPrice, trial: trial) } ?? " ")
+            Text(store.price(plan).map { plan.terms(price: $0, trial: trial) } ?? " ")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .contentTransition(.opacity)

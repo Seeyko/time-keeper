@@ -20,4 +20,13 @@ final class PaywallTests: XCTestCase {
     func testTrialReminderComesBeforeTheFirstPayment() {
         XCTAssertLessThan(Plan.trialReminderDay, Plan.trialDays)
     }
+
+    func testTestFlightEuroPricesMatchTheStore() throws {
+        let file = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().appending(path: "TimeKeeper.storekit")
+        let text = try String(contentsOf: file, encoding: .utf8)
+        for plan in Plan.allCases {
+            let price = String(format: "%d.%02d", plan.euroCents / 100, plan.euroCents % 100)
+            XCTAssertTrue(text.contains("\"displayPrice\" : \"\(price)\""), plan.rawValue)
+        }
+    }
 }
