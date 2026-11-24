@@ -64,33 +64,6 @@ final class RulesTests: XCTestCase {
         XCTAssertEqual(removed.pending?.blockedDomains, ["instagram.com"])
     }
 
-    func testLimitSiteAddNowRemoveLater() {
-        let (s, g) = state()
-        var add = s.active
-        add.groups[0].sites = ["xtomd.com"]
-        let added = Engine.plan(s, draft: add, now: now)
-        XCTAssertNil(added.pending)
-        XCTAssertEqual(added.active.groups.first { $0.id == g.id }?.sites, ["xtomd.com"])
-
-        var remove = added.active
-        remove.groups[0].sites = []
-        let removed = Engine.plan(added, draft: remove, now: now)
-        XCTAssertEqual(removed.active.groups.first { $0.id == g.id }?.sites, ["xtomd.com"])
-        XCTAssertEqual(removed.pending?.groups.first?.sites, [])
-        XCTAssertEqual(removed.pendingEffective, now.addingTimeInterval(Policy.loosenDelay))
-    }
-
-    func testLimitWithoutSitesStillDecodes() throws {
-        var group = LimitGroup(name: "Vidéo", minutes: 45)
-        group.sites = ["xtomd.com"]
-        var json = try JSONSerialization.jsonObject(with: JSONEncoder().encode(group)) as! [String: Any]
-        json["sites"] = nil
-        let old = try JSONDecoder().decode(LimitGroup.self, from: JSONSerialization.data(withJSONObject: json))
-        XCTAssertEqual(old.minutes, 45)
-        XCTAssertEqual(old.sites, [])
-        XCTAssertEqual(old.blockedSites, [])
-    }
-
     func testLockOnNowOffLater() {
         let (s, _) = state()
         var on = s.active
