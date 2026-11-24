@@ -8,11 +8,11 @@ const here = __dirname;
 const conf = JSON.parse(readFileSync(resolve(here, process.argv[2] ?? 'slides.json'), 'utf8'));
 const [W, H] = conf.size;
 const [RW, RH] = conf.raw;
-const out = resolve(here, conf.out);
+const out = process.env.OUT ? resolve(process.env.OUT) : resolve(here, conf.out);
 const only = process.argv[3];
 mkdirSync(out, { recursive: true });
 
-const url = (p) => pathToFileURL(resolve(here, p)).href;
+const url = (p) => pathToFileURL(p.startsWith('shot:') ? resolve(process.env.SCREENS ?? '', p.slice(5)) : resolve(here, p)).href;
 
 const dev = conf.device;
 const phone = { x: dev.x, y: dev.y, w: dev.w };
