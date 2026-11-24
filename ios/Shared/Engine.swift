@@ -16,7 +16,7 @@ enum Shield {
         store.shield.applicationCategories = sel.categoryTokens.isEmpty ? nil : .specific(sel.categoryTokens)
         store.shield.webDomains = sel.webDomainTokens.isEmpty ? nil : sel.webDomainTokens
         store.shield.webDomainCategories = sel.categoryTokens.isEmpty ? nil : .specific(sel.categoryTokens)
-        let sites = Engine.filteredDomains(sel.webDomains.compactMap(\.domain).compactMap(Rules.normalizeDomain))
+        let sites = Engine.filteredDomains(group.blockedSites)
         store.webContent.blockedByFilter = sites.isEmpty ? nil : .specific(sites)
     }
 

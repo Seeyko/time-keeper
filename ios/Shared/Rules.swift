@@ -40,6 +40,7 @@ struct LimitGroup: Codable, Identifiable {
     var name: String
     var selection = FamilyActivitySelection()
     var minutes: Int = 30
+    var sites: [String] = []
 
     static var eventName: DeviceActivityEvent.Name { DeviceActivityEvent.Name(rawValue: "threshold") }
     static let prefix = "limit."
@@ -74,12 +75,28 @@ struct LimitGroup: Codable, Identifiable {
     }
 }
 
+extension LimitGroup {
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        name = try c.decode(String.self, forKey: .name)
+        selection = try c.decode(FamilyActivitySelection.self, forKey: .selection)
+        minutes = try c.decode(Int.self, forKey: .minutes)
+        sites = try c.decodeIfPresent([String].self, forKey: .sites) ?? []
+    }
+
+    var blockedSites: [String] {
+        sites + selection.webDomains.compactMap(\.domain).compactMap(Rules.normalizeDomain)
+    }
+}
+
 extension LimitGroup: Equatable {
     static func == (l: LimitGroup, r: LimitGroup) -> Bool {
         l.id == r.id && l.name == r.name && l.minutes == r.minutes
             && l.selection.applicationTokens == r.selection.applicationTokens
             && l.selection.categoryTokens == r.selection.categoryTokens
             && l.selection.webDomainTokens == r.selection.webDomainTokens
+            && l.sites == r.sites
     }
 }
 
@@ -98,6 +115,7 @@ struct Rules: Codable, Equatable {
                 merged.selection.applicationTokens = current.selection.applicationTokens.union(wanted.selection.applicationTokens)
                 merged.selection.categoryTokens = current.selection.categoryTokens.union(wanted.selection.categoryTokens)
                 merged.selection.webDomainTokens = current.selection.webDomainTokens.union(wanted.selection.webDomainTokens)
+                merged.sites = wanted.sites + current.sites.filter { !wanted.sites.contains($0) }
                 out.groups.append(merged)
             } else {
                 out.groups.append(wanted)

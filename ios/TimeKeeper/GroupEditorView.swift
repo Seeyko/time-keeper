@@ -11,6 +11,8 @@ struct GroupEditorView: View {
     @State private var showPicker = false
     @State private var confirmDelete = false
     @State private var delayedUntil: Date?
+    @State private var siteInput = ""
+    @State private var siteInvalid = false
 
     var body: some View {
         List {
@@ -53,6 +55,28 @@ struct GroupEditorView: View {
                 Text("Un site manque ? Ouvre-le une fois dans Safari.")
             }
 
+            Section {
+                ForEach(group.sites, id: \.self) { site in
+                    TileLabel(site, glyph: .globe, tint: .indigo)
+                }
+                .onDelete { group.sites.remove(atOffsets: $0) }
+                TextField("youtube.com", text: $siteInput)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                    .submitLabel(.done)
+                    .onSubmit(addSite)
+                    .sensoryFeedback(.success, trigger: group.sites.count)
+            } header: {
+                Text("Aussi dans Chrome et les autres")
+            } footer: {
+                if siteInvalid {
+                    Text("Écris-le comme ça : youtube.com").foregroundStyle(.red)
+                } else {
+                    Text("Safari seul est compté. Une fois le temps passé, ces sites sont bloqués dans tous les navigateurs.")
+                }
+            }
+
             if !isNew {
                 Section {
                     Button("Supprimer cette limite", role: .destructive) { confirmDelete = true }
@@ -79,6 +103,17 @@ struct GroupEditorView: View {
             Button("Supprimer dans 24 h", role: .destructive) { finish(model.deleteGroup(group.id)) }
         }
         .delayedAlert($delayedUntil) { dismiss() }
+    }
+
+    private func addSite() {
+        guard !siteInput.isEmpty else { return }
+        guard let site = Rules.normalizeDomain(siteInput) else {
+            siteInvalid = true
+            return
+        }
+        siteInvalid = false
+        siteInput = ""
+        if !group.sites.contains(site) { group.sites.append(site) }
     }
 
     private func finish(_ outcome: SaveOutcome) {
