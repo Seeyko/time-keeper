@@ -18,6 +18,13 @@ enum Plan: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    var euroCents: Int {
+        switch self {
+        case .yearly: 1999
+        case .lifetime: 3999
+        }
+    }
+
     func cta(trial: Bool) -> String {
         self == .yearly && trial ? "Essayer \(Plan.trialDays) jours gratuits" : "Continuer"
     }
@@ -53,10 +60,15 @@ final class Store: ObservableObject {
     @Published private(set) var products: [Plan: Product] = [:]
     @Published private(set) var trialEligible = true
     @Published private(set) var purchasing: Plan?
+    @Published private(set) var testFlightInEuros = false
 
     private let demo: Bool
     private var updates: Task<Void, Never>?
     private static let grantedKey = "access.granted.v1"
+    private static let euroStorefronts: Set<String> = [
+        "AUT", "BEL", "BGR", "CYP", "DEU", "ESP", "EST", "FIN", "FRA", "GRC", "HRV",
+        "IRL", "ITA", "LTU", "LUX", "LVA", "MLT", "NLD", "PRT", "SVK", "SVN",
+    ]
 
     init(demo: Bool, paywall: Bool) {
         self.demo = demo
@@ -73,7 +85,16 @@ final class Store: ObservableObject {
         }
     }
 
+    func price(_ plan: Plan) -> String? {
+        guard let product = products[plan] else { return nil }
+        guard testFlightInEuros, product.priceFormatStyle.currencyCode != "EUR" else { return product.displayPrice }
+        return (Decimal(plan.euroCents) / 100).formatted(.currency(code: "EUR"))
+    }
+
     func refresh() async {
+        if !demo, !testFlightInEuros {
+            testFlightInEuros = await Store.isTestFlightInEuros()
+        }
         if products.count < Plan.allCases.count,
            let loaded = try? await Product.products(for: Plan.allCases.map(\.rawValue)) {
             products = Dictionary(uniqueKeysWithValues: loaded.compactMap { product in
@@ -126,6 +147,14 @@ final class Store: ObservableObject {
         try? await AppStore.sync()
         await refresh()
         Analytics.capture("purchase_restored", ["found": access == .granted])
+    }
+
+    private static func isTestFlightInEuros() async -> Bool {
+        guard case .verified(let app)? = try? await AppTransaction.shared, app.environment == .sandbox else { return false }
+        if let country = await Storefront.current?.countryCode, country != "USA" {
+            return euroStorefronts.contains(country)
+        }
+        return Locale.current.currency?.identifier == "EUR"
     }
 
     private func setAccess(_ value: Access) {
