@@ -13,10 +13,15 @@ struct TimeKeeperApp: App {
         paywall: ProcessInfo.processInfo.arguments.contains("-paywall")
     )
 
+    @StateObject private var pass = PassModel(
+        demo: ["-demo", "-onboarding"].contains(where: ProcessInfo.processInfo.arguments.contains)
+    )
+
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(model)
+                .environmentObject(pass)
                 .environmentObject(store)
         }
     }
@@ -25,6 +30,7 @@ struct TimeKeeperApp: App {
 struct RootView: View {
     @EnvironmentObject private var model: AppModel
     @EnvironmentObject private var store: Store
+    @EnvironmentObject private var pass: PassModel
     @ObservedObject private var auth = AuthorizationCenter.shared
     @Environment(\.scenePhase) private var scenePhase
 
@@ -43,12 +49,16 @@ struct RootView: View {
         .animation(.smooth, value: model.hasOnboarded)
         .animation(.smooth, value: store.access)
         .tint(Theme.accent)
-        .onAppear { model.refresh() }
+        .onAppear {
+            model.refresh()
+            pass.refresh()
+        }
         .task { await store.refresh() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Analytics.capture("app_opened")
                 model.refresh()
+                pass.refresh()
                 Task { await store.refresh() }
             }
         }
