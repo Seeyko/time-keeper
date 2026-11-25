@@ -67,6 +67,7 @@ enum Engine {
     }
 
     static func sync(_ rules: Rules) {
+        closePassIfDue()
         let center = DeviceActivityCenter()
         if SharedStorage.suspended {
             suspend(center)
@@ -83,6 +84,11 @@ enum Engine {
             SharedStorage.forget(id)
         }
         SharedStorage.knownGroupIDs = currentIDs
+        if let pass = SharedStorage.activePass, !currentIDs.contains(pass.groupID) {
+            PassReminder.cancel()
+            closePass()
+        }
+        let openID = SharedStorage.activePass?.groupID
 
         let reminders = SharedStorage.reminderSettings
         let schedule = DeviceActivitySchedule(
@@ -91,7 +97,7 @@ enum Engine {
             repeats: true
         )
         for group in rules.groups {
-            if SharedStorage.isShieldedToday(group.id) { Shield.apply(group) }
+            if SharedStorage.isShieldedToday(group.id), group.id != openID { Shield.apply(group) }
 
             guard !group.isEmpty else {
                 SharedStorage.setFingerprint(nil, for: group.id)
@@ -121,13 +127,93 @@ enum Engine {
     }
 
     private static func suspend(_ center: DeviceActivityCenter) {
-        center.stopMonitoring(center.activities.filter { LimitGroup.id(from: $0) != nil })
+        center.stopMonitoring(center.activities.filter { LimitGroup.id(from: $0) != nil || ActivePass.groupID(from: $0) != nil })
+        if SharedStorage.activePass != nil {
+            SharedStorage.activePass = nil
+            PassReminder.cancel()
+        }
         for id in SharedStorage.knownGroupIDs {
             Shield.clear(id)
             SharedStorage.setFingerprint(nil, for: id)
         }
         ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "domains")).clearAllSettings()
         ManagedSettingsStore(named: ManagedSettingsStore.Name(rawValue: "global")).clearAllSettings()
+    }
+
+    @discardableResult
+    static func openPass(for group: LimitGroup, now: Date = Date()) throws -> ActivePass {
+        closePassIfDue(now: now)
+        let rules = SharedStorage.load().active
+        let zone = TimeZone.current
+        var calendar = Calendar.current
+        calendar.timeZone = zone
+        guard let ledger = PassStore.load(now: now, timeZone: zone) else { throw PassError.storage }
+        let target = rules.groups.first { $0.id == group.id }
+        let verdict = Pass.availability(
+            ledger,
+            now: now,
+            timeZone: zone,
+            calendar: calendar,
+            dayStart: rules.dayStart,
+            hasBlockedGroup: target != nil && SharedStorage.isShieldedToday(group.id),
+            suspended: SharedStorage.suspended,
+            passActive: SharedStorage.activePass
+        )
+        guard verdict == .available, let target else { throw PassError.refused(verdict) }
+
+        let pass = ActivePass(groupID: target.id, opened: now, until: now.addingTimeInterval(Policy.passDuration))
+        let center = DeviceActivityCenter()
+        center.stopMonitoring(center.activities.filter { ActivePass.groupID(from: $0) != nil })
+        let parts: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute, .second]
+        let schedule = DeviceActivitySchedule(
+            intervalStart: calendar.dateComponents(parts, from: now),
+            intervalEnd: calendar.dateComponents(parts, from: now.addingTimeInterval(Policy.passMonitorWindow)),
+            repeats: false,
+            warningTime: DateComponents(minute: Int((Policy.passMonitorWindow - Policy.passDuration) / 60))
+        )
+        var events: [DeviceActivityEvent.Name: DeviceActivityEvent] = [:]
+        if !target.isEmpty {
+            events[ActivePass.eventName] = DeviceActivityEvent(
+                applications: target.selection.applicationTokens,
+                categories: target.selection.categoryTokens,
+                webDomains: target.selection.webDomainTokens,
+                threshold: DateComponents(minute: Int(Policy.passDuration / 60)),
+                includesPastActivity: false
+            )
+        }
+        do {
+            try center.startMonitoring(pass.activityName, during: schedule, events: events)
+        } catch {
+            NSLog("TimeKeeper startMonitoring pass: \(error)")
+            throw PassError.monitoring
+        }
+        let spent = Pass.spend(ledger, now: now, timeZone: zone, calendar: calendar, dayStart: rules.dayStart)
+        guard PassStore.save(spent) else {
+            center.stopMonitoring([pass.activityName])
+            throw PassError.storage
+        }
+        SharedStorage.activePass = pass
+        Shield.clear(target.id)
+        return pass
+    }
+
+    static func closePassIfDue(now: Date = Date()) {
+        guard let pass = SharedStorage.activePass, pass.isOver(at: now) else { return }
+        closePass()
+    }
+
+    static func closePass(of id: UUID? = nil) {
+        if let pass = SharedStorage.activePass, id == nil || id == pass.groupID {
+            if !SharedStorage.suspended, SharedStorage.isShieldedToday(pass.groupID),
+               let group = SharedStorage.load().active.groups.first(where: { $0.id == pass.groupID }) {
+                Shield.apply(group)
+            }
+            SharedStorage.activePass = nil
+        }
+        let open = SharedStorage.activePass?.activityName
+        let center = DeviceActivityCenter()
+        let stale = center.activities.filter { ActivePass.groupID(from: $0) != nil && $0 != open }
+        if !stale.isEmpty { center.stopMonitoring(stale) }
     }
 
     static func filteredDomainNames(_ base: [String]) -> [String] {
