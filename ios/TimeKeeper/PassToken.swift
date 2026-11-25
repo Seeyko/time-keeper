@@ -14,7 +14,8 @@ struct PassToken: View {
     var size: CGFloat = 168
     @Environment(\.colorScheme) private var scheme
 
-    private static let threeD = MTLCreateSystemDefaultDevice() != nil
+    private static var threeD: Bool { device && TokenModel.prototype != nil }
+    private static let device = MTLCreateSystemDefaultDevice() != nil
 
     private var spoken: String {
         switch face {

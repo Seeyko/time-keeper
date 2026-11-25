@@ -74,7 +74,7 @@ extension RootView {
         if arguments.contains("-pass-open") {
             _ = try? pass.open(group, blocked: true, dayStart: dayStart)
         } else if arguments.contains("-pass-vide") {
-            _ = try? pass.open(group, blocked: true, dayStart: dayStart, now: Date().addingTimeInterval(-2 * Policy.passDuration))
+            _ = try? pass.open(group, blocked: true, dayStart: dayStart, now: pass.now.addingTimeInterval(-2 * Policy.passDuration))
             pass.refresh()
         }
     }

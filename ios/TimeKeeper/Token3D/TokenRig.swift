@@ -9,24 +9,25 @@ final class TokenRig {
     private let tilt = SCNNode()
     private let jeton: SCNNode
     private let parens: [(node: SCNNode, rest: SCNVector3, side: Float)]
-    private let jewels: [SCNNode]
+    private let jewels: [(mesh: SCNNode, tint: Any?, glow: Any?)]
     private let filet: SCNNode?
-    private let dial: SCNNode?
+    private let medallion: SCNNode?
     private let motion = CMMotionManager()
     private var face: PassToken.Face?
     private var stock = -1
+    private var turning = false
 
-    private static let spreadDistance: Float = 0.055
-    private static let swayKey = "sway"
+    private static let spreadDistance: Float = 0.036
     private static let spinKey = "spin"
+    private static let unlit = UIColor(red: 0x2B / 255, green: 0x26 / 255, blue: 0x20 / 255, alpha: 1)
 
     init() {
         scene = SCNScene()
         scene.background.contents = UIColor.clear
-        scene.lightingEnvironment.contents = TokenModel.environment()
-        scene.lightingEnvironment.intensity = 2.2
+        scene.lightingEnvironment.contents = TokenModel.environment
+        scene.lightingEnvironment.intensity = 1.15
 
-        let model = TokenModel.load()
+        let model = TokenModel.instance() ?? SCNNode()
         jeton = model
         tilt.addChildNode(model)
         scene.rootNode.addChildNode(tilt)
@@ -35,9 +36,12 @@ final class TokenRig {
             guard let node = model.childNode(withName: name, recursively: true) else { return nil }
             return (node, node.position, side)
         }
-        jewels = ["Index1", "Index2"].compactMap { model.childNode(withName: $0, recursively: true) }
-        filet = model.childNode(withName: "Filet", recursively: true)
-        dial = model.childNode(withName: "Cadran", recursively: true)
+        jewels = ["Index1", "Index2"].compactMap { name in
+            guard let mesh = TokenModel.mesh(name, in: model), let material = mesh.geometry?.firstMaterial else { return nil }
+            return (mesh, material.diffuse.contents, material.emission.contents)
+        }
+        filet = TokenModel.mesh("Filet", in: model)
+        medallion = model.childNode(withName: "Medaillon", recursively: true)
         filet?.geometry?.materials.forEach { $0.shaderModifiers = [.fragment: TokenModel.sweep] }
 
         let lens = SCNCamera()
@@ -47,8 +51,8 @@ final class TokenRig {
         lens.wantsHDR = true
         lens.wantsExposureAdaptation = false
         lens.exposureOffset = 0
-        lens.bloomIntensity = 0.15
-        lens.bloomThreshold = 0.9
+        lens.bloomIntensity = 0.12
+        lens.bloomThreshold = 0.92
         lens.bloomBlurRadius = 6
         camera.camera = lens
         camera.position = SCNVector3(0, 0, 3.75)
@@ -66,7 +70,7 @@ final class TokenRig {
                 MainActor.assumeIsolated { self?.lean(pitch: pitch, roll: roll) }
             }
         } else {
-            tilt.runAction(TokenRig.sway(), forKey: TokenRig.swayKey)
+            tilt.runAction(TokenRig.sway())
         }
     }
 
@@ -80,6 +84,7 @@ final class TokenRig {
         guard previous != newFace || stock != newStock else { return }
         face = newFace
         stock = newStock
+        let flipping = animated && !reduceMotion && isAirlock(previous) && isOpen(newFace)
 
         SCNTransaction.begin()
         SCNTransaction.animationDuration = animated ? duration(from: previous, to: newFace) : 0
@@ -90,16 +95,21 @@ final class TokenRig {
             paren.node.position = position
         }
         for (index, jewel) in jewels.enumerated() {
-            TokenModel.light(jewel, lit: newStock > index)
+            let lit = newStock > index && newFace != .spent
+            jewel.mesh.geometry?.firstMaterial?.diffuse.contents = lit ? jewel.tint : TokenRig.unlit
+            jewel.mesh.geometry?.firstMaterial?.emission.contents = lit ? jewel.glow : UIColor.black
         }
         filet?.geometry?.materials.forEach { $0.setValue(NSNumber(value: progress(newFace)), forKey: "progress") }
+        if !flipping && !turning {
+            jeton.eulerAngles.y = isOpen(newFace) ? .pi : 0
+        }
         SCNTransaction.commit()
 
         jeton.filters = newFace == .spent ? [TokenModel.tarnish()] : nil
         spin(for: newFace, reduceMotion: reduceMotion)
 
-        if animated, case .airlock = previous, case .open = newFace {
-            celebrate(reduceMotion: reduceMotion)
+        if animated && isAirlock(previous) && isOpen(newFace) {
+            celebrate(flip: flipping)
         }
     }
 
@@ -113,58 +123,76 @@ final class TokenRig {
     }
 
     private func spin(for face: PassToken.Face, reduceMotion: Bool) {
-        guard let dial, !reduceMotion else { return }
+        guard let medallion, !reduceMotion else { return }
         guard case .airlock(let progress) = face else {
-            dial.removeAction(forKey: TokenRig.spinKey)
-            dial.runAction(.rotateTo(x: 0, y: 0, z: 0, duration: 0.6, usesShortestUnitArc: true))
+            medallion.removeAction(forKey: TokenRig.spinKey)
+            medallion.runAction(.rotateTo(x: 0, y: 0, z: 0, duration: 0.6, usesShortestUnitArc: true))
             return
         }
-        if dial.action(forKey: TokenRig.spinKey) == nil {
-            dial.runAction(.repeatForever(.rotateBy(x: 0, y: 0, z: -.pi * 2, duration: 4)), forKey: TokenRig.spinKey)
+        if medallion.action(forKey: TokenRig.spinKey) == nil {
+            medallion.runAction(.repeatForever(.rotateBy(x: 0, y: 0, z: -.pi * 2, duration: 4)), forKey: TokenRig.spinKey)
         }
-        dial.action(forKey: TokenRig.spinKey)?.speed = 0.15 + 2.4 * progress * progress
+        medallion.action(forKey: TokenRig.spinKey)?.speed = 0.15 + 2.4 * progress * progress
     }
 
-    private func celebrate(reduceMotion: Bool) {
+    private func celebrate(flip: Bool) {
         if let lens = camera.camera {
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.18
-            lens.bloomIntensity = 1.6
-            lens.exposureOffset = 0.6
-            SCNTransaction.completionBlock = {
-                MainActor.assumeIsolated {
-                    SCNTransaction.begin()
-                    SCNTransaction.animationDuration = 0.9
-                    lens.bloomIntensity = 0.15
-                    lens.exposureOffset = 0
-                    SCNTransaction.commit()
-                }
+            lens.bloomIntensity = 1.4
+            lens.exposureOffset = 0.5
+            SCNTransaction.completionBlock = { [weak self] in
+                Task { @MainActor in self?.dim() }
             }
             SCNTransaction.commit()
         }
-        guard !reduceMotion else { return }
-        let turn = SCNAction.rotateBy(x: 0, y: .pi * 2 + 0.34, z: 0, duration: 0.7)
-        turn.timingMode = .easeInEaseOut
-        let back = SCNAction.rotateBy(x: 0, y: -0.46, z: 0, duration: 0.28)
+        guard flip else { return }
+        turning = true
+        let spin = SCNAction.rotateBy(x: 0, y: .pi * 5 + 0.42, z: 0, duration: 1.25)
+        spin.timingMode = .easeIn
+        let back = SCNAction.rotateBy(x: 0, y: -0.62, z: 0, duration: 0.32)
         back.timingMode = .easeInEaseOut
-        let settle = SCNAction.rotateBy(x: 0, y: 0.12, z: 0, duration: 0.22)
+        let again = SCNAction.rotateBy(x: 0, y: 0.28, z: 0, duration: 0.26)
+        again.timingMode = .easeInEaseOut
+        let settle = SCNAction.rotateBy(x: 0, y: -0.08, z: 0, duration: 0.22)
         settle.timingMode = .easeOut
         let lift = SCNAction.sequence([
-            .moveBy(x: 0, y: 0, z: 0.35, duration: 0.35),
-            .moveBy(x: 0, y: 0, z: -0.35, duration: 0.6),
+            .moveBy(x: 0, y: 0, z: 0.4, duration: 0.6),
+            .moveBy(x: 0, y: 0, z: -0.4, duration: 0.9),
         ])
         lift.timingMode = .easeInEaseOut
-        jeton.runAction(.group([.sequence([turn, back, settle]), lift]))
+        jeton.runAction(.group([.sequence([spin, back, again, settle]), lift])) { [weak self] in
+            Task { @MainActor in self?.landed() }
+        }
+    }
+
+    private func dim() {
+        guard let lens = camera.camera else { return }
+        SCNTransaction.begin()
+        SCNTransaction.animationDuration = 0.9
+        lens.bloomIntensity = 0.12
+        lens.exposureOffset = 0
+        SCNTransaction.commit()
+    }
+
+    private func landed() {
+        turning = false
+        jeton.eulerAngles.y = isOpen(face) ? .pi : 0
     }
 
     private func duration(from old: PassToken.Face?, to new: PassToken.Face) -> CFTimeInterval {
-        if case .airlock = old, case .airlock = new { return 1 }
-        if case .open = old, case .open = new { return 1 }
+        if isAirlock(old) && isAirlock(new) { return 1 }
+        if isOpen(old) && isOpen(new) { return 1 }
         return 0.6
     }
 
-    private func isAirlock(_ face: PassToken.Face) -> Bool {
+    private func isAirlock(_ face: PassToken.Face?) -> Bool {
         if case .airlock = face { return true }
+        return false
+    }
+
+    private func isOpen(_ face: PassToken.Face?) -> Bool {
+        if case .open = face { return true }
         return false
     }
 

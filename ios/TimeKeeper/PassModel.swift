@@ -7,11 +7,13 @@ final class PassModel: ObservableObject {
     @Published private(set) var active: ActivePass?
     @Published private(set) var reminder: PassReminder
 
+    let shift: TimeInterval
     private var closing: Task<Void, Never>?
 
     init(demo: Bool) {
         self.demo = demo
         let now = Date()
+        shift = demo ? (Calendar.current.date(bySettingHour: 12, minute: 42, second: 0, of: now) ?? now).timeIntervalSince(now) : 0
         if demo {
             ledger = PassLedger(now: now.addingTimeInterval(-24 * 60 * 60), timeZone: .current)
             active = nil
@@ -25,12 +27,16 @@ final class PassModel: ObservableObject {
 
     var stock: Int { ledger.stock }
 
-    func isOpen(_ id: UUID, now: Date = Date()) -> Bool {
+    var now: Date { Date().addingTimeInterval(shift) }
+
+    func isOpen(_ id: UUID, now: Date? = nil) -> Bool {
+        let now = now ?? self.now
         guard let active, active.groupID == id else { return false }
         return !active.isOver(at: now)
     }
 
-    func refresh(now: Date = Date()) {
+    func refresh(now: Date? = nil) {
+        let now = now ?? self.now
         if demo {
             if let active, active.isOver(at: now) { self.active = nil }
             watch()
@@ -47,7 +53,8 @@ final class PassModel: ObservableObject {
         watch()
     }
 
-    func availability(blocked: Bool, dayStart: DayStart, now: Date = Date()) -> PassAvailability {
+    func availability(blocked: Bool, dayStart: DayStart, now: Date? = nil) -> PassAvailability {
+        let now = now ?? self.now
         let verdict = evaluate(blocked: blocked, dayStart: dayStart, now: now)
         guard demo, verdict == .night else { return verdict }
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: now) ?? now
@@ -55,7 +62,8 @@ final class PassModel: ObservableObject {
     }
 
     @discardableResult
-    func open(_ group: LimitGroup, blocked: Bool, dayStart: DayStart, now: Date = Date()) throws -> ActivePass {
+    func open(_ group: LimitGroup, blocked: Bool, dayStart: DayStart, now: Date? = nil) throws -> ActivePass {
+        let now = now ?? self.now
         guard demo else {
             let pass = try Engine.openPass(for: group, now: now)
             refresh(now: now)
@@ -76,7 +84,7 @@ final class PassModel: ObservableObject {
         if demo { return }
         SharedStorage.passReminder = value
         PassReminder.cancel()
-        guard let active, !active.isOver(at: Date()),
+        guard let active, !active.isOver(at: now),
               let group = SharedStorage.load().active.groups.first(where: { $0.id == active.groupID }) else { return }
         value.schedule(for: group, until: active.until)
     }
@@ -97,8 +105,9 @@ final class PassModel: ObservableObject {
     private func watch() {
         closing?.cancel()
         guard let until = active?.until else { return }
+        let delay = max(0, until.timeIntervalSince(now)) + 1
         closing = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(max(0, until.timeIntervalSinceNow) + 1))
+            try? await Task.sleep(for: .seconds(delay))
             guard !Task.isCancelled else { return }
             self?.refresh()
         }

@@ -31,7 +31,7 @@ struct PassSheet: View {
 
     var body: some View {
         TimelineView(.periodic(from: (airlockEnd ?? anchor).addingTimeInterval(-Policy.passAirlock), by: 1)) { context in
-            tick(frozenAt ?? context.date)
+            tick(frozenAt ?? context.date.addingTimeInterval(pass.shift))
         }
         .tint(Theme.accent)
         .navigationBarTitleDisplayMode(.inline)
@@ -221,7 +221,7 @@ struct PassSheet: View {
     private func start() {
         guard target != nil else { return }
         failed = false
-        withAnimation(motion) { airlockEnd = Date().addingTimeInterval(Policy.passAirlock) }
+        withAnimation(motion) { airlockEnd = pass.now.addingTimeInterval(Policy.passAirlock) }
     }
 
     private func cancel() {
@@ -233,7 +233,7 @@ struct PassSheet: View {
 
     private func finish() {
         guard !opening, let end = airlockEnd else { return }
-        guard let id = target?.id, Date().timeIntervalSince(end) < Policy.passDuration else {
+        guard let id = target?.id, pass.now.timeIntervalSince(end) < Policy.passDuration else {
             airlockEnd = nil
             return
         }
@@ -262,12 +262,12 @@ struct PassSheet: View {
             chosen = blocked.first?.id
             Task {
                 try? await Task.sleep(for: .seconds(2))
-                withAnimation(motion) { airlockEnd = Date().addingTimeInterval(6) }
+                withAnimation(motion) { airlockEnd = pass.now.addingTimeInterval(6) }
             }
             return
         }
         guard arguments.contains("-pass-sas"), airlockEnd == nil else { return }
-        let start = Date()
+        let start = pass.now
         chosen = blocked.first?.id
         frozenAt = start
         airlockEnd = start.addingTimeInterval(18)
