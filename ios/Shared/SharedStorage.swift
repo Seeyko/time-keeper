@@ -62,6 +62,16 @@ enum SharedStorage {
         set { defaults.set(newValue, forKey: "suspended.v1") }
     }
 
+    static var activePass: ActivePass? {
+        get { defaults.data(forKey: "pass.active.v1").flatMap { try? JSONDecoder().decode(ActivePass.self, from: $0) } }
+        set { defaults.set(newValue.flatMap { try? JSONEncoder().encode($0) }, forKey: "pass.active.v1") }
+    }
+
+    static var passReminder: PassReminder {
+        get { defaults.string(forKey: "pass.reminder.v1").flatMap(PassReminder.init(rawValue:)) ?? .minuteBefore }
+        set { defaults.set(newValue.rawValue, forKey: "pass.reminder.v1") }
+    }
+
     static var knownGroupIDs: Set<UUID> {
         get { Set((defaults.stringArray(forKey: knownGroupsKey) ?? []).compactMap(UUID.init(uuidString:))) }
         set { defaults.set(newValue.map(\.uuidString), forKey: knownGroupsKey) }
