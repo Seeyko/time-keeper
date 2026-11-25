@@ -32,16 +32,7 @@ struct PassSheet: View {
 
     var body: some View {
         TimelineView(.periodic(from: (airlockEnd ?? anchor).addingTimeInterval(-Policy.passAirlock), by: 1)) { context in
-            let now = frozenAt ?? context.date
-            let verdict = pass.availability(blocked: !blocked.isEmpty, dayStart: model.active.dayStart, now: now)
-            let left = airlockEnd.map { min(Int(Policy.passAirlock), max(0, Int($0.timeIntervalSince(now).rounded()))) }
-            content(verdict: verdict, left: left, now: now)
-                .onChange(of: left) { _, seconds in
-                    if seconds == 0 { finish() }
-                }
-                .sensoryFeedback(.impact(weight: .light), trigger: left) { _, seconds in
-                    seconds == 20 || seconds == 10
-                }
+            tick(frozenAt ?? context.date)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -59,6 +50,24 @@ struct PassSheet: View {
         .sensoryFeedback(.success, trigger: opened)
         .sensoryFeedback(.error, trigger: failed) { _, now in now }
         .onAppear(perform: stageCapture)
+    }
+
+    private func secondsLeft(_ now: Date) -> Int? {
+        guard let airlockEnd else { return nil }
+        let remaining = Int(airlockEnd.timeIntervalSince(now).rounded())
+        return min(Int(Policy.passAirlock), max(0, remaining))
+    }
+
+    private func tick(_ now: Date) -> some View {
+        let verdict = pass.availability(blocked: !blocked.isEmpty, dayStart: model.active.dayStart, now: now)
+        let left = secondsLeft(now)
+        return content(verdict: verdict, left: left, now: now)
+            .onChange(of: left) { (_: Int?, seconds: Int?) in
+                if seconds == 0 { finish() }
+            }
+            .sensoryFeedback(.impact(weight: .light), trigger: left) { (_: Int?, seconds: Int?) -> Bool in
+                seconds.map { [20, 10].contains($0) } ?? false
+            }
     }
 
     private func content(verdict: PassAvailability, left: Int?, now: Date) -> some View {
