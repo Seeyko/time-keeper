@@ -23,7 +23,7 @@ struct PassSheet: View {
     }
 
     private var target: LimitGroup? {
-        blocked.count == 1 ? blocked.first : blocked.first(where: { $0.id == chosen })
+        blocked.first(where: { $0.id == chosen }) ?? blocked.first
     }
 
     private var openName: String {
