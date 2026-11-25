@@ -42,7 +42,7 @@ struct MainView: View {
     private func passValue(_ verdict: PassAvailability) -> String {
         switch verdict {
         case .open(let until): "Ouvert jusqu'à \(until.passTime)"
-        case .empty(let next): "Retour le \(next.passDay)"
+        case .empty(let next): "Prochaine le \(next.passDay)"
         default: "\(pass.stock) sur \(Policy.passMaxStock)"
         }
     }

@@ -11,7 +11,6 @@ struct PassSheet: View {
     @State private var frozenAt: Date?
     @State private var anchor = Date()
     @State private var opening = false
-    @State private var flip: CGFloat = 1
     @State private var failed = false
     @State private var opened = 0
     @State private var cancelled = 0
@@ -34,6 +33,7 @@ struct PassSheet: View {
         TimelineView(.periodic(from: (airlockEnd ?? anchor).addingTimeInterval(-Policy.passAirlock), by: 1)) { context in
             tick(frozenAt ?? context.date)
         }
+        .tint(Theme.accent)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if airlockEnd == nil {
@@ -73,52 +73,57 @@ struct PassSheet: View {
     private func content(verdict: PassAvailability, left: Int?, now: Date) -> some View {
         let until = openUntil(verdict)
         let choosing = left == nil && until == nil
+        let listing = choosing && verdict == .available
         let tokenFace = face(verdict: verdict, now: now)
-        return List {
-            Section {
-                VStack(spacing: 8) {
-                    PassToken(face: tokenFace, stock: pass.stock, size: choosing ? 168 : 208)
-                        .animation(reduceMotion ? nil : .linear(duration: 1), value: tokenFace)
-                        .scaleEffect(x: flip, y: 1)
-                        .padding(.top, choosing ? 8 : 48)
-                        .padding(.bottom, 16)
-                    Text(title(left: left, until: until))
-                        .font(.title.bold())
-                        .monospacedDigit()
-                        .multilineTextAlignment(.center)
-                    Text(line(verdict: verdict, choosing: choosing, left: left))
-                        .foregroundStyle(choosing && failed ? Theme.blocked : Color.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .frame(maxWidth: .infinity)
-                .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets())
+        return VStack(spacing: 0) {
+            if !listing {
+                Spacer(minLength: 0)
             }
-            if choosing && verdict == .available {
-                Section {
-                    ForEach(blocked) { group in
-                        row(group)
-                    }
-                }
-                Section {
-                    Picker("Me prévenir", selection: Binding(
-                        get: { pass.reminder },
-                        set: { pass.setReminder($0) }
-                    )) {
-                        ForEach(PassReminder.allCases, id: \.self) { choice in
-                            Text(choice.label).tag(choice)
+            VStack(spacing: 8) {
+                PassToken(face: tokenFace, stock: pass.stock, size: choosing ? 176 : 220)
+                    .padding(.bottom, 12)
+                Text(title(left: left, until: until))
+                    .font(.title.bold())
+                    .monospacedDigit()
+                    .multilineTextAlignment(.center)
+                    .contentTransition(.numericText(countsDown: true))
+                Text(line(verdict: verdict, choosing: choosing, left: left))
+                    .foregroundStyle(choosing && failed ? Theme.blocked : Color.secondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 8)
+            if listing {
+                List {
+                    Section {
+                        ForEach(blocked) { group in
+                            row(group)
+                        }
+                        Picker("Me prévenir", selection: Binding(
+                            get: { pass.reminder },
+                            set: { pass.setReminder($0) }
+                        )) {
+                            ForEach(PassReminder.allCases, id: \.self) { choice in
+                                Text(choice.label).tag(choice)
+                            }
                         }
                     }
                 }
+                .listStyle(.insetGrouped)
+                .contentMargins(.top, 16, for: .scrollContent)
+                .scrollBounceBehavior(.basedOnSize)
+                .scrollContentBackground(.hidden)
+            } else {
+                Spacer(minLength: 0)
             }
         }
-        .listStyle(.insetGrouped)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(uiColor: .systemGroupedBackground))
         .safeAreaInset(edge: .bottom) {
             action(verdict: verdict, airlock: left != nil, open: until != nil)
                 .padding(.horizontal, 24)
                 .padding(.top, 8)
                 .padding(.bottom, 16)
-                .background(Color(uiColor: .systemGroupedBackground))
         }
     }
 
@@ -140,12 +145,12 @@ struct PassSheet: View {
                 Text("OK").frame(maxWidth: .infinity)
             }
             .buttonStyle(PrimaryButtonStyle())
-        } else {
+        } else if verdict == .available {
             Button(action: start) {
                 Text("Ouvrir 5 min").frame(maxWidth: .infinity)
             }
             .buttonStyle(PrimaryButtonStyle())
-            .disabled(verdict != .available || target == nil)
+            .disabled(target == nil)
         }
     }
 
@@ -194,8 +199,8 @@ struct PassSheet: View {
     }
 
     private func title(left: Int?, until: Date?) -> String {
-        if let left { return "Ça s'ouvre dans \(left) s" }
-        if let until { return "Ouvert jusqu'à \(until.passTime)" }
+        if let left { return "Ça s’ouvre dans \(left) s" }
+        if let until { return "Ouvert jusqu’à \(until.passTime)" }
         return "Ouvrir une parenthèse"
     }
 
@@ -205,10 +210,10 @@ struct PassSheet: View {
         if failed { return "Pas ouvert. Réessaie dans un moment." }
         switch verdict {
         case .night: return "Pas entre 22 h et 6 h."
-        case .usedToday: return "Déjà utilisée aujourd'hui."
-        case .nothingBlocked, .suspended: return "Rien n'est bloqué."
+        case .usedToday: return "Déjà utilisée aujourd’hui."
+        case .nothingBlocked, .suspended: return "Rien n’est bloqué."
         case .empty(let next): return "Prochaine le \(next.passDay)"
-        case .clockMoved: return "Remets l'heure automatique."
+        case .clockMoved: return "Remets l’heure automatique."
         case .available, .open: return "5 min sur une limite. Elle se referme seule."
         }
     }
@@ -233,16 +238,7 @@ struct PassSheet: View {
             return
         }
         opening = true
-        if reduceMotion {
-            withAnimation(motion) { commit(id) }
-            return
-        }
-        withAnimation(.easeIn(duration: 0.35)) {
-            flip = 0.02
-        } completion: {
-            commit(id)
-            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) { flip = 1 }
-        }
+        withAnimation(motion) { commit(id) }
     }
 
     private func commit(_ id: UUID) {
