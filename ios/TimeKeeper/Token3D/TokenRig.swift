@@ -12,20 +12,27 @@ final class TokenRig {
     private let jewels: [(mesh: SCNNode, tint: Any?, glow: Any?)]
     private let filet: SCNNode?
     private let medallion: SCNNode?
+    private let hand = TokenModel.hand()
     private let motion = CMMotionManager()
     private var face: PassToken.Face?
     private var stock = -1
     private var turning = false
+    private var ticking = true
+    private var reduceMotion = false
+    private var openLeft: (fraction: Double, at: CFTimeInterval)?
+    private var kickedAt: CFTimeInterval = 0
 
     private static let spreadDistance: Float = 0.036
     private static let spinKey = "spin"
+    private static let handKey = "hand"
+    private static let turn = Float.pi * 2
     private static let unlit = UIColor(red: 0x2B / 255, green: 0x26 / 255, blue: 0x20 / 255, alpha: 1)
 
     init() {
         scene = SCNScene()
         scene.background.contents = UIColor.clear
         scene.lightingEnvironment.contents = TokenModel.environment
-        scene.lightingEnvironment.intensity = 1.15
+        scene.lightingEnvironment.intensity = 1.35
 
         let model = TokenModel.instance() ?? SCNNode()
         jeton = model
@@ -42,7 +49,32 @@ final class TokenRig {
         }
         filet = TokenModel.mesh("Filet", in: model)
         medallion = model.childNode(withName: "Medaillon", recursively: true)
-        filet?.geometry?.materials.forEach { $0.shaderModifiers = [.fragment: TokenModel.sweep] }
+        filet?.geometry?.materials.forEach { material in
+            var modifiers = material.shaderModifiers ?? [:]
+            modifiers[.fragment] = TokenModel.sweep
+            material.shaderModifiers = modifiers
+        }
+        hand.enumerateHierarchy { node, _ in node.castsShadow = true }
+        model.addChildNode(hand)
+
+        let light = SCNLight()
+        light.type = .directional
+        light.intensity = 1500
+        light.castsShadow = true
+        light.shadowMode = .forward
+        light.shadowSampleCount = 16
+        light.shadowRadius = 4
+        light.shadowColor = UIColor(white: 0, alpha: 0.55)
+        light.shadowMapSize = CGSize(width: 2048, height: 2048)
+        light.orthographicScale = 0.6
+        light.zNear = 0.1
+        light.zFar = 10
+        light.shadowBias = 0.5
+        let key = SCNNode()
+        key.light = light
+        key.position = SCNVector3(-1.2, 1.8, 2.6)
+        key.look(at: SCNVector3(0, 0, 0))
+        scene.rootNode.addChildNode(key)
 
         let lens = SCNCamera()
         lens.fieldOfView = 17
@@ -79,11 +111,13 @@ final class TokenRig {
         tilt.removeAllActions()
     }
 
-    func apply(face newFace: PassToken.Face, stock newStock: Int, animated: Bool, reduceMotion: Bool) {
+    func apply(face newFace: PassToken.Face, stock newStock: Int, ticking newTicking: Bool, animated: Bool, reduceMotion: Bool) {
         let previous = face
-        guard previous != newFace || stock != newStock else { return }
+        guard previous != newFace || stock != newStock || ticking != newTicking else { return }
         face = newFace
         stock = newStock
+        ticking = newTicking
+        self.reduceMotion = reduceMotion
         let flipping = animated && !reduceMotion && isAirlock(previous) && isOpen(newFace)
 
         SCNTransaction.begin()
@@ -99,7 +133,11 @@ final class TokenRig {
             jewel.mesh.geometry?.firstMaterial?.diffuse.contents = lit ? jewel.tint : TokenRig.unlit
             jewel.mesh.geometry?.firstMaterial?.emission.contents = lit ? jewel.glow : UIColor.black
         }
-        filet?.geometry?.materials.forEach { $0.setValue(NSNumber(value: progress(newFace)), forKey: "progress") }
+        let gauge = gauge(newFace)
+        filet?.geometry?.materials.forEach { material in
+            material.setValue(NSNumber(value: gauge.lower), forKey: "lower")
+            material.setValue(NSNumber(value: gauge.upper), forKey: "upper")
+        }
         if !flipping && !turning {
             jeton.eulerAngles.y = isOpen(newFace) ? .pi : 0
         }
@@ -111,6 +149,47 @@ final class TokenRig {
         if animated && isAirlock(previous) && isOpen(newFace) {
             celebrate(flip: flipping)
         }
+        steer(newFace)
+    }
+
+    private func steer(_ face: PassToken.Face) {
+        guard case .open(let left) = face else {
+            openLeft = nil
+            hand.removeAction(forKey: TokenRig.handKey)
+            hand.eulerAngles.z = remainder(hand.eulerAngles.z, TokenRig.turn)
+            hand.runAction(.rotateTo(x: 0, y: 0, z: 0, duration: reduceMotion ? 0 : 0.5, usesShortestUnitArc: true), forKey: TokenRig.handKey)
+            return
+        }
+        openLeft = (left, CACurrentMediaTime())
+        guard !turning else { return }
+        let angle = TokenRig.turn * Float(1 - left)
+        if reduceMotion || !ticking {
+            hand.removeAction(forKey: TokenRig.handKey)
+            hand.eulerAngles.z = angle
+            return
+        }
+        let settling = CACurrentMediaTime() - kickedAt < 0.5
+        if hand.action(forKey: TokenRig.handKey) == nil || (!settling && abs(hand.eulerAngles.z - angle) > 0.04) {
+            sweep(from: angle, kick: false)
+        }
+    }
+
+    private func sweep(from angle: Float, kick: Bool) {
+        hand.removeAction(forKey: TokenRig.handKey)
+        hand.eulerAngles.z = angle
+        guard ticking, angle < TokenRig.turn else { return }
+        let remaining = Double(TokenRig.turn - angle) / Double(TokenRig.turn) * Policy.passDuration
+        var steps: [SCNAction] = []
+        if kick {
+            kickedAt = CACurrentMediaTime()
+            let out = SCNAction.rotateBy(x: 0, y: 0, z: 0.12, duration: 0.07)
+            out.timingMode = .easeOut
+            let back = SCNAction.rotateBy(x: 0, y: 0, z: -0.12, duration: 0.22)
+            back.timingMode = .easeInEaseOut
+            steps += [out, back]
+        }
+        steps.append(.rotateBy(x: 0, y: 0, z: CGFloat(TokenRig.turn - angle), duration: remaining))
+        hand.runAction(.sequence(steps), forKey: TokenRig.handKey)
     }
 
     private func lean(pitch: Float, roll: Float) {
@@ -178,6 +257,9 @@ final class TokenRig {
     private func landed() {
         turning = false
         jeton.eulerAngles.y = isOpen(face) ? .pi : 0
+        guard let openLeft else { return }
+        let left = openLeft.fraction - (CACurrentMediaTime() - openLeft.at) / Policy.passDuration
+        sweep(from: TokenRig.turn * Float(1 - max(0, left)), kick: true)
     }
 
     private func duration(from old: PassToken.Face?, to new: PassToken.Face) -> CFTimeInterval {
@@ -204,11 +286,11 @@ final class TokenRig {
         }
     }
 
-    private func progress(_ face: PassToken.Face) -> Double {
+    private func gauge(_ face: PassToken.Face) -> (lower: Double, upper: Double) {
         switch face {
-        case .rest, .spent: 0
-        case .airlock(let progress): progress
-        case .open(let left): left
+        case .rest, .spent: (0, 0)
+        case .airlock(let progress): (0, progress)
+        case .open(let left): (1 - left, 1)
         }
     }
 

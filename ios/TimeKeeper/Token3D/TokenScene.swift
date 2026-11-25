@@ -4,6 +4,7 @@ import SceneKit
 struct TokenScene: UIViewRepresentable {
     let face: PassToken.Face
     let stock: Int
+    let ticking: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeCoordinator() -> TokenRig {
@@ -23,12 +24,12 @@ struct TokenScene: UIViewRepresentable {
         view.scene = context.coordinator.scene
         view.pointOfView = context.coordinator.camera
         context.coordinator.start(reduceMotion: reduceMotion)
-        context.coordinator.apply(face: face, stock: stock, animated: false, reduceMotion: reduceMotion)
+        context.coordinator.apply(face: face, stock: stock, ticking: ticking, animated: false, reduceMotion: reduceMotion)
         return view
     }
 
     func updateUIView(_ view: SCNView, context: Context) {
-        context.coordinator.apply(face: face, stock: stock, animated: true, reduceMotion: reduceMotion)
+        context.coordinator.apply(face: face, stock: stock, ticking: ticking, animated: true, reduceMotion: reduceMotion)
     }
 
     static func dismantleUIView(_ view: SCNView, coordinator: TokenRig) {

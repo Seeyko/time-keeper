@@ -12,6 +12,7 @@ struct PassToken: View {
     let face: Face
     let stock: Int
     var size: CGFloat = 168
+    var ticking = true
     @Environment(\.colorScheme) private var scheme
 
     private static var threeD: Bool { device && TokenModel.prototype != nil }
@@ -21,9 +22,18 @@ struct PassToken: View {
         switch face {
         case .rest: "\(stock) sur \(Policy.passMaxStock)"
         case .airlock: "Ouverture en cours"
-        case .open: "Ouverte"
+        case .open(let left): PassToken.remaining(left)
         case .spent: "Vide"
         }
+    }
+
+    private static func remaining(_ left: Double) -> String {
+        let seconds = Int((left * Policy.passDuration).rounded())
+        let minutes = seconds / 60
+        let rest = seconds % 60
+        if minutes == 0 { return "reste \(rest) s" }
+        if rest == 0 { return "reste \(minutes) min" }
+        return "reste \(minutes) min \(rest) s"
     }
 
     var body: some View {
@@ -35,7 +45,7 @@ struct PassToken: View {
                         .frame(width: size * 0.7, height: size * 0.16)
                         .blur(radius: size * 0.06)
                         .offset(y: size * 0.47)
-                    TokenScene(face: face, stock: stock)
+                    TokenScene(face: face, stock: stock, ticking: ticking)
                 }
             } else {
                 FlatPassToken(face: face, stock: stock, size: size)

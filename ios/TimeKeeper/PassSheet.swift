@@ -25,10 +25,6 @@ struct PassSheet: View {
         blocked.first(where: { $0.id == chosen }) ?? blocked.first
     }
 
-    private var openName: String {
-        model.active.groups.first(where: { $0.id == pass.active?.groupID })?.name ?? ""
-    }
-
     var body: some View {
         TimelineView(.periodic(from: (airlockEnd ?? anchor).addingTimeInterval(-Policy.passAirlock), by: 1)) { context in
             tick(frozenAt ?? context.date.addingTimeInterval(pass.shift))
@@ -80,16 +76,18 @@ struct PassSheet: View {
                 Spacer(minLength: 0)
             }
             VStack(spacing: 8) {
-                PassToken(face: tokenFace, stock: pass.stock, size: choosing ? 176 : 220)
+                PassToken(face: tokenFace, stock: pass.stock, size: choosing ? 176 : 220, ticking: frozenAt == nil)
                     .padding(.bottom, 12)
-                Text(title(left: left, until: until))
+                Text(title(verdict: verdict, left: left, until: until))
                     .font(.title.bold())
                     .monospacedDigit()
                     .multilineTextAlignment(.center)
                     .contentTransition(.numericText(countsDown: true))
-                Text(line(verdict: verdict, choosing: choosing, left: left))
-                    .foregroundStyle(choosing && failed ? Theme.blocked : Color.secondary)
-                    .multilineTextAlignment(.center)
+                if listing {
+                    Text(failed ? "Pas ouvert. Réessaie dans un moment." : "5 min sur une limite. Elle se referme seule.")
+                        .foregroundStyle(failed ? Theme.blocked : Color.secondary)
+                        .multilineTextAlignment(.center)
+                }
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
@@ -161,12 +159,7 @@ struct PassSheet: View {
         } label: {
             HStack {
                 Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(group.name.isEmpty ? "Sans nom" : group.name)
-                        Text("\(formatMinutes(group.minutes)) par jour")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text(group.name.isEmpty ? "Sans nom" : group.name)
                 } icon: {
                     Tile(glyph: .lock, tint: .red)
                 }
@@ -198,23 +191,16 @@ struct PassSheet: View {
         }
     }
 
-    private func title(left: Int?, until: Date?) -> String {
+    private func title(verdict: PassAvailability, left: Int?, until: Date?) -> String {
         if let left { return "Ça s’ouvre dans \(left) s" }
         if let until { return "Ouvert jusqu’à \(until.passTime)" }
-        return "Ouvrir une parenthèse"
-    }
-
-    private func line(verdict: PassAvailability, choosing: Bool, left: Int?) -> String {
-        if left != nil { return target?.name ?? "" }
-        if !choosing { return openName }
-        if failed { return "Pas ouvert. Réessaie dans un moment." }
         switch verdict {
         case .night: return "Pas entre 22 h et 6 h."
         case .usedToday: return "Déjà utilisée aujourd’hui."
         case .nothingBlocked, .suspended: return "Rien n’est bloqué."
         case .empty(let next): return "Prochaine le \(next.passDay)"
         case .clockMoved: return "Remets l’heure automatique."
-        case .available, .open: return "5 min sur une limite. Elle se referme seule."
+        case .available, .open: return "Ouvrir une parenthèse"
         }
     }
 
@@ -258,6 +244,10 @@ struct PassSheet: View {
 
     private func stageCapture() {
         let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-pass-open"), let active = pass.active {
+            frozenAt = active.opened.addingTimeInterval(100)
+            return
+        }
         if arguments.contains("-pass-film"), airlockEnd == nil {
             chosen = blocked.first?.id
             Task {
