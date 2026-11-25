@@ -71,6 +71,10 @@ struct PassSheet: View {
         let choosing = left == nil && until == nil
         let listing = choosing && verdict == .available
         let tokenFace = face(verdict: verdict, now: now)
+        let heading: String = title(verdict: verdict, left: left, until: until)
+        let spoken: String = left.map { "Ouverture dans \($0) secondes" } ?? heading
+        let headingFont: Font = left == nil ? .title.bold() : .system(size: 72, weight: .bold, design: .rounded)
+        let headingColor: Color = failed && listing ? Theme.blocked : .primary
         return VStack(spacing: 0) {
             if !listing {
                 Spacer(minLength: 0)
@@ -78,16 +82,14 @@ struct PassSheet: View {
             VStack(spacing: 8) {
                 PassToken(face: tokenFace, stock: pass.stock, size: choosing ? 176 : 220, ticking: frozenAt == nil)
                     .padding(.bottom, 12)
-                Text(title(verdict: verdict, left: left, until: until))
-                    .font(.title.bold())
+                Text(heading)
+                    .font(headingFont)
                     .monospacedDigit()
+                    .foregroundStyle(headingColor)
                     .multilineTextAlignment(.center)
                     .contentTransition(.numericText(countsDown: true))
-                if listing {
-                    Text(failed ? "Pas ouvert. Réessaie dans un moment." : "5 min sur une limite. Elle se referme seule.")
-                        .foregroundStyle(failed ? Theme.blocked : Color.secondary)
-                        .multilineTextAlignment(.center)
-                }
+                    .animation(.snappy, value: left)
+                    .accessibilityLabel(spoken)
             }
             .padding(.horizontal, 24)
             .padding(.top, 8)
@@ -192,7 +194,7 @@ struct PassSheet: View {
     }
 
     private func title(verdict: PassAvailability, left: Int?, until: Date?) -> String {
-        if let left { return "Ça s’ouvre dans \(left) s" }
+        if let left { return "\(left)" }
         if let until { return "Ouvert jusqu’à \(until.passTime)" }
         switch verdict {
         case .night: return "Pas entre 22 h et 6 h."
@@ -200,7 +202,7 @@ struct PassSheet: View {
         case .nothingBlocked, .suspended: return "Rien n’est bloqué."
         case .empty(let next): return "Prochaine le \(next.passDay)"
         case .clockMoved: return "Remets l’heure automatique."
-        case .available, .open: return "Ouvrir une parenthèse"
+        case .available, .open: return failed ? "Pas ouvert. Réessaie." : "Ouvrir une parenthèse"
         }
     }
 
