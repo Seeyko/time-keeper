@@ -178,7 +178,7 @@ struct Parentheses: Shape {
         let unit = rect.width / 0.45
         let half = unit * 0.115
         let sag = unit * 0.055
-        let apex = unit * CGFloat(0.075 + 0.095 * spread)
+        let apex = unit * CGFloat(0.11 + 0.07 * spread)
         var path = Path()
         for side: CGFloat in [-1, 1] {
             let x = rect.midX + side * (apex - sag)

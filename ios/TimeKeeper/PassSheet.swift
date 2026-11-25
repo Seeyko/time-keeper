@@ -261,7 +261,16 @@ struct PassSheet: View {
     }
 
     private func stageCapture() {
-        guard ProcessInfo.processInfo.arguments.contains("-pass-sas"), airlockEnd == nil else { return }
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains("-pass-film"), airlockEnd == nil {
+            chosen = blocked.first?.id
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+                withAnimation(motion) { airlockEnd = Date().addingTimeInterval(6) }
+            }
+            return
+        }
+        guard arguments.contains("-pass-sas"), airlockEnd == nil else { return }
         let start = Date()
         chosen = blocked.first?.id
         frozenAt = start

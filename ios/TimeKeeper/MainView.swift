@@ -5,7 +5,7 @@ struct MainView: View {
     @EnvironmentObject private var model: AppModel
     @EnvironmentObject private var pass: PassModel
     @State private var newGroup: LimitGroup?
-    @State private var passSheet = ["-pass", "-pass-sas", "-pass-open", "-pass-vide"].contains(where: ProcessInfo.processInfo.arguments.contains)
+    @State private var passSheet = ["-pass", "-pass-sas", "-pass-open", "-pass-vide", "-pass-film"].contains(where: ProcessInfo.processInfo.arguments.contains)
     @State private var settings = ProcessInfo.processInfo.arguments.contains("-settings")
     @State private var sites = ProcessInfo.processInfo.arguments.contains("-sites")
     @Environment(\.dynamicTypeSize) private var typeSize
