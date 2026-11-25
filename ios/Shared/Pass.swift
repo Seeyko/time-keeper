@@ -152,7 +152,11 @@ enum PassStore {
         search[kSecMatchLimit as String] = kSecMatchLimitOne
         var item: CFTypeRef?
         let status = SecItemCopyMatching(search as CFDictionary, &item)
-        if status == errSecItemNotFound { return PassLedger(now: now, timeZone: timeZone) }
+        if status == errSecItemNotFound {
+            let fresh = PassLedger(now: now, timeZone: timeZone)
+            save(fresh)
+            return fresh
+        }
         guard status == errSecSuccess, let data = item as? Data else { return nil }
         return (try? JSONDecoder().decode(PassLedger.self, from: data)) ?? PassLedger(now: now, timeZone: timeZone)
     }

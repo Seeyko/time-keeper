@@ -163,7 +163,8 @@ enum Engine {
 
         let pass = ActivePass(groupID: target.id, opened: now, until: now.addingTimeInterval(Policy.passDuration))
         let center = DeviceActivityCenter()
-        center.stopMonitoring(center.activities.filter { ActivePass.groupID(from: $0) != nil })
+        let stale = center.activities.filter { ActivePass.groupID(from: $0) != nil }
+        if !stale.isEmpty { center.stopMonitoring(stale) }
         let parts: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute, .second]
         let schedule = DeviceActivitySchedule(
             intervalStart: calendar.dateComponents(parts, from: now),
