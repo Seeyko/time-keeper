@@ -183,7 +183,7 @@ struct OnboardingFlow: View {
 
     private var how: some View {
         VStack(spacing: 18) {
-            StepTitle("Quand ton temps est fini, l'app se ferme.", line: "Pas de bouton « Encore 5 minutes ». Rien à contourner.")
+            StepTitle("Quand ton temps est fini, l'app se ferme.", line: "Aucun bouton pour continuer. Rien à contourner.")
                 .padding(.top, 8)
             ShieldPreview()
             Spacer(minLength: 0)

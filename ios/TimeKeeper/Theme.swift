@@ -61,9 +61,9 @@ struct PrimaryButtonStyle: ButtonStyle {
 }
 
 enum Glyph {
-    case clock, clockAlert, lock, plus, globe, gear, reset, bell, chart, email
+    case clock, clockAlert, lock, plus, globe, gear, reset, bell, chart, email, parenthesis
 
-    var central: String {
+    var central: String? {
         switch self {
         case .clock: "central-clock-outlined"
         case .clockAlert: "central-clock-alert-filled"
@@ -75,6 +75,7 @@ enum Glyph {
         case .bell: "central-bell-filled"
         case .chart: "central-chart-1-filled"
         case .email: "central-email-1-filled"
+        case .parenthesis: nil
         }
     }
 
@@ -90,6 +91,7 @@ enum Glyph {
         case .bell: "bell.fill"
         case .chart: "chart.bar.fill"
         case .email: "envelope.fill"
+        case .parenthesis: "parentheses"
         }
     }
 }
@@ -104,8 +106,8 @@ struct Tile: View {
 
     var body: some View {
         Group {
-            if UIImage(named: glyph.central) != nil {
-                Image(glyph.central)
+            if let central = glyph.central, UIImage(named: central) != nil {
+                Image(central)
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()

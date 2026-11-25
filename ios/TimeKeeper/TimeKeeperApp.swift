@@ -52,6 +52,7 @@ struct RootView: View {
         .onAppear {
             model.refresh()
             pass.refresh()
+            stageCapture()
         }
         .task { await store.refresh() }
         .onChange(of: scenePhase) { _, phase in
@@ -61,6 +62,20 @@ struct RootView: View {
                 pass.refresh()
                 Task { await store.refresh() }
             }
+        }
+    }
+}
+
+extension RootView {
+    private func stageCapture() {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard pass.demo, let group = model.active.groups.first else { return }
+        let dayStart = model.active.dayStart
+        if arguments.contains("-pass-open") {
+            _ = try? pass.open(group, blocked: true, dayStart: dayStart)
+        } else if arguments.contains("-pass-vide") {
+            _ = try? pass.open(group, blocked: true, dayStart: dayStart, now: Date().addingTimeInterval(-2 * Policy.passDuration))
+            pass.refresh()
         }
     }
 }
@@ -178,7 +193,7 @@ final class AppModel: ObservableObject {
     }
 
     func isBlockedToday(_ id: UUID) -> Bool {
-        if demo { return state.active.groups.first?.id == id }
+        if demo { return state.active.groups.prefix(2).contains { $0.id == id } }
         return SharedStorage.isShieldedToday(id)
     }
 

@@ -46,14 +46,14 @@ Tout est dans `ios/TimeKeeper/Theme.swift`. Une couleur porte un sens, jamais un
 ## Layout
 - Toutes les listes (accueil, limite, sites, Réglages) copient les Réglages d'iOS 26 : `List` en `.insetGrouped` sur le fond système, barre de navigation Liquid Glass d'origine, bleu système pour les liens, interrupteurs verts, une pastille d'icône de 30 pt (`Tile`, `TileLabel`) aux couleurs système au début de chaque ligne. Un sous-écran (Sites bloqués, Réglages) ouvre sur une carte d'en-tête alignée à gauche (`HeaderCard`) : grande icône, titre en grand gras, une ligne grise. Pas de titre dans la barre, comme Apple.
 - Les icônes des pastilles sont des Central Icons (round, filled, radius 2, stroke 2), choisies dans `Glyph` (`Theme.swift`). Pourquoi : Tom veut les vrais Réglages de l'iPhone, composants natifs au maximum (2026-11-23).
-- Les pastilles : bleu pour une limite et pour ajouter (cadenas rouge système quand elle bloque), indigo pour les sites, gris pour les Réglages et le verrou, orange pour les rappels, violet pour les statistiques, sarcelle pour « Ton avis ».
-- L'accueil : les limites, les sites, puis une ligne « Réglages » qui ouvre leur écran.
+- Les pastilles : bleu pour une limite et pour ajouter (cadenas rouge système quand elle bloque), indigo pour les sites, gris pour les Réglages et le verrou, orange pour les rappels, violet pour les statistiques, sarcelle pour « Ton avis », brun pour la parenthèse (le laiton de sa lunette), grise quand il n'en reste plus.
+- L'accueil : les limites, la ligne « Parenthèse », les sites, puis une ligne « Réglages » qui ouvre leur écran.
 - Un écran = un titre et, seulement si c'est indispensable, une ligne courte. Pas d'eyebrow, pas de pied de section qui explique.
 - Un seul bouton plein par écran. Sur l'accueil il est fixe en bas.
 - Cibles de 44 pt au moins.
 
 ## Elevation & Depth
-Aucune ombre, aucune bordure. Deux surfaces teintées : la bannière « Assouplissement en attente » et la pastille du hibou dans les Réglages.
+Aucune ombre, aucune bordure. Deux surfaces teintées : la bannière « Assouplissement en attente » et la pastille du hibou dans les Réglages. Seule exception : le jeton de la parenthèse, qui porte une ombre de contact.
 
 ## Shapes
 Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran est un anneau avec un tiers rempli.
@@ -61,7 +61,15 @@ Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran 
 ## Components
 - `Dial` (`Theme.swift`) : la marque dans l'app. Elle sert à l'accueil. L'icône la reprend sur la montre du hibou.
 - `PrimaryButtonStyle` (`Theme.swift`) : le bouton plein.
-- `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
+- `GroupRow` (`MainView.swift`) : le nom, une ligne d'état (« Bloqué jusqu'à 04:00 », « Ouvert jusqu'à 12:47 » en gris pendant une parenthèse, « Modification dans 24 h » ou le nombre d'éléments), la durée à droite.
+- La parenthèse (`PassToken.swift`, `PassSheet.swift`) : 5 min sur une limite bloquée, puis elle se referme seule. Pourquoi : Tom veut que celui qui paye ne se sente pas totalement bloqué (2026-11-25). Elle arrive au calendrier, pas au mérite : ce n'est ni une récompense ni un achat.
+  - L'accueil : une ligne native « Parenthèse », pastille brune au glyphe « ( ) », valeur « 1 sur 2 », « Ouvert jusqu'à 12:47 » ou « Retour le 9 déc. » (pastille grise). Aucun jeton dans la liste. La ligne disparaît quand les blocages sont suspendus.
+  - Le jeton (`PassToken`) : le seul objet dessiné sur mesure hors onboarding. Une face d'acier bleui brossé (`#1F3A8A`) sous un verre, une lunette fine en laiton, un guillochage de 24 cercles. Aucun texte gravé. Au centre, deux arcs dessinés : « ( ) ». Le stock se lit sur la lunette : deux points-index, allumés selon ce qu'il reste. Identique en clair et en sombre, seule l'ombre change. 168 pt au choix, 208 pt ensuite.
+  - Ses états : au repos, les arcs sont fermés. Pendant le sas, ils s'écartent et un filet crème se remplit en 30 s. Ouvert, ils sont écartés et le filet se vide en 5 min. Vide, le même jeton est en gris. L'heure et la date sont dans le titre, jamais dans le jeton.
+  - La feuille (`PassSheet`) : « Ouvrir une parenthèse », « 5 min sur une limite. Elle se referme seule. », les limites bloquées aujourd'hui (une seule : déjà choisie), « Me prévenir » (1 min avant, À la fin, Jamais), le bouton plein « Ouvrir 5 min ». Puis le sas : « Ça s'ouvre dans 18 s », « Annuler ». Puis « Ouvert jusqu'à 12:47 », « OK ». Un refus désactive le bouton et remplace la ligne : « Pas entre 22 h et 6 h. », « Déjà utilisée aujourd'hui. », « Rien n'est bloqué. », « Prochaine le 9 déc. », « Remets l'heure automatique. ».
+  - Le mouvement : à l'ouverture, le jeton se retourne (il s'écrase à plat en 0,35 s, change de face, revient en ressort). Avec Réduire les animations : un fondu, pas de retournement, le filet avance par pas d'une seconde.
+  - Haptique : `.selection` à l'ouverture de la feuille, au choix de la limite et du rappel, impact moyen sur « Ouvrir 5 min », impact léger à 20 s et à 10 s, `.success` à l'ouverture, `.selection` sur « Annuler », `.error` si l'ouverture échoue. Jamais un coup par seconde : ce serait une machine à sous.
+  - Refusé : la pièce d'or, la tranche cannelée, un jeton dans la liste, des confettis, un son, le gyroscope.
 - `delayedAlert` (`MainView.swift`) : l'explication du délai de 24 h au moment où il s'applique. L'onboarding le dit aussi une fois, avant le choix du temps et du verrou, parce que c'est là qu'il change la décision.
 - L'écran de blocage (`ShieldConfigurationExtension.swift`) : fond nuit, le hibou au cadenas (`owl-cadenas`, copié dans l'extension), un bouton blanc « Fermer ». Ses coins sont dessinés par iOS : on ne les règle pas.
 - Le rappel avant la fin : une notification à la moitié du temps (limite de 20 min et plus) et quand il reste 5 min (10 min et plus), une fois par jour chacune. Titre : le nom de la limite. Rien d'autre ne s'affiche : pas de compteur, pas de notification quand rien ne se passe. iOS déclenche les paliers lui-même, l'app ne tourne pas en fond. Deux réglages : « Me prévenir à la moitié » (oui par défaut) et « Me prévenir avant la fin » (Jamais, 5, 10, 15 ou 30 min, 5 par défaut). Les rappels sont « urgents » (Time Sensitive) : ils passent les modes Concentration. L'onboarding les demande sur un écran à lui, après le temps par jour : « Je te préviens avant la fin. », « Me prévenir » ou « Plus tard ». Si les notifications sont refusées, une ligne « Autoriser les notifications » ouvre les Réglages. Elle porte l'icône du hibou. Pas de Dynamic Island : iOS ne démarre une Live Activity que depuis l'app ouverte ou un push d'un serveur, et l'app n'a pas de serveur.
@@ -72,7 +80,7 @@ Rayon 14 pt, continu, pour le bouton plein, le champ et la bannière. Le cadran 
 - L'accueil n'a pas de titre : le nom de l'app n'apporte rien sur son propre écran (Tom, 2026-11-21, confirmé le 2026-11-23).
 
 ## Motion
-Animations système uniquement.
+Animations système uniquement. Seule exception : le retournement du jeton de la parenthèse.
 
 ## Haptics
 - Une règle change (enregistrer, ajouter un site, verrou, annuler un assouplissement) : `.success`.
@@ -93,17 +101,18 @@ Le hibou de l'icône est la seule illustration. Dans l'app, il apparaît dans l'
 - Vérifier : réduire l'icône à 60 px sur fond clair et sur fond sombre. On doit encore voir les yeux et le cadran.
 
 ## Do's and Don'ts
-- Ne jamais proposer de débloquer, rallonger ou ignorer.
+- Rien sur l'écran de blocage ne débloque. Rien ne rallonge une limite. Seule exception : la parenthèse.
 - L'écran de blocage a un seul bouton : « Fermer ».
 - Montre l'état dans la ligne (« Bloqué jusqu'à 04:00 ») au lieu de l'expliquer sous la liste.
 - Pas de sablier, pas d'orange en couleur d'action.
 - Pas de rouge ailleurs que sur « Bloqué », une erreur de saisie, une suppression et le refus de Temps d'écran dans l'onboarding (sans cet accès, rien ne bloque).
 
 ## Vérifier ce fichier
-Lancer avec `-demo` (et `-onboarding` pour le parcours d'accueil), en clair puis en sombre, regarder chaque écran en vraie taille, cacher chaque texte avec le doigt. Chercher `Color.orange`, `.red` et `hourglass` dans `ios/` : il ne doit rien rester.
+Lancer avec `-demo` (`-onboarding` pour le parcours d'accueil, `-demo -pass`, `-pass-sas`, `-pass-open` et `-pass-vide` pour la parenthèse), en clair puis en sombre, regarder chaque écran en vraie taille, cacher chaque texte avec le doigt. Chercher `Color.orange`, `.red` et `hourglass` dans `ios/` : il ne doit rien rester.
 
 ## Les mots
 Relus par deux relecteurs Fable (copy-cutter et story-reviewer, 2026-11-21). Les mêmes mots partout :
+- « parenthèse », jamais « jeton », « joker » ni « pause » dans l'app. « Ouvrir », jamais « débloquer ».
 - « limite », jamais « règle ». « Changement prévu le … », jamais « assouplissement » ni « effectif ».
 - Une date réelle, jamais « dans 24 h » sur un état qui dure : il devient faux une heure après.
 - « Remise à zéro à » pour le début de journée. « Verrouiller la suppression d'apps » pour le verrou.
