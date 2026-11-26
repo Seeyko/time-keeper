@@ -13,7 +13,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 | `DESIGN.md` | le système de design |
 
 ## La règle produit
-- **Jamais de déblocage sur le moment.** Pas de bouton « ignorer », pas de « +15 min », pas de code. Toute évolution garde ça.
+- **Rien sur l'écran de blocage ne débloque, jamais.** Pas de bouton « ignorer », pas de « +15 min », pas de code. Seule exception : la parenthèse (`Pass.swift`), 5 min sur une limite bloquée, depuis l'app, 1 au départ puis 1 tous les 14 jours, 2 en stock au plus, 1 par jour, jamais entre 22 h et 6 h. Aucun réglage n'en donne plus, elle ne s'achète pas.
 - Ce qui rend plus strict s'applique tout de suite. Ce qui assouplit (temps plus long, app retirée, limite supprimée, site débloqué, verrou coupé, heure de début de journée changée) s'applique `Policy.loosenDelay` plus tard (24 h). Le test `RulesTests` le prouve pour chaque cas.
 - Modifier une limite ne remet pas le compteur à zéro (`includesPastActivity`).
 - **Le paywall** (`PaywallView`, `Store`) : dur, sans croix, après l'onboarding. Sans achat valide, l'app suspend les blocages (`SharedStorage.suspended`) sans effacer les règles, qui reviennent dès l'achat. Un abonnement résilié reste actif jusqu'à la fin de la période payée : jamais de déblocage sur le moment. L'accès offert passe par des codes d'offre Apple, à usage unique, que Tom donne lui-même.
@@ -26,7 +26,7 @@ App iOS open source (MIT) qui bloque des apps après un temps d'écran quotidien
 - **Une PR par étape**, merge quand la CI est verte. Le code d'un build envoyé au store est sur `main`.
 - **Présente chaque travail fini** pour un non-technique : un titre humain, une description courte, des captures, puis le lien (skill `present-work` de tom-playbook).
 - **Pas de commentaire dans le code, pas de code mort.**
-- **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir). `-onboarding` rejoue l'onboarding avec les mêmes données fictives. `-demo -settings` ouvre les Réglages, `-demo -sites` les sites bloqués. `-demo -paywall` montre le paywall, avec les prix du fichier `ios/TimeKeeper.storekit` (France).
+- **Captures** : lancer l'app avec l'argument `-demo` affiche des données d'exemple sans demander Temps d'écran (le simulateur n'a pas de vraies apps à choisir). `-onboarding` rejoue l'onboarding avec les mêmes données fictives. `-demo -settings` ouvre les Réglages, `-demo -sites` les sites bloqués. `-demo -paywall` montre le paywall, avec les prix du fichier `ios/TimeKeeper.storekit` (France). `-demo -pass` ouvre la feuille de la parenthèse, `-demo -pass-sas` le sas figé à 18 s, `-demo -pass-open` l'état ouvert, aiguille figée à 1 min 40 écoulée, `-demo -pass-vide` le stock à zéro, `-demo -pass-film` joue seul le parcours pour la vidéo (feuille, sas de 6 s, retournement, aiguille qui part).
 - **Outils** : le CLI `asc` pour App Store Connect.
 - **Icônes** : Central Icons (licence de Tom), listées dans `ios/central-icons.txt`, générées par `python3 ios/ci/central-icons.py` dans `Assets.xcassets/Central/`, ignoré par git. Leur licence interdit de les publier : jamais de SVG commité. Sur le Mac, `CENTRAL_ICONS_DIR` pointe vers les paquets `@central-icons-react` déjà installés de RMP. Sans elles, `Glyph` retombe sur les symboles Apple.
 

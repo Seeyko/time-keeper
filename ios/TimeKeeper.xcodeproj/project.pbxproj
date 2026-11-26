@@ -10,29 +10,42 @@
 		005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */; };
 		0BFB7D827850435BBC31C563 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 828BBDD4382219E02C5ED2D9 /* MainView.swift */; };
 		0CAD474273E5D10355283C2C /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
+		12B00A60534AFBBCA9E1F86B /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8967FE40099DA601E0EAD92 /* Pass.swift */; };
 		16E0802369EB9A210ADC5B69 /* TimeKeeperShieldAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2BF2E8D51A9548D65E08CB8C /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A808CABF3CDF7C98CB4380C /* Reminder.swift */; };
+		2C2BB6B5905F2186059EDCC7 /* jeton.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 7EA5178C3E358AE8F026624D /* jeton.usdz */; };
+		2F10293ED2232843B1711886 /* env.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 9A226F96C5D64BF5BAF1B021 /* env.hdr */; };
 		2F619EFE7AAD17248EA71147 /* AccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56366CD559483D922C273E8 /* AccessView.swift */; };
 		33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD3B46068D60F11BD6E072 /* Engine.swift */; };
+		356538ABECDFEE365BED1AC9 /* FlatPassToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = D612D1A7F945992E1D646D2B /* FlatPassToken.swift */; };
 		3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798B9B60F4D7071DC2C9DD83 /* Theme.swift */; };
 		4E4F8FA542B1F32C14DEF268 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54B7D56A4AB3DE9BD4C5140 /* Analytics.swift */; };
 		56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
+		6E8EABDBD324D8067B7E6AA7 /* TokenRig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE20447D1E74DB8CEA3A33 /* TokenRig.swift */; };
 		7ADC1EFBA63776BC0C6DD6FB /* ShieldActionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1001C02E73CBADFC6B1ED2C8 /* ShieldActionExtension.swift */; };
+		7E122CADD6F2B37485CFF696 /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8967FE40099DA601E0EAD92 /* Pass.swift */; };
 		7FF6CA506A45252A89A754FA /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219E2D9D530A014A173CAB69 /* Store.swift */; };
 		887EA25C5B8747907A4EBF22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C7545C5C79393B0D39779E49 /* Assets.xcassets */; };
 		8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */; };
+		8E7330C6600F755A4B3DF366 /* TokenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C21A39EAFAF5409AFA393E /* TokenModel.swift */; };
 		906AF459DA95A99D966F0442 /* RulesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BFE1784245BBF04E121E29 /* RulesTests.swift */; };
+		9420B08D980F5B9AF10B739B /* PassModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D6DB8C28DAB9E933FEE5FF /* PassModel.swift */; };
 		942F8EE0A565EF68B9CF77D7 /* TimeKeeperShieldConfig.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		975526108C5E25AF7FE2A3E5 /* ShieldConfigurationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */; };
 		983F8A0FC39093ABC3464EB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */; };
+		998B66FF753E80BB4CC1230E /* env.png in Resources */ = {isa = PBXBuildFile; fileRef = CE68072114BB23039E0B2262 /* env.png */; };
 		9BD95244BE7FC5EB199BE65C /* Engine.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1AD3B46068D60F11BD6E072 /* Engine.swift */; };
 		A2A73F50C9B55901AC577E24 /* TimeKeeperMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A37A5CD66C9C25B68F344509 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AED8718E1FD59658A0F6F1 /* FeedbackView.swift */; };
 		AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2189A5CCB346E488A5C40B75 /* DeviceActivityMonitorExtension.swift */; };
+		B28C4379320F215FD06BD2F2 /* PassToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2507ABDBF17928123CCC3C /* PassToken.swift */; };
+		BA9E36B506DF80EF9618EFBC /* PassSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CBF65297291A42D3ACA612 /* PassSheet.swift */; };
 		BD05C488DFBB68E14EEEE8C7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D495CD1379BAFC7B5B323A9 /* SettingsView.swift */; };
 		C6C174523400F45178F14F37 /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54DFC4114B884004CC41B5D2 /* Rules.swift */; };
 		C9264B7E8C30BEAD850AE050 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A808CABF3CDF7C98CB4380C /* Reminder.swift */; };
+		CBBF18994888FC4118E54A97 /* TokenScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D13BD70BBD407BD95395EF /* TokenScene.swift */; };
 		D3FB132E0A0155BDC9D34A10 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E775367B0D27121A835BF8 /* OnboardingFlow.swift */; };
+		E2EDBC52AD9B8B6948816D4B /* PassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D77FE128243E1574A116BB /* PassTests.swift */; };
 		ECFCF9731EFAEBB69CD8A112 /* PaywallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D0C35AB6FD91D3F052263E /* PaywallTests.swift */; };
 		ED5FE77E85440F99EA6F3B13 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE74379BA1ECEB33C99DD36B /* PaywallView.swift */; };
 		F04F9A769F9E19BB14C869D9 /* SharedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */; };
@@ -99,27 +112,39 @@
 		28591F6C7DA3705210D3D114 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2A808CABF3CDF7C98CB4380C /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		46E775367B0D27121A835BF8 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
+		4B2507ABDBF17928123CCC3C /* PassToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassToken.swift; sourceTree = "<group>"; };
+		4FEE20447D1E74DB8CEA3A33 /* TokenRig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRig.swift; sourceTree = "<group>"; };
+		50D6DB8C28DAB9E933FEE5FF /* PassModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassModel.swift; sourceTree = "<group>"; };
 		54DFC4114B884004CC41B5D2 /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 		61D73A4EE6DDFFC3948F7E01 /* TimeKeeperShieldConfig.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldConfig.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCBEEC30CF8F24FCDB5D40E /* TimeKeeperTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TimeKeeperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		76CBF65297291A42D3ACA612 /* PassSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassSheet.swift; sourceTree = "<group>"; };
 		798B9B60F4D7071DC2C9DD83 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		7EA5178C3E358AE8F026624D /* jeton.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = jeton.usdz; sourceTree = "<group>"; };
 		816EB5BB67769480F91BCA8C /* TimeKeeperShieldAction.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		828BBDD4382219E02C5ED2D9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorView.swift; sourceTree = "<group>"; };
 		9492ABC70DD6CED6696BF726 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9A226F96C5D64BF5BAF1B021 /* env.hdr */ = {isa = PBXFileReference; path = env.hdr; sourceTree = "<group>"; };
 		A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStorage.swift; sourceTree = "<group>"; };
 		A7D0C35AB6FD91D3F052263E /* PaywallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallTests.swift; sourceTree = "<group>"; };
 		AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeKeeperApp.swift; sourceTree = "<group>"; };
 		B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B50E142C4310B9631FB1E67A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B56366CD559483D922C273E8 /* AccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessView.swift; sourceTree = "<group>"; };
+		B8967FE40099DA601E0EAD92 /* Pass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pass.swift; sourceTree = "<group>"; };
 		BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeper.entitlements; sourceTree = "<group>"; };
 		C66DAEC8274E5D183AF5A1D5 /* ShieldConfigurationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShieldConfigurationExtension.swift; sourceTree = "<group>"; };
 		C7545C5C79393B0D39779E49 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CA30C0929FE5AA3A28ECF906 /* TimeKeeperMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = TimeKeeperMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE68072114BB23039E0B2262 /* env.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = env.png; sourceTree = "<group>"; };
 		CE74379BA1ECEB33C99DD36B /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		D1AD3B46068D60F11BD6E072 /* Engine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Engine.swift; sourceTree = "<group>"; };
 		D54B7D56A4AB3DE9BD4C5140 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		D612D1A7F945992E1D646D2B /* FlatPassToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatPassToken.swift; sourceTree = "<group>"; };
+		D7D77FE128243E1574A116BB /* PassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassTests.swift; sourceTree = "<group>"; };
+		E0D13BD70BBD407BD95395EF /* TokenScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenScene.swift; sourceTree = "<group>"; };
+		E5C21A39EAFAF5409AFA393E /* TokenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenModel.swift; sourceTree = "<group>"; };
 		EE278922667D82B311597FFF /* TimeKeeperShieldConfig.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeperShieldConfig.entitlements; sourceTree = "<group>"; };
 		F766C10929FB6044FDF77FC9 /* TimeKeeper.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = TimeKeeper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA1A5FF1CFDBD62BBCA1A18C /* TimeKeeperShieldAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimeKeeperShieldAction.entitlements; sourceTree = "<group>"; };
@@ -130,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				D1AD3B46068D60F11BD6E072 /* Engine.swift */,
+				B8967FE40099DA601E0EAD92 /* Pass.swift */,
 				2A808CABF3CDF7C98CB4380C /* Reminder.swift */,
 				54DFC4114B884004CC41B5D2 /* Rules.swift */,
 				A4F25BB5C47B31C68FFEAD3A /* SharedStorage.swift */,
@@ -177,16 +203,21 @@
 				B10619A96CD9DD2EBB0FF5C9 /* Assets.xcassets */,
 				0D7802EBC8AFAD537D79DFC8 /* DomainsView.swift */,
 				21AED8718E1FD59658A0F6F1 /* FeedbackView.swift */,
+				D612D1A7F945992E1D646D2B /* FlatPassToken.swift */,
 				9383011F905012DDD0B2B6A9 /* GroupEditorView.swift */,
 				B50E142C4310B9631FB1E67A /* Info.plist */,
 				828BBDD4382219E02C5ED2D9 /* MainView.swift */,
 				46E775367B0D27121A835BF8 /* OnboardingFlow.swift */,
+				50D6DB8C28DAB9E933FEE5FF /* PassModel.swift */,
+				76CBF65297291A42D3ACA612 /* PassSheet.swift */,
+				4B2507ABDBF17928123CCC3C /* PassToken.swift */,
 				CE74379BA1ECEB33C99DD36B /* PaywallView.swift */,
 				0D495CD1379BAFC7B5B323A9 /* SettingsView.swift */,
 				219E2D9D530A014A173CAB69 /* Store.swift */,
 				798B9B60F4D7071DC2C9DD83 /* Theme.swift */,
 				BAB7025B6D995B1979B5A741 /* TimeKeeper.entitlements */,
 				AFA3FBF9FA08DB0AEA440371 /* TimeKeeperApp.swift */,
+				BF42A69AF4A789D4A895060A /* Token3D */,
 			);
 			path = TimeKeeper;
 			sourceTree = "<group>";
@@ -207,10 +238,24 @@
 		BEEA5A7E91F4DF728B105336 /* TimeKeeperTests */ = {
 			isa = PBXGroup;
 			children = (
+				D7D77FE128243E1574A116BB /* PassTests.swift */,
 				A7D0C35AB6FD91D3F052263E /* PaywallTests.swift */,
 				24BFE1784245BBF04E121E29 /* RulesTests.swift */,
 			);
 			path = TimeKeeperTests;
+			sourceTree = "<group>";
+		};
+		BF42A69AF4A789D4A895060A /* Token3D */ = {
+			isa = PBXGroup;
+			children = (
+				9A226F96C5D64BF5BAF1B021 /* env.hdr */,
+				CE68072114BB23039E0B2262 /* env.png */,
+				7EA5178C3E358AE8F026624D /* jeton.usdz */,
+				E5C21A39EAFAF5409AFA393E /* TokenModel.swift */,
+				4FEE20447D1E74DB8CEA3A33 /* TokenRig.swift */,
+				E0D13BD70BBD407BD95395EF /* TokenScene.swift */,
+			);
+			path = Token3D;
 			sourceTree = "<group>";
 		};
 		FDB54EF842862EFDE8CD6A0D /* TimeKeeperShieldConfig */ = {
@@ -382,6 +427,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				983F8A0FC39093ABC3464EB7 /* Assets.xcassets in Resources */,
+				2F10293ED2232843B1711886 /* env.hdr in Resources */,
+				998B66FF753E80BB4CC1230E /* env.png in Resources */,
+				2C2BB6B5905F2186059EDCC7 /* jeton.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +448,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2EDBC52AD9B8B6948816D4B /* PassTests.swift in Sources */,
 				ECFCF9731EFAEBB69CD8A112 /* PaywallTests.swift in Sources */,
 				906AF459DA95A99D966F0442 /* RulesTests.swift in Sources */,
 			);
@@ -419,6 +468,7 @@
 			files = (
 				AE073131E3177EF345C6D154 /* DeviceActivityMonitorExtension.swift in Sources */,
 				9BD95244BE7FC5EB199BE65C /* Engine.swift in Sources */,
+				7E122CADD6F2B37485CFF696 /* Pass.swift in Sources */,
 				2BF2E8D51A9548D65E08CB8C /* Reminder.swift in Sources */,
 				0CAD474273E5D10355283C2C /* Rules.swift in Sources */,
 				56F677571F5571A7397A05DD /* SharedStorage.swift in Sources */,
@@ -434,9 +484,14 @@
 				FC16AFF14C2097AE7D51E238 /* DomainsView.swift in Sources */,
 				33D8D20C1C526D1CAB5BA1A1 /* Engine.swift in Sources */,
 				A37A5CD66C9C25B68F344509 /* FeedbackView.swift in Sources */,
+				356538ABECDFEE365BED1AC9 /* FlatPassToken.swift in Sources */,
 				005B0E91A648571F61B3FBEB /* GroupEditorView.swift in Sources */,
 				0BFB7D827850435BBC31C563 /* MainView.swift in Sources */,
 				D3FB132E0A0155BDC9D34A10 /* OnboardingFlow.swift in Sources */,
+				12B00A60534AFBBCA9E1F86B /* Pass.swift in Sources */,
+				9420B08D980F5B9AF10B739B /* PassModel.swift in Sources */,
+				BA9E36B506DF80EF9618EFBC /* PassSheet.swift in Sources */,
+				B28C4379320F215FD06BD2F2 /* PassToken.swift in Sources */,
 				ED5FE77E85440F99EA6F3B13 /* PaywallView.swift in Sources */,
 				C9264B7E8C30BEAD850AE050 /* Reminder.swift in Sources */,
 				C6C174523400F45178F14F37 /* Rules.swift in Sources */,
@@ -445,6 +500,9 @@
 				7FF6CA506A45252A89A754FA /* Store.swift in Sources */,
 				3AF6B22C5508BA2B969070BA /* Theme.swift in Sources */,
 				8B62DA11C01435087DD3A389 /* TimeKeeperApp.swift in Sources */,
+				8E7330C6600F755A4B3DF366 /* TokenModel.swift in Sources */,
+				6E8EABDBD324D8067B7E6AA7 /* TokenRig.swift in Sources */,
+				CBBF18994888FC4118E54A97 /* TokenScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

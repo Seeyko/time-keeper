@@ -13,10 +13,15 @@ struct TimeKeeperApp: App {
         paywall: ProcessInfo.processInfo.arguments.contains("-paywall")
     )
 
+    @StateObject private var pass = PassModel(
+        demo: ["-demo", "-onboarding"].contains(where: ProcessInfo.processInfo.arguments.contains)
+    )
+
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(model)
+                .environmentObject(pass)
                 .environmentObject(store)
         }
     }
@@ -25,6 +30,7 @@ struct TimeKeeperApp: App {
 struct RootView: View {
     @EnvironmentObject private var model: AppModel
     @EnvironmentObject private var store: Store
+    @EnvironmentObject private var pass: PassModel
     @ObservedObject private var auth = AuthorizationCenter.shared
     @Environment(\.scenePhase) private var scenePhase
 
@@ -43,14 +49,33 @@ struct RootView: View {
         .animation(.smooth, value: model.hasOnboarded)
         .animation(.smooth, value: store.access)
         .tint(Theme.accent)
-        .onAppear { model.refresh() }
+        .onAppear {
+            model.refresh()
+            pass.refresh()
+            stageCapture()
+        }
         .task { await store.refresh() }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Analytics.capture("app_opened")
                 model.refresh()
+                pass.refresh()
                 Task { await store.refresh() }
             }
+        }
+    }
+}
+
+extension RootView {
+    private func stageCapture() {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard pass.demo, let group = model.active.groups.first else { return }
+        let dayStart = model.active.dayStart
+        if arguments.contains("-pass-open") {
+            _ = try? pass.open(group, blocked: true, dayStart: dayStart)
+        } else if arguments.contains("-pass-vide") {
+            _ = try? pass.open(group, blocked: true, dayStart: dayStart, now: pass.now.addingTimeInterval(-2 * Policy.passDuration))
+            pass.refresh()
         }
     }
 }
@@ -168,7 +193,7 @@ final class AppModel: ObservableObject {
     }
 
     func isBlockedToday(_ id: UUID) -> Bool {
-        if demo { return state.active.groups.first?.id == id }
+        if demo { return state.active.groups.prefix(2).contains { $0.id == id } }
         return SharedStorage.isShieldedToday(id)
     }
 

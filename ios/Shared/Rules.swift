@@ -7,6 +7,16 @@ enum Policy {
     static let loosenDelay: TimeInterval = 24 * 60 * 60
     static let minutesRange = 5...600
     static let maxFilteredDomains = 50
+    static let passDuration: TimeInterval = 5 * 60
+    static let passMaxStock = 2
+    static let passInitialStock = 1
+    static let passRefill: TimeInterval = 14 * 24 * 60 * 60
+    static let passAirlock: TimeInterval = 30
+    static let passNightStartHour = 22
+    static let passNightEndHour = 6
+    static let passClockTolerance: TimeInterval = 2 * 60
+    static let passZoneQuarantine: TimeInterval = 24 * 60 * 60
+    static let passMonitorWindow: TimeInterval = 15 * 60
 }
 
 struct DayStart: Codable, Equatable, Sendable {

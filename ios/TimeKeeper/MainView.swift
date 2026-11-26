@@ -3,7 +3,9 @@ import FamilyControls
 
 struct MainView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var pass: PassModel
     @State private var newGroup: LimitGroup?
+    @State private var passSheet = ["-pass", "-pass-sas", "-pass-open", "-pass-vide", "-pass-film"].contains(where: ProcessInfo.processInfo.arguments.contains)
     @State private var settings = ProcessInfo.processInfo.arguments.contains("-settings")
     @State private var sites = ProcessInfo.processInfo.arguments.contains("-sites")
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -30,7 +32,28 @@ struct MainView: View {
             .accessibilityLabel("Annuler ce changement")
     }
 
+    private var passVerdict: PassAvailability {
+        pass.availability(
+            blocked: model.active.groups.contains { model.isBlockedToday($0.id) },
+            dayStart: model.active.dayStart
+        )
+    }
+
+    private func passValue(_ verdict: PassAvailability) -> String {
+        switch verdict {
+        case .open(let until): "Ouvert jusqu'à \(until.passTime)"
+        case .empty(let next): "Prochaine le \(next.passDay)"
+        default: "\(pass.stock) sur \(Policy.passMaxStock)"
+        }
+    }
+
+    private func isEmpty(_ verdict: PassAvailability) -> Bool {
+        if case .empty = verdict { return true }
+        return false
+    }
+
     var body: some View {
+        let verdict = passVerdict
         NavigationStack {
             List {
                 if let date = model.state.pendingEffective, model.state.pending != nil {
@@ -64,7 +87,8 @@ struct MainView: View {
                             GroupEditorView(group: group, isNew: false)
                         } label: {
                             GroupRow(group: group,
-                                     blockedUntil: model.isBlockedToday(group.id) ? model.active.dayStart.label : nil,
+                                     blockedUntil: model.isBlockedToday(group.id) && !pass.isOpen(group.id) ? model.active.dayStart.label : nil,
+                                     openUntil: pass.isOpen(group.id) ? pass.active?.until : nil,
                                      pending: model.hasPendingChange(group.id))
                         }
                     }
@@ -80,6 +104,28 @@ struct MainView: View {
                     .sensoryFeedback(.selection, trigger: newGroup?.id)
                 } header: {
                     Text("Limites par jour")
+                }
+
+                if verdict != .suspended {
+                    Section {
+                        Button {
+                            passSheet = true
+                        } label: {
+                            HStack {
+                                TileLabel("Parenthèse", glyph: .parenthesis, tint: isEmpty(verdict) ? .gray : .brown)
+                                Spacer()
+                                Text(passValue(verdict))
+                                    .monospacedDigit()
+                                    .foregroundStyle(.secondary)
+                                Image(systemName: "chevron.right")
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundStyle(.tertiary)
+                                    .accessibilityHidden(true)
+                            }
+                        }
+                        .foregroundStyle(.primary)
+                        .sensoryFeedback(.selection, trigger: passSheet) { _, shown in shown }
+                    }
                 }
 
                 Section {
@@ -111,6 +157,10 @@ struct MainView: View {
                 }
                 .tint(.blue)
             }
+            .sheet(isPresented: $passSheet) {
+                NavigationStack { PassSheet() }
+                    .tint(.blue)
+            }
             .navigationDestination(isPresented: $settings) { SettingsView() }
             .navigationDestination(isPresented: $sites) { DomainsView() }
         }
@@ -122,6 +172,7 @@ struct MainView: View {
 private struct GroupRow: View {
     let group: LimitGroup
     let blockedUntil: String?
+    let openUntil: Date?
     let pending: Bool
 
     var body: some View {
@@ -150,6 +201,10 @@ private struct GroupRow: View {
                 }
                 .font(.subheadline)
                 .foregroundStyle(.red)
+            } else if let openUntil {
+                Text("Ouvert jusqu'à \(openUntil.passTime)")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
             } else if pending {
                 Text("Changement en attente")
                     .font(.subheadline)
